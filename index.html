@@ -55,9 +55,10 @@
   <section id="apropos" class="apropos">
     <h2>À propos de TLM CF</h2>
     <p>Centre de formation crée en 2021 par Frédéric Martinez. Transports Logistique Martinez, Conseils et Formations agit sur toutes les formations lié au transport, logisitque et la sécurtié du travail.</p>
-    <p>Cv de Frédéric : cariste de puis 1996 et conducteur routier depuis 2009, frédéric a une forte experience dans le domaine du transprt et de la logistique</p>
-    <p>En 2017 , il decide de proposer ses service en tant que formateur. Dans les debut il a énormement travaillé dans les ofrmatiosn en Titre Professionnel (CTRMP et CTRMTV) puis a a continjué en FCO et FIMO. Par la suite, titulaire des capacités de transport (marchandises, voyageur et commissionnaire) il décide de devenir formateur en explaoitation de transport, puis devient formateur en parallele des formations R485, 489, 490. En 2021 il démissionne de son emploi et décide de créé Transport Logistique Martinez, Conseils et Formations ou il exerce dans les memes domaines.
-    </p>
+    <p></p>
+    <p>CV de Frédéric : Cariste depuis 1996 et conducteur routier depuis 2009, Frédéric a une forte expérience dans le domaine du transport et de la logistique
+      En 2017, il décide de proposer ses services en tant que formateur. Dans les début il a énormément travaillé dans les formations en Titre Professionnel (CTRMP et CTRMTV) puis a continué en FCO et FIMO. Par la suite, titulaire des capacités de transport (marchandises, voyageur et commissionnaire) il décide de devenir formateur en exploitation de transports, puis devient formateur en parallèle des formations R485, 489, 490. En 2021 il démissionne de son emploi et décide de créé Transport Logistique Martinez, Conseils et Formations où il exerce dans les mêmes domaines.</p>
+      
   </section>
 
   <section id="entreprise" class="entreprise">
@@ -77,20 +78,21 @@
   </section>
 
   <section id="contact" class="contact">
-    <h2>Contact</h2>
-    <form>
-      <input type="text" placeholder="Nom et prénom" required>
-      <input type="email" placeholder="Email" required>
-      <input type="tel" placeholder="Téléphone">
-      <textarea placeholder="Votre message" required></textarea>
+    <h2>Contactez-nous</h2>
+    <form action="sendmail.php" method="POST">
+      <input type="text" name="nom" placeholder="Nom et prénom" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="telephone" placeholder="Téléphone">
+      <textarea name="message" placeholder="Votre message" required></textarea>
       <button type="submit">Envoyer</button>
     </form>
     <div class="carte">
       <p>Adresse : [à renseigner]</p>
       <p>Téléphone : 06.09.62.49.43</p>
-      <p>Email : martinez.frederic33@outlook.fr</p>
+      <p>Email : <a href="contact@tlmcf.com">contact@tlmcf.com</a></p>
     </div>
   </section>
+  
 
   <footer>
     <p>&copy; 2025 TLM CF - Tous droits réservés | Mentions légales</p>
