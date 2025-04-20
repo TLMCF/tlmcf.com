@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telephone = strip_tags(trim($_POST["telephone"]));
     $message = strip_tags(trim($_POST["message"]));
 
-    $destinataire = "contact@tonsite.com"; // Ton email chez IONOS
+    $destinataire = "contact@tlmcf.com"; // Ton email chez IONOS
     $sujet = "Nouveau message depuis votre site web";
 
     $contenu = "Nom et Prénom: $nom\n";
