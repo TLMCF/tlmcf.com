@@ -1,11 +1,174 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestes et postures - TLM CF</title>
+  <title>Gestes et psotures - TLM CF</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .formation-wrapper {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px; /* Pour espacer du footer */
+    }
+
+    .formation-card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .formation-card h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .formation-card .details {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+
+    .formation-card .details li {
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .formation-card .details strong {
+      font-weight: bold;
+    }
+
+    .formation-card .call-to-action {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .formation-card .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 0;
+    }
+
+    .formation-card .button {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .formation-card .button:hover {
+      background-color: #0056b3;
+    }
+
+    .bouton-jaune {
+      background-color: #f0e24e; /* Jaune moins vif (couleur orange cuivré) */
+      color: black; /* Couleur du texte dans le bouton */
+      padding: 10px 20px; /* Espacement intérieur un peu plus grand */
+      border-radius: 5px; /* Bords arrondis */
+      text-decoration: none; /* Supprime le soulignement par défaut des liens */
+      display: inline-block; /* Pour que la largeur et le padding fonctionnent */
+      margin: 10px; /* Espacement autour des boutons */
+    }
+
+    .bouton-jaune a {
+      color: inherit; /* Hérite de la couleur du span */
+      text-decoration: none; /* Supprime le soulignement du lien à l'intérieur */
+    }
+
+    .bouton-jaune:hover {
+      background-color: #d0ba2b; /* Couleur au survol (facultatif) */
+    }
+
+    .bloc-boutons {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center; /* Centre horizontalement les éléments inline */
+    }
+
+    .bloc-boutons ul {
+      list-style: none;
+      padding: 0;
+      display: inline-block; /* Permet de centrer la liste si nécessaire */
+      margin: 0;
+    }
+
+    .bloc-boutons li {
+      margin: 0;
+    }
+
+    .promotion-gestes-postures {
+      background-color: #f9f9f9; /* Fond légèrement gris pour faire ressortir le bloc */
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center; /* Centrer le texte globalement */
+    }
+
+    .promotion-gestes-postures h3 {
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .promotion-gestes-postures p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .strong {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .promotion-gestes-postures .highlight {
+      color: #007bff; /* Couleur bleue pour mettre en évidence le nom de la formation */
+      font-weight: bold;
+    }
+
+    .promotion-gestes-postures ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 15px;
+      color: #555;
+      text-align: left; /* Aligner la liste à gauche pour une meilleure lecture */
+      display: inline-block; /* Permet de centrer la liste dans le bloc */
+    }
+
+    .promotion-gestes-postures h4 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .call-to-action {
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+
+    .promotion-gestes-postures .button-inscription {
+      display: inline-block;
+      background-color: #28a745; /* Couleur verte pour le bouton d'inscription */
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .promotion-gestes-postures .button-inscription:hover {
+      background-color: #1e7e34;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -20,10 +183,59 @@
   </header>
   <section class="hero">
     <div class="hero-text">
-      <h2>Formation : Gestes et postures</h2>
-      <p>Détails à venir sur cette formation.</p>
+      <h2>Formation : GESTES ET POSTURES</h2>
     </div>
   </section>
+
+  <div class="formation-wrapper">
+    <div class="formation-card">
+      <h3>Formation "Gestes et Postures"</h3>
+      <div class="promotion-gestes-postures">
+        <h3>Ne laissez pas les douleurs s'installer !</h3>
+        <p>Vous passez vos journées assis devant un écran ? Votre travail sollicite des mouvements répétitifs ou le port de charges ?</p>
+        <p class="strong">Investissez dans votre bien-être et votre capital santé grâce à notre <span class="highlight">formation "Gestes et Postures" !</span></p>
+        <p>Bien plus qu'une simple sensibilisation, cette formation pratique et interactive vous donnera les clés pour adopter les bonnes habitudes au quotidien. Vous apprendrez à :</p>
+        <ul>
+          <li>Identifier les risques liés à vos activités professionnelles.</li>
+          <li>Comprendre les mécanismes des troubles musculo-squelettiques (TMS).</li>
+          <li>Appliquer des techniques simples et efficaces pour adopter des postures de travail optimales.</li>
+          <li>Réaliser des exercices d'échauffement et d'étirement pour prévenir les douleurs.</li>
+          <li>Aménager votre poste de travail de manière ergonomique.</li>
+        </ul>
+        <h4>Les bénéfices sont concrets :</h4>
+        <ul>
+          <li>Réduction significative des douleurs et des tensions musculaires.</li>
+          <li>Amélioration de votre confort et de votre bien-être au travail.</li>
+          <li>Augmentation de votre productivité grâce à une meilleure condition physique.</li>
+          <li>Prévention des arrêts de travail liés aux TMS.</li>
+          <li>Un investissement durable pour votre santé à long terme.</li>
+        </ul>
+        <p class="call-to-action"><strong>N'attendez plus que la douleur s'installe !</strong> Offrez-vous (ou à vos équipes) les outils nécessaires pour travailler en toute sérénité.</p>
+        <p class="call-to-action"><a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20gestes%20et%20postures." class="button-inscription">Rejoignez dès aujourd'hui notre formation "Gestes et Postures" et faites le premier pas vers un quotidien professionnel plus confortable et plus sain !</a></p>
+      </div>
+      <div class="call-to-action">
+        <a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20Gestes%20et%20postures." class="button">En savoir plus et s'inscrire</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bloc-boutons">
+    <ul>
+      <li><span class="bouton-jaune"><a href="d.pdf" download>📥 TÉLÉCHARGER LE PROGRAMME</a></span></li>
+     </div>
+</section>
+<section id="contact" class="contact">
+<h2>Contact</h2>
+<form>
+<input type="text" placeholder="Nom et prénom" required>
+<input type="email" placeholder="Email" required>
+<input type="tel" placeholder="Téléphone">
+<textarea placeholder="Votre message" required></textarea>
+<button type="submit">Envoyer</button>
+</form>
+<div class="carte">
+<a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20AC-485.">contact@tlmcf.com</a>
+</div>
   <footer>
     <p>&copy; 2025 TLM CF - Tous droits réservés</p>
   </footer>

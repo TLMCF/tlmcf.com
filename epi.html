@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EPI - TLM CF</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* ... (Votre CSS existant) ... */
+
+    .bouton-jaune {
+      background-color: #f0e24e; /* Jaune moins vif (couleur orange cuivré) */
+      color: black; /* Couleur du texte dans le bouton */
+      padding: 10px 20px; /* Espacement intérieur un peu plus grand */
+      border-radius: 5px; /* Bords arrondis */
+      text-decoration: none; /* Supprime le soulignement par défaut des liens */
+      display: inline-block; /* Pour que la largeur et le padding fonctionnent */
+      margin: 10px; /* Espacement autour des boutons */
+    }
+
+    .bouton-jaune a {
+      color: inherit; /* Hérite de la couleur du span */
+      text-decoration: none; /* Supprime le soulignement du lien à l'intérieur */
+    }
+
+    .bouton-jaune:hover {
+      background-color: #eed536; /* Couleur au survol (facultatif) */
+    }
+
+    .bloc-boutons {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center; /* Centre horizontalement les éléments inline */
+    }
+
+    .bloc-boutons ul {
+      list-style: none;
+      padding: 0;
+      display: inline-block; /* Permet de centrer la liste si nécessaire */
+      margin: 0;
+    }
+
+    .bloc-boutons li {
+      margin: 0;
+    }
+
+    .promotion-epi {
+      background-color: #f9f9f9; /* Fond légèrement gris pour faire ressortir le bloc */
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center; /* Centrer le texte globalement */
+    }
+
+    .promotion-epi h3 {
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .promotion-epi p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .promotion-epi .strong {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .promotion-epi .highlight {
+      color: #dc3545; /* Couleur rouge pour mettre en évidence le nom de la formation (couleur d'urgence) */
+      font-weight: bold;
+    }
+
+    .promotion-epi ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 15px;
+      color: #555;
+      text-align: left; /* Aligner la liste à gauche pour une meilleure lecture */
+      display: inline-block; /* Permet de centrer la liste dans le bloc */
+    }
+
+    .promotion-epi h4 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .promotion-epi .call-to-action {
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+
+    .promotion-epi .button-inscription-epi {
+      display: inline-block;
+      background-color: #dc3545; /* Couleur rouge pour le bouton d'inscription (urgence/sécurité) */
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .promotion-epi .button-inscription-epi:hover {
+      background-color: #c82333;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -21,20 +126,68 @@
   <section class="hero">
     <div class="hero-text">
       <h2>Formation : EPI</h2>
-
-
     </div>
   </section>
+
+  <div class="formation-wrapper">
+    <div class="formation-card">
+      <h3>Formation "EPI"</h3>
+  </ul>
+     
+    </div>
+  </div>
+
+  <div class="promotion-epi">
+    <h3>Soyez le premier maillon de la sécurité !</h3>
+    <p>Face à un début d'incendie, chaque seconde compte. Êtes-vous prêt à agir efficacement pour protéger les personnes et les biens ?</p>
+    <p class="strong">Devenez un <span class="highlight">Équipier de Première Intervention (EPI)</span> grâce à notre formation complète et pratique !</p>
+    <p>Cette formation essentielle vous apprendra à :</p>
+    <ul>
+      <li>Identifier les différents types de feux et leurs agents extincteurs appropriés.</li>
+      <li>Maîtriser l'utilisation des extincteurs portatifs et autres moyens de première intervention.</li>
+      <li>Appliquer les procédures d'alerte et d'évacuation en cas d'incendie.</li>
+      <li>Agir en sécurité pour vous-même et pour les autres.</li>
+      <li>Participer activement à la prévention des risques incendie dans votre entreprise.</li>
+    </ul>
+    <h4>Les avantages de notre formation EPI :</h4>
+    <ul>
+      <li>Des formateurs expérimentés et passionnés par la sécurité incendie.</li>
+      <li>Des exercices pratiques et des mises en situation réalistes.</li>
+      <li>Une formation conforme à la réglementation en vigueur.</li>
+      <li>Renforcez la sécurité au sein de votre entreprise.</li>
+      <li>Valorisez les compétences de vos équipes en matière de sécurité.</li>
+      <ul></ul>
+      <ul class="details">
+        <h4></h4>
+        <h4><strong>Public cible:</strong> Employés de bureau, manutentionnaires, etc.</h4>
+        <li><strong>Durée:</strong> [Indiquez la durée de la formation]</li>
+        <li><strong>Modalités:</strong> Le formateur se déplace sur site</li>
+        <li><strong>Objectifs:</strong> Réduction des TMS, amélioration du confort, prévention des risques.</li>
+      </ul>
+    </ul>
+    <p class="call-to-action"><strong>N'attendez pas l'urgence pour vous préparer !</strong> Formez vos équipes aux gestes qui sauvent.</p>
+    <p class="call-to-action"><a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20EPI." class="button-inscription-epi">Inscrivez-vous dès maintenant à notre formation EPI !</a></p>
+  </div>
+  <div class="bloc-boutons">
+    <ul>
+      <li><span class="bouton-jaune"><a href="D.pdf" download>📥 TÉLÉCHARGER LE PROGRAMME</a></span></li>
+    </ul>
+  </div>
+</section>
+<section id="contact" class="contact">
+<h2>Contact</h2>
+<form>
+<input type="text" placeholder="Nom et prénom" required>
+<input type="email" placeholder="Email" required>
+<input type="tel" placeholder="Téléphone">
+<textarea placeholder="Votre message" required></textarea>
+<button type="submit">Envoyer</button>
+</form>
+<div class="carte">
+<a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20EPI.">contact@tlmcf.com</a>
+</div>
   <footer>
     <p>&copy; 2025 TLM CF - Tous droits réservés</p>
   </footer>
 </body>
-
 </html>
-<section class="hero">
-  <div class="hero-text">
-    <h2>Formez-vous aux métiers du transport et de la logistique</h2>
-    <p>TLM CF vous accompagne vers l'emploi et la réussite professionnelle</p>
-    <a href="#formations" class="btn">Découvrir nos formations</a>
-  </div>
-</section>
