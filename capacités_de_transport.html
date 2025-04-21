@@ -1,11 +1,199 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capacité de transport - TLM CF</title>
+  <title>Capacités de transport - TLM CF</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .formation-wrapper {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px; /* Pour espacer du footer */
+    }
+
+    .formation-card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .formation-card h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .formation-card .details {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+
+    .formation-card .details li {
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .formation-card .details strong {
+      font-weight: bold;
+    }
+
+    .formation-card .call-to-action {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .formation-card .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 0;
+    }
+
+    .formation-card .button {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .formation-card .button:hover {
+      background-color: #0056b3;
+    }
+
+    .boutons-transport {
+      display: flex; /* Pour aligner les éléments en ligne */
+      flex-wrap: wrap; /* Permet aux boutons de passer à la ligne si l'espace est insuffisant */
+      gap: 10px; /* Espacement entre les boutons */
+      justify-content: center; /* Centrer les boutons horizontalement */
+      margin-bottom: 20px; /* Espacement sous les boutons */
+    }
+
+    .bouton-transport-lien {
+      background-color: #6c757d; /* Couleur grise par défaut */
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block; /* Nécessaire pour le padding et la bordure */
+      transition: background-color 0.3s ease;
+      white-space: nowrap; /* Empêche le texte de passer à la ligne si possible */
+    }
+
+    .bouton-transport-lien:nth-child(1) {
+      background-color: #007bff; /* Bleu */
+    }
+
+    .bouton-transport-lien:nth-child(2) {
+      background-color: #28a745; /* Vert */
+    }
+
+    .bouton-transport-lien:nth-child(3) {
+      background-color: #ffc107; /* Jaune */
+      color: #333;
+    }
+
+    .bouton-transport-lien:nth-child(4) {
+      background-color: #dc3545; /* Rouge */
+    }
+
+    .bouton-transport-lien:nth-child(5) {
+      background-color: #6f42c1; /* Violet */
+    }
+
+    .bouton-transport-lien:hover {
+      opacity: 0.8;
+    }
+
+    .bloc-boutons {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center; /* Centre horizontalement les éléments inline */
+    }
+
+    .bloc-boutons ul {
+      list-style: none;
+      padding: 0;
+      display: inline-block; /* Permet de centrer la liste si nécessaire */
+      margin: 0;
+    }
+
+    .bloc-boutons li {
+      margin: 0;
+    }
+
+    .promotion-gestes-postures {
+      background-color: #f9f9f9; /* Fond légèrement gris pour faire ressortir le bloc */
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center; /* Centrer le texte globalement */
+    }
+
+    .promotion-gestes-postures h3 {
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .promotion-gestes-postures p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .strong {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .promotion-gestes-postures .highlight {
+      color: #007bff; /* Couleur bleue pour mettre en évidence le nom de la formation */
+      font-weight: bold;
+    }
+
+    .promotion-gestes-postures ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 15px;
+      color: #555;
+      text-align: left; /* Aligner la liste à gauche pour une meilleure lecture */
+      display: inline-block; /* Permet de centrer la liste dans le bloc */
+    }
+
+    .promotion-gestes-postures h4 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .call-to-action {
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+
+    .promotion-gestes-postures .button-inscription {
+      display: inline-block;
+      background-color: #28a745; /* Couleur verte pour le bouton d'inscription */
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .promotion-gestes-postures .button-inscription:hover {
+      background-color: #1e7e34;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -20,10 +208,67 @@
   </header>
   <section class="hero">
     <div class="hero-text">
-      <h2>Formation : Capacité de transport</h2>
-      <p>Détails à venir sur cette formation.</p>
+      <h2>Formation : Capacités de transport</h2>
+      <div class="boutons-transport">
+        <a href="capacité de transport de marchandises -3,5t.html" class="bouton-transport-lien">Marchandises -3,5t</a>
+        <a href="capacité de transport de marchandises +3,5t.html" class="bouton-transport-lien">Marchandises +3,5t</a>
+        <a href="capacité de transport de voyageurs -10 places.html" class="bouton-transport-lien">Voyageurs -10 places</a>
+        <a href="capacité de transport de voyageurs +10 places.html" class="bouton-transport-lien">Voyageurs +10 places</a>
+        <a href="capacité commissionnaire.html" class="bouton-transport-lien">Commissionnaire</a>
+      </div>
     </div>
   </section>
+
+  <div class="formation-wrapper">
+    <div class="formation-card">
+      <h3>Formation "Capacités de transport"</h3>
+      <div class="promotion-gestes-postures">
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Formations Capacités en Transport</title>
+        </head>
+        <body>
+            <h1>Formations Capacités en Transport (Marchandises, Voyageurs, Commissionnaire)</h1>
+        
+            <p>Les formations de capacité en transport sont des certifications essentielles pour exercer des activités professionnelles dans le secteur du transport, qu'il s'agisse de marchandises, de voyageurs ou en tant que commissionnaire de transport. Elles attestent d'un niveau de compétence et de connaissances réglementaires indispensables pour garantir la sécurité, l'efficacité et la conformité des opérations de transport.</p>
+        
+            <h2>La capacité professionnelle en transport de marchandises</h2>
+            <p>S'adresse aux entreprises et aux personnes souhaitant exercer la profession de transporteur public routier de marchandises avec des véhicules de plus de 3,5 tonnes de poids total autorisé en charge (PTAC). Cette formation aborde des aspects cruciaux tels que la réglementation des transports, la gestion administrative et financière d'une entreprise de transport, la sécurité routière, la maintenance des véhicules, et la relation avec la clientèle. L'obtention de cette capacité est souvent conditionnée par la réussite à un examen national.</p>
+        
+            <h2>La capacité professionnelle en transport de voyageurs</h2>
+            <p>Concerne les entreprises et les individus désirant effectuer du transport public de personnes avec des véhicules de plus de neuf places assises, conducteur compris. Le contenu de cette formation met l'accent sur la réglementation spécifique au transport de voyageurs, la gestion des services, la sécurité des passagers, l'accessibilité, la relation avec les voyageurs, et les aspects environnementaux. Comme pour le transport de marchandises, un examen est généralement requis pour valider les acquis.</p>
+        
+            <h2>La capacité professionnelle de commissionnaire de transport</h2>
+            <p>Est destinée aux entreprises qui organisent et font exécuter, sous leur propre responsabilité et en leur nom, un transport de marchandises par un ou plusieurs transporteurs. Cette formation couvre des domaines tels que le droit des transports, la logistique, l'organisation des flux, la gestion des contrats de transport, l'assurance, et la responsabilité du commissionnaire. Bien qu'il puisse exister des spécificités selon les pays, cette capacité atteste d'une expertise dans l'intermédiation et l'organisation des opérations de transport.</p>
+        
+            <p>En France, ces formations sont dispensées par des organismes agréés et sont sanctionnées par un examen organisé par la Direction Régionale de l'Environnement, de l'Aménagement et du Logement (DREAL). Obtenir la capacité professionnelle est une étape réglementaire incontournable pour accéder à ces professions et garantir la pérennité et la légalité de l'activité de transport. Elle permet aux professionnels d'acquérir les compétences nécessaires pour gérer efficacement leur entreprise, respecter la réglementation en vigueur et offrir des services de qualité.</p>
+        </body>
+        </html>
+        </ul>
+        <p class="call-to-action"><strong>N'attendez plus que les autres le fasse a votre place</strong> Offrez-vous les outils nécessaires pour travailler en toute facilité.</p>
+        <p class="call-to-action"><a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20les%20formations%20Capacités." class="button-inscription">Rejoignez dès aujourd'hui nos formations "Capacités en transport" et faites le premier pas vers un quotidien professionnel plus confortable et plus sain !</a></p>
+      </div>
+      <div class="call-to-action">
+        <a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20les%20formations%20Capacités." class="button">En savoir plus et s'inscrire</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="contact" class="contact">
+<h2>Contact</h2>
+<form>
+<input type="text" placeholder="Nom et prénom" required>
+<input type="email" placeholder="Email" required>
+<input type="tel" placeholder="Téléphone">
+<textarea placeholder="Votre message" required></textarea>
+<button type="submit">Envoyer</button>
+</form>
+<div class="carte">
+<a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20les%20formations%20Capacités.">contact@tlmcf.com</a>
+</div>
   <footer>
     <p>&copy; 2025 TLM CF - Tous droits réservés</p>
   </footer>
