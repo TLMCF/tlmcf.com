@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul PMA, MMA, CU (Tonnage)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .vehicle-type {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .vehicle-type label {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px; /* Espacement entre les boutons */
+        }
+        button:first-of-type {
+            background-color: #007bff; /* Couleur du bouton Calculer (bleu) */
+            color: white;
+        }
+        button:last-of-type {
+            background-color: #f08080; /* Couleur du bouton Vider (rouge clair) */
+            color: white;
+        }
+        #resultat {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .pma-final {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .assemblage-result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calcul PMA, MMA, CU (Tonnage)</h1>
+
+        <div class="vehicle-type">
+            <label>
+                <input type="radio" name="type_vehicule" value="porteur" id="porteur" checked> Porteur
+            </label>
+            <label>
+                <input type="radio" name="type_vehicule" value="tracteur" id="tracteur"> Tracteur
+            </label>
+        </div>
+
+        <h2>Informations Véhicule Moteur</h2>
+        <label for="tracteur_pv">Poids à Vide (PV) (tonnes) :</label>
+        <input type="number" id="tracteur_pv" name="tracteur_pv" step="0.001">
+
+        <label for="tracteur_ptac">PTAC (tonnes) :</label>
+        <input type="number" id="tracteur_ptac" name="tracteur_ptac" step="0.001">
+
+        <label for="tracteur_ptra" id="label_ptra">PTRA (tonnes) :</label>
+        <input type="number" id="tracteur_ptra" name="tracteur_ptra" step="0.001">
+
+        <h2>Informations Remorque</h2>
+        <label for="remorque_pv">Poids à Vide (PV) (tonnes) :</label>
+        <input type="number" id="remorque_pv" name="remorque_pv" step="0.001">
+
+        <label for="remorque_ptac">PTAC (tonnes) :</label>
+        <input type="number" id="remorque_ptac" name="remorque_ptac" step="0.001">
+
+        <h2>Nombre d'essieux de l'ensemble</h2>
+        <input type="number" id="nombre_essieux" name="nombre_essieux" min="1" step="1">
+
+        <button onclick="calculer()">Calculer</button>
+        <button onclick="viderFormulaire()">Vider</button>
+
+        <div id="resultat" style="display: none;">
+            <h3>Résultats :</h3>
+            <p>1. PTRA du Tracteur : <span id="premiere_valeur"></span> tonnes</p>
+            <p>2. Nombre d'essieux : <span id="essieux_resultat"></span></p>
+            <p>3. <span id="label_troisieme_valeur"></span> : <span id="troisieme_valeur"></span> tonnes</p>
+            <p class="assemblage-result">Assemblage Possible : <span id="assemblage"></span></p>
+            <p class="pma-final">Donc mon PMA est de : <span id="pma_final"></span> tonnes</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const porteurRadio = document.getElementById('porteur');
+            const tracteurRadio = document.getElementById('tracteur');
+            const labelPtra = document.getElementById('label_ptra');
+            const inputPtra = document.getElementById('tracteur_ptra');
+            const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
+            const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
+            const tracteurPvInput = document.getElementById('tracteur_pv');
+            const tracteurPtacInput = document.getElementById('tracteur_ptac');
+            const remorquePtacInput = document.getElementById('remorque_ptac');
+
+            function updateTroisiemeValeur() {
+                const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
+                let troisieme_valeur = 0;
+                let label_troisieme_texte = "";
+                if (typeVehicule === 'tracteur') {
+                    troisieme_valeur = parseFloat(tracteurPvInput.value) + parseFloat(remorquePtacInput.value);
+                    label_troisieme_texte = 'PV Tracteur + PTAC Remorque';
+                } else if (typeVehicule === 'porteur') {
+                    troisieme_valeur = parseFloat(tracteurPtacInput.value) + parseFloat(remorquePtacInput.value);
+                    label_troisieme_texte = 'PTAC Porteur + PTAC Remorque';
+                }
+                troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : troisieme_valeur.toFixed(0);
+                labelTroisiemeValeur.textContent = label_troisieme_texte;
+            }
+
+            porteurRadio.addEventListener('change', updateTroisiemeValeur);
+            tracteurRadio.addEventListener('change', updateTroisiemeValeur);
+        });
+
+        function calculer() {
+            const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
+            const tracteur_pv = parseFloat(document.getElementById("tracteur_pv").value);
+            const tracteur_ptac = parseFloat(document.getElementById("tracteur_ptac").value);
+            const tracteur_ptra = parseFloat(document.getElementById("tracteur_ptra").value);
+            const remorque_ptac = parseFloat(document.getElementById("remorque_ptac").value);
+            const nombre_essieux = parseInt(document.getElementById("nombre_essieux").value);
+            const premiereValeurSpan = document.getElementById('premiere_valeur');
+            const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
+            const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
+
+            premiereValeurSpan.textContent = isNaN(tracteur_ptra) ? "" : tracteur_ptra.toFixed(0);
+            let essieux_texte = nombre_essieux + " essieu";
+            if (nombre_essieux > 1) {
+                essieux_texte += "x";
+            }
+            let limite_poids = "";
+            let pma_autorise = 0;
+            if (nombre_essieux <= 4) {
+                limite_poids = "= 40 t";
+                pma_autorise = 40;
+            } else {
+                limite_poids = "= 44 t";
+                pma_autorise = 44;
+            }
+            document.getElementById("essieux_resultat").textContent = essieux_texte + " " + limite_poids;
+
+            let troisieme_valeur = 0;
+            let label_troisieme_texte = "";
+            if (typeVehicule === 'tracteur') {
+                troisieme_valeur = parseFloat(document.getElementById("tracteur_pv").value) + parseFloat(document.getElementById("remorque_ptac").value);
+                label_troisieme_texte = 'PV Tracteur + PTAC Remorque';
+            } else if (typeVehicule === 'porteur') {
+                troisieme_valeur = parseFloat(document.getElementById("tracteur_ptac").value) + parseFloat(document.getElementById("remorque_ptac").value);
+                label_troisieme_texte = 'PTAC Porteur + PTAC Remorque';
+            }
+            troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : troisieme_valeur.toFixed(0);
+            labelTroisiemeValeur.textContent = label_troisieme_texte;
+
+            let assemblage_possible = "Oui";
+            if (isNaN(tracteur_pv) || isNaN(tracteur_ptac) || (typeVehicule === 'tracteur' && isNaN(tracteur_ptra)) || isNaN(remorque_ptac) || isNaN(nombre_essieux)) {
+                assemblage_possible = "Non";
+            } else {
+                if (parseFloat(document.getElementById("tracteur_ptac").value) < parseFloat(document.getElementById("tracteur_pv").value) || parseFloat(document.getElementById("remorque_ptac").value) < parseFloat(document.getElementById("remorque_ptac").value)) {
+                    assemblage_possible = "Non";
+                } else {
+                    const pma_theorique = parseFloat(document.getElementById("tracteur_ptac").value) + parseFloat(document.getElementById("remorque_ptac").value);
+                    if (pma_theorique > parseFloat(premiereValeurSpan.textContent)) {
+                        assemblage_possible = "Non";
+                    }
+                    if (pma_theorique > pma_autorise) {
+                        assemblage_possible = "Non";
+                    }
+                }
+            }
+            document.getElementById("assemblage").textContent = assemblage_possible;
+            const premiereValeurPMA = parseFloat(premiereValeurSpan.textContent);
+            const pma_essieux = pma_autorise;
+            const troisiemeValeurPMA = parseFloat(troisiemeValeurSpan.textContent);
+            const pma_final = Math.min(premiereValeurPMA, pma_essieux, troisiemeValeurPMA);
+            document.getElementById("pma_final").textContent = isNaN(pma_final) ? "" : pma_final.toFixed(0);
+            document.getElementById("resultat").style.display = "block";
+        }
+
+        function viderFormulaire() {
+            document.getElementById("tracteur_pv").value = "";
+            document.getElementById("tracteur_ptac").value = "";
+            document.getElementById("tracteur_ptra").value = "";
+            document.getElementById("remorque_pv").value = "";
+            document.getElementById("remorque_ptac").value = "";
+            document.getElementById("nombre_essieux").value = "";
+            document.getElementById("resultat").style.display = "none";
+            document.getElementById("premiere_valeur").textContent = "";
+            document.getElementById("essieux_resultat").textContent = "";
+            document.getElementById("troisieme_valeur").textContent = "";
+            document.getElementById("assemblage").textContent = "";
+            document.getElementById("pma_final").textContent = "";
+        }
+    </script>
+</body>
+</html>
