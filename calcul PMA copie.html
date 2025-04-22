@@ -265,13 +265,13 @@
 
     function calculer() {
         const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
-        const tracteur_pv = parseFloat(document.getElementById("tracteur_pv").value) || 0;
-        const tracteur_ptac = parseFloat(document.getElementById("tracteur_ptac").value) || 0;
-        const tracteur_ptra = parseFloat(document.getElementById("tracteur_ptra").value) || 0;
-        const remorque_pv = parseFloat(document.getElementById("remorque_pv").value) || 0;
-        const remorque_ptac = parseFloat(document.getElementById("remorque_ptac").value) || 0;
-        const poids_chargement = parseFloat(document.getElementById("poids_chargement").value) || 0;
-        const nombre_essieux = parseInt(document.getElementById("nombre_essieux").value) || 1;
+        const tracteur_pv = parseFloat(document.getElementById("tracteur_pv").value);
+        const tracteur_ptac = parseFloat(document.getElementById("tracteur_ptac").value);
+        const tracteur_ptra = parseFloat(document.getElementById("tracteur_ptra").value);
+        const remorque_pv = parseFloat(document.getElementById("remorque_pv").value); // Récupération du PV remorque
+        const remorque_ptac = parseFloat(document.getElementById("remorque_ptac").value);
+        const poids_chargement = parseFloat(document.getElementById("poids_chargement").value); // Récupération du poids du chargement
+        const nombre_essieux = parseInt(document.getElementById("nombre_essieux").value);
         const premiereValeurSpan = document.getElementById('premiere_valeur');
         const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
         const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
@@ -283,8 +283,16 @@
         const remorque2PvInput = document.getElementById('remorque2_pv');
         const remorque2PtacSupInput = document.getElementById('remorque2_ptac_sup');
 
-        let poids_reel_calcule = tracteur_pv + remorque_pv + poids_chargement;
-        let pma_final_calcule;
+        let poids_reel_calcule = tracteur_pv + remorque_pv + (isNaN(poids_chargement) ? 0 : poids_chargement);
+        if (dollyCheckbox.checked) {
+            const dolly_pv_value = parseFloat(dollyPvInput.value) || 0;
+            poids_reel_calcule += dolly_pv_value;
+        }
+        if (remorque2Checkbox.checked) {
+            const remorque2_pv_value = parseFloat(remorque2PvInput.value) || 0;
+            poids_reel_calcule += remorque2_pv_value;
+        }
+        poidsReelResultatSpan.textContent = isNaN(poids_reel_calcule) ? "" : formatTonnage(poids_reel_calcule);
 
         premiereValeurSpan.textContent = isNaN(tracteur_ptra) ? "" : formatTonnage(tracteur_ptra);
         let essieux_texte = nombre_essieux + " essieu";
@@ -296,7 +304,8 @@
         if (nombre_essieux <= 4) {
             limite_poids = "= 40 t";
             pma_autorise = 40;
-        } else {limite_poids = "= 44 t";
+        } else {
+            limite_poids = "= 44 t";
             pma_autorise = 44;
         }
         document.getElementById("essieux_resultat").textContent = essieux_texte + " " + limite_poids;
@@ -316,38 +325,21 @@
         troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : formatTonnage(troisieme_valeur);
         labelTroisiemeValeur.textContent = label_troisieme_texte;
 
-        const premiereValeurPMA = parseFloat(premiereValeurSpan.textContent) || Infinity;
+        const premiereValeurPMA = parseFloat(premiereValeurSpan.textContent);
         const pma_essieux = pma_autorise;
-        const troisiemeValeurPMA = parseFloat(troisiemeValeurSpan.textContent) || Infinity;
-        pma_final_calcule = Math.min(premiereValeurPMA, pma_essieux, troisiemeValeurPMA);
+        const troisiemeValeurPMA = parseFloat(troisiemeValeurSpan.textContent);
+        const pma_final_calcule = Math.min(premiereValeurPMA, pma_essieux, troisiemeValeurPMA);
         pmaFinalSpan.textContent = isNaN(pma_final_calcule) ? "" : formatTonnage(pma_final_calcule);
 
-        if (poids_chargement === 0) {
-            // Calcul du CU si aucun chargement
-            let poids_vide_total = tracteur_pv + remorque_pv;
-            if (dollyCheckbox.checked) {
-                poids_vide_total += parseFloat(dollyPvInput.value) || 0;
-            }
-            if (remorque2Checkbox.checked) {
-                poids_vide_total += parseFloat(remorque2PvInput.value) || 0;
-            }
-            const cu_calcule = pma_final_calcule - poids_vide_total;
-            poidsReelResultatSpan.textContent = isNaN(cu_calcule) ? "" : formatTonnage(cu_calcule);
-            document.querySelector('.poids-reel-result').textContent = "Charge Utile (CU) :";
-            poidsReelResultatSpan.style.color = 'green'; // Indiquer que c'est le CU
-        } else {
-            // Affichage du poids réel si chargement
-            poidsReelResultatSpan.textContent = isNaN(poids_reel_calcule) ? "" : formatTonnage(poids_reel_calcule);
-            document.querySelector('.poids-reel-result').textContent = "Poids Réel :";
-            if (!isNaN(poids_reel_calcule) && !isNaN(pma_final_calcule)) {
-                if (poids_reel_calcule > pma_final_calcule) {
-                    poidsReelResultatSpan.style.color = 'red';
-                } else {
-                    poidsReelResultatSpan.style.color = 'blue';
-                }
+        // Application de la couleur au poids réel
+        if (!isNaN(poids_reel_calcule) && !isNaN(pma_final_calcule)) {
+            if (poids_reel_calcule > pma_final_calcule) {
+                poidsReelResultatSpan.style.color = 'red';
             } else {
-                poidsReelResultatSpan.style.color = ''; // Réinitialiser la couleur si les valeurs ne sont pas numériques
+                poidsReelResultatSpan.style.color = 'blue';
             }
+        } else {
+            poidsReelResultatSpan.style.color = ''; // Réinitialiser la couleur si les valeurs ne sont pas numériques
         }
 
         document.getElementById("resultat").style.display = "block";
@@ -367,7 +359,6 @@
         document.getElementById("troisieme_valeur").textContent = "";
         document.getElementById("pma_final").textContent = "";
         document.getElementById("poids_reel_resultat").textContent = ""; // Réinitialisation de l'affichage du poids réel
-        document.querySelector('.poids-reel-result').textContent = "Poids Réel :"; // Réinitialiser le libellé
         document.getElementById("poids_reel_resultat").style.color = ''; // Réinitialiser la couleur
         document.getElementById('dolly').checked = false;
         document.getElementById('dolly_pv').value = ""; // Réinitialiser le PV Dolly
