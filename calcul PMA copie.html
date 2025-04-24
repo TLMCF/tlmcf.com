@@ -76,6 +76,7 @@
             border: 1px solid #eee;
             border-radius: 5px;
             background-color: #f9f9f9;
+            display: none;
         }
         .result-box {
             background-color: #f0f8ff; /* Couleur AliceBlue, sobre et légère */
@@ -200,57 +201,33 @@
         </div>
     </div>
 </section>
-<footer>
-    <p>&copy; 2025 TLM CF - Tous droits réservés</p>
-</footer>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const porteurRadio = document.getElementById('porteur');
-        const tracteurRadio = document.getElementById('tracteur');
-        const labelPtra = document.getElementById('label_ptra');
-        const inputPtra = document.getElementById('tracteur_ptra');
-        const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
-        const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
-        const tracteurPvInput = document.getElementById('tracteur_pv');
-        const tracteurPtacInput = document.getElementById('tracteur_ptac');
-        const remorquePtacInput = document.getElementById('remorque_ptac');
-        const dollyCheckbox = document.getElementById('dolly');
-        const remorque2Checkbox = document.getElementById('remorque2');
-        const dollyInfoDiv = document.getElementById('dolly-info');
-        const remorque2InfoDiv = document.getElementById('remorque2-info');
-
-        function updateTroisiemeValeur() {
-            const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
-            let troisieme_valeur = 0;
-            let label_troisieme_texte = "";
-            const remorque2Checked = document.getElementById('remorque2').checked;
-            const remorque2PtacSupValue = remorque2Checked ? parseFloat(document.getElementById('remorque2_ptac_sup').value) || 0 : 0;
-
-            if (typeVehicule === 'tracteur') {
-                troisieme_valeur = parseFloat(tracteurPvInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValue;
-                label_troisieme_texte = 'PV Tracteur + PTAC Remorque(s)';
-            } else if (typeVehicule === 'porteur') {
-                troisieme_valeur = parseFloat(tracteurPtacInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValue;
-                label_troisieme_texte = 'PTAC Porteur + PTAC Remorque(s)';
-            }
-            troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : formatTonnage(troisieme_valeur);
-            labelTroisiemeValeur.textContent = label_troisieme_texte;
-        }
-
-        porteurRadio.addEventListener('change', updateTroisiemeValeur);
-        tracteurRadio.addEventListener('change', updateTroisiemeValeur);
-
-        // Afficher/cacher les informations Dolly
-        dollyCheckbox.addEventListener('change', function() {
-            dollyInfoDiv.style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Afficher/cacher les informations Remorque 2
-        remorque2Checkbox.addEventListener('change', function() {
-            remorque2InfoDiv.style.display = this.checked ? 'block' : 'none';
-            updateTroisiemeValeur(); // Recalculer la troisième valeur quand Remorque 2 est cochée/décochée
-        });
-    });
+    const porteurRadio = document.getElementById('porteur');
+    const tracteurRadio = document.getElementById('tracteur');
+    const labelPtra = document.getElementById('label_ptra');
+    const inputPtra = document.getElementById('tracteur_ptra');
+    const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
+    const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
+    const tracteurPvInput = document.getElementById('tracteur_pv');
+    const tracteurPtacInput = document.getElementById('tracteur_ptac');
+    const remorquePtacInput = document.getElementById('remorque_ptac');
+    const dollyCheckbox = document.getElementById('dolly');
+    const remorque2Checkbox = document.getElementById('remorque2');
+    const dollyInfoDiv = document.getElementById('dolly-info');
+    const remorque2InfoDiv = document.getElementById('remorque2-info');
+    const resultatDiv = document.getElementById('resultat');
+    const premiereValeurSpan = document.getElementById('premiere_valeur');
+    const essieuxResultatSpan = document.getElementById('essieux_resultat');
+    const poidsReelResultatSpan = document.getElementById('poids_reel_resultat');
+    const pmaFinalSpan = document.getElementById('pma_final');
+    const poidsReelLabel = document.querySelector('.poids-reel-result');
+    const dollyPvInput = document.getElementById('dolly_pv');
+    const remorque2PvInput = document.getElementById('remorque2_pv');
+    const remorque2PtacSupInput = document.getElementById('remorque2_ptac_sup');
+    const poidsChargementInput = document.getElementById('poids_chargement');
+    const nombreEssieuxInput = document.getElementById('nombre_essieux');
 
     function formatTonnage(value) {
         if (isNaN(value)) {
@@ -263,30 +240,50 @@
         }
     }
 
-    function calculer() {
+    function updateTroisiemeValeur() {
         const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
-        const tracteur_pv = parseFloat(document.getElementById("tracteur_pv").value) || 0;
-        const tracteur_ptac = parseFloat(document.getElementById("tracteur_ptac").value) || 0;
-        const tracteur_ptra = parseFloat(document.getElementById("tracteur_ptra").value) || 0;
+        let troisieme_valeur = 0;
+        let label_troisieme_texte = "";
+        const remorque2Checked = remorque2Checkbox.checked;
+        const remorque2PtacSupValue = remorque2Checked ? parseFloat(remorque2PtacSupInput.value) || 0 : 0;
+
+        if (typeVehicule === 'tracteur') {
+            troisieme_valeur = parseFloat(tracteurPvInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValue;
+            label_troisieme_texte = 'PV Tracteur + PTAC Remorque(s)';
+        } else if (typeVehicule === 'porteur') {
+            troisieme_valeur = parseFloat(tracteurPtacInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValue;
+            label_troisieme_texte = 'PTAC Porteur + PTAC Remorque(s)';
+        }
+        troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : formatTonnage(troisieme_valeur);
+        labelTroisiemeValeur.textContent = label_troisieme_texte;
+    }
+
+    porteurRadio.addEventListener('change', updateTroisiemeValeur);
+    tracteurRadio.addEventListener('change', updateTroisiemeValeur);
+
+    dollyCheckbox.addEventListener('change', function() {
+        dollyInfoDiv.style.display = this.checked ? 'block' : 'none';
+    });
+
+    remorque2Checkbox.addEventListener('change', function() {
+        remorque2InfoDiv.style.display = this.checked ? 'block' : 'none';
+        updateTroisiemeValeur();
+    });
+
+    window.calculer = function() {
+        const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
+        const tracteur_pv = parseFloat(tracteurPvInput.value) || 0;
+        const tracteur_ptac = parseFloat(tracteurPtacInput.value) || 0;
+        const tracteur_ptra = parseFloat(inputPtra.value) || 0;
         const remorque_pv = parseFloat(document.getElementById("remorque_pv").value) || 0;
-        const remorque_ptac = parseFloat(document.getElementById("remorque_ptac").value) || 0;
-        const poids_chargement = parseFloat(document.getElementById("poids_chargement").value) || 0;
-        const nombre_essieux = parseInt(document.getElementById("nombre_essieux").value) || 1;
-        const premiereValeurSpan = document.getElementById('premiere_valeur');
-        const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
-        const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
-        const poidsReelResultatSpan = document.getElementById('poids_reel_resultat');
-        const pmaFinalSpan = document.getElementById('pma_final');
-        const dollyCheckbox = document.getElementById('dolly');
-        const dollyPvInput = document.getElementById('dolly_pv');
-        const remorque2Checkbox = document.getElementById('remorque2');
-        const remorque2PvInput = document.getElementById('remorque2_pv');
-        const remorque2PtacSupInput = document.getElementById('remorque2_ptac_sup');
+        const remorque_ptac = parseFloat(remorquePtacInput.value) || 0;
+        const poids_chargement = parseFloat(poidsChargementInput.value) || 0;
+        const nombre_essieux = parseInt(nombreEssieuxInput.value) || 1;
 
         let poids_reel_calcule = tracteur_pv + remorque_pv + poids_chargement;
         let pma_final_calcule;
 
-        premiereValeurSpan.textContent = isNaN(parseFloat(document.getElementById("tracteur_ptra").value) || 0) ? "" : formatTonnage(parseFloat(document.getElementById("tracteur_ptra").value) || 0);
+        premiereValeurSpan.textContent = isNaN(tracteur_ptra) ? "" : formatTonnage(tracteur_ptra);
         let essieux_texte = nombre_essieux + " essieu";
         if (nombre_essieux > 1) {
             essieux_texte += "x";
@@ -300,44 +297,44 @@
             limite_poids = "= 44 t";
             pma_autorise = 44;
         }
-        document.getElementById("essieux_resultat").textContent = essieux_texte + " " + limite_poids;
+        essieuxResultatSpan.textContent = essieux_texte + " " + limite_poids;
 
         let troisieme_valeur = 0;
         let label_troisieme_texte = "";
-        const remorque2CheckedCalc = document.getElementById('remorque2').checked;
-        const remorque2PtacSupValueCalc = remorque2CheckedCalc ? parseFloat(document.getElementById('remorque2_ptac_sup').value) || 0 : 0;
+        const remorque2CheckedCalc = remorque2Checkbox.checked;
+        const remorque2PtacSupValueCalc = remorque2CheckedCalc ? parseFloat(remorque2PtacSupInput.value) || 0 : 0;
 
         if (typeVehicule === 'tracteur') {
-            troisieme_valeur = parseFloat(document.getElementById("tracteur_pv").value) + parseFloat(document.getElementById("remorque_ptac").value) + remorque2PtacSupValueCalc;
+            troisieme_valeur = parseFloat(tracteurPvInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValueCalc;
             label_troisieme_texte = 'PV Tracteur + PTAC Remorque(s)';
         } else if (typeVehicule === 'porteur') {
-            troisieme_valeur = parseFloat(document.getElementById("tracteur_ptac").value) + parseFloat(document.getElementById("remorque_ptac").value) + remorque2PtacSupValueCalc;
+            troisieme_valeur = parseFloat(tracteurPtacInput.value) + parseFloat(remorquePtacInput.value) + remorque2PtacSupValueCalc;
             label_troisieme_texte = 'PTAC Porteur + PTAC Remorque(s)';
         }
         troisiemeValeurSpan.textContent = isNaN(troisieme_valeur) ? "" : formatTonnage(troisieme_valeur);
         labelTroisiemeValeur.textContent = label_troisieme_texte;
 
-        const premiereValeurPMA = parseFloat(document.getElementById('premiere_valeur').textContent) || Infinity;
+        const premiereValeurPMA = parseFloat(premiereValeurSpan.textContent) || Infinity;
         const pma_essieux = pma_autorise;
-        const troisiemeValeurPMA = parseFloat(document.getElementById('troisieme_valeur').textContent) || Infinity;
+        const troisiemeValeurPMA = parseFloat(troisiemeValeurSpan.textContent) || Infinity;
         pma_final_calcule = Math.min(premiereValeurPMA, pma_essieux, troisiemeValeurPMA);
         pmaFinalSpan.textContent = isNaN(pma_final_calcule) ? "" : formatTonnage(pma_final_calcule);
 
         if (poids_chargement === 0) {
-            let poids_vide_total = parseFloat(document.getElementById("tracteur_pv").value) || 0 + parseFloat(document.getElementById("remorque_pv").value) || 0;
-            if (document.getElementById('dolly').checked) {
-                poids_vide_total += parseFloat(document.getElementById('dolly_pv').value) || 0;
+            let poids_vide_total = parseFloat(tracteurPvInput.value) || 0 + parseFloat(document.getElementById("remorque_pv").value) || 0;
+            if (dollyCheckbox.checked) {
+                poids_vide_total += parseFloat(dollyPvInput.value) || 0;
             }
-            if (document.getElementById('remorque2').checked) {
-                poids_vide_total += parseFloat(document.getElementById('remorque2_pv').value) || 0;
+            if (remorque2Checkbox.checked) {
+                poids_vide_total += parseFloat(remorque2PvInput.value) || 0;
             }
             const cu_calcule = pma_final_calcule - poids_vide_total;
             poidsReelResultatSpan.textContent = isNaN(cu_calcule) ? "" : formatTonnage(cu_calcule);
-            document.querySelector('.poids-reel-result').textContent = "Charge Utile (CU) :";
+            poidsReelLabel.textContent = "Charge Utile (CU) :";
             poidsReelResultatSpan.style.color = 'green';
         } else {
             poidsReelResultatSpan.textContent = isNaN(poids_reel_calcule) ? "" : formatTonnage(poids_reel_calcule);
-            document.querySelector('.poids-reel-result').textContent = "Poids Réel :";
+            poidsReelLabel.textContent = "Poids Réel :";
             if (!isNaN(poids_reel_calcule) && !isNaN(pma_final_calcule)) {
                 if (poids_reel_calcule > pma_final_calcule) {
                     poidsReelResultatSpan.style.color = 'red';
@@ -349,10 +346,10 @@
             }
         }
 
-        document.getElementById("resultat").style.display = "block";
-    }
+        resultatDiv.style.display = "block";
+    };
 
-    function viderFormulaire() {
+    window.viderFormulaire = function() {
         document.getElementById("tracteur_pv").value = "";
         document.getElementById("tracteur_ptac").value = "";
         document.getElementById("tracteur_ptra").value = "";
@@ -360,22 +357,23 @@
         document.getElementById("remorque_ptac").value = "";
         document.getElementById("nombre_essieux").value = "";
         document.getElementById("poids_chargement").value = "";
-        document.getElementById("resultat").style.display = "none";
-        document.getElementById("premiere_valeur").textContent = "";
-        document.getElementById("essieux_resultat").textContent = "";
-        document.getElementById("troisieme_valeur").textContent = "";
-        document.getElementById("pma_final").textContent = "";
-        document.getElementById("poids_reel_resultat").textContent = "";
-        document.querySelector('.poids-reel-result').textContent = "Poids Réel :";
-        document.getElementById("poids_reel_resultat").style.color = '';
-        document.getElementById('dolly').checked = false;
-        document.getElementById('dolly_pv').value = "";
-        document.getElementById('dolly-info').style.display = 'none';
-        document.getElementById('remorque2').checked = false;
-        document.getElementById('remorque2_pv').value = "";
-        document.getElementById('remorque2_ptac_sup').value = "";
-        document.getElementById('remorque2-info').style.display = 'none';
-    }
+        resultatDiv.style.display = "none";
+        premiereValeurSpan.textContent = "";
+        essieuxResultatSpan.textContent = "";
+        troisiemeValeurSpan.textContent = "";
+        pmaFinalSpan.textContent = "";
+        poidsReelResultatSpan.textContent = "";
+        poidsReelLabel.textContent = "Poids Réel :";
+        poidsReelResultatSpan.style.color = '';
+        dollyCheckbox.checked = false;
+        dollyPvInput.value = "";
+        dollyInfoDiv.style.display = 'none';
+        remorque2Checkbox.checked = false;
+        remorque2PvInput.value = "";
+        remorque2PtacSupInput.value = "";
+        remorque2InfoDiv.style.display = 'none';
+    };
+});
 </script>
 </section>
 <footer>

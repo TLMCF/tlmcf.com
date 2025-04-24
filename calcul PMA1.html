@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calcul PMA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 0.3rem;
+      box-sizing: border-box;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calcul du PMA</h1>
+  <div class="form-container">
+    <label for="pv">Poids à Vide du tracteur (kg):</label>
+    <input type="number" id="pv" />
+
+    <label for="ptac">PTAC de la remorque (kg):</label>
+    <input type="number" id="ptac" />
+
+    <label for="chargement">Poids du chargement (kg):</label>
+    <input type="number" id="chargement" />
+
+    <div class="result" id="poidsReel">Poids Réel : -</div>
+    <div class="result" id="pma">PMA : -</div>
+  </div>
+
+  <script>
+    const pvInput = document.getElementById("pv");
+    const ptacInput = document.getElementById("ptac");
+    const chargementInput = document.getElementById("chargement");
+    const poidsReelDisplay = document.getElementById("poidsReel");
+    const pmaDisplay = document.getElementById("pma");
+
+    function updateResults() {
+      const pv = parseFloat(pvInput.value);
+      const ptac = parseFloat(ptacInput.value);
+      const chargement = parseFloat(chargementInput.value);
+
+      const pma = !isNaN(pv) && !isNaN(ptac) ? pv + ptac : "-";
+      let poidsReel;
+
+      if (!isNaN(pv)) {
+        if (!isNaN(chargement)) {
+          poidsReel = pv + chargement + " kg";
+        } else {
+          poidsReel = "C.U";
+        }
+      } else {
+        poidsReel = "-";
+      }
+
+      poidsReelDisplay.textContent = "Poids Réel : " + poidsReel;
+      pmaDisplay.textContent = "PMA : " + (typeof pma === "number" ? pma + " kg" : "-");
+    }
+
+    pvInput.addEventListener("input", updateResults);
+    ptacInput.addEventListener("input", updateResults);
+    chargementInput.addEventListener("input", updateResults);
+  </script>
+</body>
+</html>

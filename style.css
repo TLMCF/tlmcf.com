@@ -59,6 +59,37 @@ nav ul li a {
   display: inline-block;
   border-radius: 5px;
 }
+#resultat {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.result-box {
+  background-color: #f0f8ff;
+  border: 1px solid #add8e6;
+  border-radius: 3px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.pma-final-label {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.pma-final-value {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.poids-reel-result {
+  font-weight: bold;
+  font-size: 1.2em;
+}
 .formations, .apropos, .entreprise, .actualites, .temoignages, .contact {
   padding: 3rem 2rem;
 }
