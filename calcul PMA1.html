@@ -1,94 +1,550 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calcul PMA</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-      padding: 2rem;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .form-container {
-      max-width: 500px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    input[type="number"] {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-      margin-top: 0.3rem;
-      box-sizing: border-box;
-    }
-    .result {
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #222;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul "PMA, MMA, CU"</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff; /* Bordure sous les titres */
+            padding-bottom: 5px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        h1 {
+            text-align: center;
+        }
+        /* La bordure du div options-sup et vehicle-type est supprimée ici */
+        .options-sup {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .options-sup label {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+         .options-sup input[type="checkbox"] {
+             margin-right: 5px;
+         }
+
+        .vehicle-type {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            flex-wrap: wrap;
+        }
+        .vehicle-type label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+         .vehicle-type input[type="radio"] {
+             margin-right: 5px;
+         }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            /* MODIFIÉ : Supprime le margin-right par défaut pour mieux gérer l'espacement avec Flexbox */
+            /* margin-right: 10px; */
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        button:first-of-type {
+            background-color: #007bff;
+            color: white;
+        }
+        button:first-of-type:hover {
+             background-color: #0056b3;
+        }
+        button:last-of-type {
+            background-color: #dc3545;
+            color: white;
+        }
+        button:last-of-type:hover {
+             background-color: #c82333;
+        }
+
+        /* Styles pour le conteneur des boutons calculer/vider/don */
+        .button-group {
+            display: flex; /* Active Flexbox */
+            align-items: center; /* Alignement vertical centré */
+            justify-content: space-between; /* Pousse les deux groupes (calculer/vider et don) aux extrémités */
+            margin-bottom: 20px; /* Espace sous ce groupe de boutons */
+            flex-wrap: wrap; /* Permet aux groupes de passer à la ligne sur petits écrans */
+            gap: 10px; /* Ajoute un petit espace si jamais les groupes wrap */
+        }
+
+        /* NOUVEAU : Styles pour le conteneur des boutons Calculer et Vider */
+        .calc-clear-buttons {
+            display: flex; /* Active Flexbox pour les boutons internes */
+            gap: 10px; /* Crée l'espace entre Calculer et Vider */
+            align-items: center; /* Alignement vertical interne */
+            /* Permet à ce groupe de rester ensemble s'il y a peu de place */
+            /* Vous pouvez ajouter flex-shrink: 0; si vous voulez absolument qu'ils ne rétrécissent pas */
+        }
+
+
+        #resultat {
+            margin-top: 25px;
+            padding: 20px;
+            border: 1px solid #d6e9c6;
+            border-radius: 8px;
+            background-color: #dff0d8;
+            display: none;
+        }
+        #resultat h3 {
+            color: #3c763d;
+            margin-top: 0;
+        }
+        #resultat p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .result-box {
+            background-color: #cce5ff;
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .pma-final-label {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #004085;
+        }
+        .pma-final-value {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #004085;
+        }
+        .poids-reel-result {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #000;
+        }
+        .poids-reel-result span {
+             font-size: 1.1em;
+        }
+
+        #dolly-info,
+        #remorque2-info {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+        #dolly-info h2,
+        #remorque2-info h2 {
+             font-size: 1.2em;
+             margin-top: 0;
+             margin-bottom: 15px;
+             border-bottom: 1px dashed #ccc;
+             padding-bottom: 5px;
+             color: #666;
+        }
+
+        /* Styles pour la section de don (texte explicatif) */
+        .donation-box {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            background-color: #e9e9e9;
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .donation-box p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+
+        /* Styles pour le bouton de don (lien stylisé) */
+        .donation-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #28a745; /* Bouton vert */
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            /* margin-left: auto; S'il n'y avait que 2 éléments dans button-group */
+            /* Avec 3 éléments et space-between, la marge auto n'est pas nécessaire */
+        }
+
+        .donation-button:hover {
+            background-color: #218838;
+        }
+
+
+        footer {
+            background-color: #e9ecef;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-  <h1>Calcul du PMA</h1>
-  <div class="form-container">
-    <label for="pv">Poids à Vide du tracteur (kg):</label>
-    <input type="number" id="pv" />
+    <div class="container">
+        <h1>Calcul "PMA, MMA, CU"</h1>
 
-    <label for="ptac">PTAC de la remorque (kg):</label>
-    <input type="number" id="ptac" />
+        <div style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 10px; flex-wrap: wrap;">
+            <div class="vehicle-type">
+                <label for="porteur">
+                    <input type="radio" name="type_vehicule" value="porteur" id="porteur" checked> Porteur
+                </label>
+                <label for="tracteur">
+                    <input type="radio" name="type_vehicule" value="tracteur" id="tracteur"> Tracteur
+                </label>
+            </div>
+            <div class="options-sup">
+                <label for="dolly">
+                    <input type="checkbox" id="dolly" name="options_sup" value="dolly"> Dolly
+                </label>
+                <label for="remorque2">
+                    <input type="checkbox" id="remorque2" name="options_sup" value="remorque2"> Remorque 2
+                </label>
+            </div>
+        </div>
 
-    <label for="chargement">Poids du chargement (kg):</label>
-    <input type="number" id="chargement" />
+        <h2>Informations Véhicule Moteur</h2>
+        <label for="tracteur_pv">Poids à Vide (PV) (tonnes) :</label>
+        <input type="number" id="tracteur_pv" name="tracteur_pv" step="0.5">
 
-    <div class="result" id="poidsReel">Poids Réel : -</div>
-    <div class="result" id="pma">PMA : -</div>
-  </div>
+        <label for="tracteur_ptac">PTAC (tonnes) :</label>
+        <input type="number" id="tracteur_ptac" name="tracteur_ptac" step="1">
 
-  <script>
-    const pvInput = document.getElementById("pv");
-    const ptacInput = document.getElementById("ptac");
-    const chargementInput = document.getElementById("chargement");
-    const poidsReelDisplay = document.getElementById("poidsReel");
-    const pmaDisplay = document.getElementById("pma");
+        <label for="tracteur_ptra" id="label_ptra">PTRA (tonnes) :</label>
+        <input type="number" id="tracteur_ptra" name="tracteur_ptra" step="1">
 
-    function updateResults() {
-      const pv = parseFloat(pvInput.value);
-      const ptac = parseFloat(ptacInput.value);
-      const chargement = parseFloat(chargementInput.value);
+        <h2>Remorque 1</h2>
+        <label for="remorque_pv">Poids à Vide (PV) (tonnes) :</label>
+        <input type="number" id="remorque_pv" name="remorque_pv" step="0.5">
 
-      const pma = !isNaN(pv) && !isNaN(ptac) ? pv + ptac : "-";
-      let poidsReel;
+        <label for="remorque_ptac">PTAC (tonnes) :</label>
+        <input type="number" id="remorque_ptac" name="remorque_ptac" step="1">
 
-      if (!isNaN(pv)) {
-        if (!isNaN(chargement)) {
-          poidsReel = pv + chargement + " kg";
-        } else {
-          poidsReel = "C.U";
-        }
-      } else {
-        poidsReel = "-";
-      }
+        <div id="dolly-info">
+            <h2>Dolly</h2>
+            <label for="dolly_pv">Poids à Vide (PV) Dolly (tonnes) :</label>
+            <input type="number" id="dolly_pv" name="dolly_pv" step="0.5">
+        </div>
 
-      poidsReelDisplay.textContent = "Poids Réel : " + poidsReel;
-      pmaDisplay.textContent = "PMA : " + (typeof pma === "number" ? pma + " kg" : "-");
-    }
+        <div id="remorque2-info">
+            <h2>Remorque 2</h2>
+            <label for="remorque2_pv">Poids à Vide (PV) Remorque 2 (tonnes) :</label>
+            <input type="number" id="remorque2_pv" name="remorque2_pv" step="0.5">
+            <label for="remorque2_ptac_sup">PTAC Remorque 2 (tonnes) :</label>
+            <input type="number" id="remorque2_ptac_sup" name="remorque2_ptac_sup" step="1">
+        </div>
 
-    pvInput.addEventListener("input", updateResults);
-    ptacInput.addEventListener("input", updateResults);
-    chargementInput.addEventListener("input", updateResults);
-  </script>
+        <h2>Poids du Chargement</h2>
+        <label for="poids_chargement">Poids du Chargement (tonnes) :</label>
+        <input type="number" id="poids_chargement" name="poids_chargement" step="1">
+
+        <h2>Nombre d'essieux de l'ensemble</h2>
+        <label for="nombre_essieux">Nombre total d'essieux de l'ensemble :</label>
+        <input type="number" id="nombre_essieux" name="nombre_essieux" min="1" step="1" value="1">
+
+        <div class="button-group">
+            <div class="calc-clear-buttons">
+                <button id="calculateBtn">Calculer</button>
+                <button id="clearBtn">Vider</button>
+            </div>
+            <form action="https://www.paypal.com/donate" method="post" target="_top">
+                <input type="hidden" name="hosted_button_id" value="PLTPDAX77WBLJ" />
+                <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Bouton Faites un don avec PayPal" />
+                <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
+                </form>                                
+        </div>
+        <div id="resultat">
+            <h3>Résultats :</h3>
+            <p>1. PTRA : <span id="premiere_valeur"></span> t</p>
+            <p>2. Nombre d'essieux : <span id="essieux_resultat"></span></p>
+            <p>3. <span id="label_troisieme_valeur"></span> : <span id="troisieme_valeur"></span> t</p>
+            <div class="result-box">
+                <p class="poids-reel-result"><span id="poids_reel_label">Poids Réel</span> : <span id="poids_reel_resultat"></span> t</p>
+            </div>
+            <div class="result-box">
+                <p class="pma-final-label">Mon PMA est de : <span id="pma_final" class="pma-final-value"></span> t</p>
+            </div>
+        </div>
+
+        <div class="donation-box">
+            <p>Si ce calculateur vous est utile, un petit don serait grandement apprécié !</p>
+            </div>
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ----- DOM Elements References -----
+            const porteurRadio = document.getElementById('porteur');
+            const tracteurRadio = document.getElementById('tracteur');
+            const inputPtra = document.getElementById('tracteur_ptra');
+
+            const tracteurPvInput = document.getElementById('tracteur_pv');
+            const tracteurPtacInput = document.getElementById('tracteur_ptac');
+            const remorquePvInput = document.getElementById('remorque_pv');
+            const remorquePtacInput = document.getElementById('remorque_ptac');
+
+            const dollyCheckbox = document.getElementById('dolly');
+            const remorque2Checkbox = document.getElementById('remorque2');
+            const dollyInfoDiv = document.getElementById('dolly-info');
+            const remorque2InfoDiv = document.getElementById('remorque2-info');
+            const dollyPvInput = document.getElementById('dolly_pv');
+            const remorque2PvInput = document.getElementById('remorque2_pv');
+            const remorque2PtacSupInput = document.getElementById('remorque2_ptac_sup');
+
+
+            const poidsChargementInput = document.getElementById('poids_chargement');
+            const nombreEssieuxInput = documentgetElementById('nombre_essieux');
+
+            const calculateBtn = document.getElementById('calculateBtn');
+            const clearBtn = document.getElementById('clearBtn');
+
+            const resultatDiv = document.getElementById('resultat');
+            const premiereValeurSpan = document.getElementById('premiere_valeur');
+            const essieuxResultatSpan = document.getElementById('essieux_resultat');
+            const labelTroisiemeValeur = document.getElementById('label_troisieme_valeur');
+            const troisiemeValeurSpan = document.getElementById('troisieme_valeur');
+            const poidsReelLabelSpan = document.getElementById('poids_reel_label');
+            const poidsReelResultatSpan = document.getElementById('poids_reel_resultat');
+            const pmaFinalSpan = document.getElementById('pma_final');
+
+
+            // ----- Helper Function -----
+            function formatTonnage(value) {
+                if (isNaN(value) || value === 0) {
+                    return "";
+                }
+                const formatted = Number(value).toFixed(3).replace(/\.?0+$/, '');
+                 if (formatted === '.') return '0';
+                 return formatted;
+            }
+
+             function formatEssieux(count) {
+                 if (isNaN(count) || count <= 0) {
+                     return "";
+                 }
+                 let limite_poids = "";
+                 if (count >= 1 && count <= 4) {
+                     limite_poids = "= 40 t";
+                 } else if (count > 4) {
+                     limite_poids = "= 44 t";
+                 } else {
+                     limite_poids = "(essieux invalide)";
+                 }
+                 return count + (count > 1 ? " essieux " : " essieu ") + limite_poids;
+             }
+
+
+            // ----- Core Calculation Function -----
+            function calculer() {
+                const typeVehicule = document.querySelector('input[name="type_vehicule"]:checked').value;
+
+                const tracteur_pv = parseFloat(tracteurPvInput.value) || 0;
+                const tracteur_ptac = parseFloat(tracteurPtacInput.value) || 0;
+                const ptra_saisi = parseFloat(inputPtra.value) || 0;
+                const remorque_pv = parseFloat(remorquePvInput.value) || 0;
+                const remorque_ptac = parseFloat(remorquePtacInput.value) || 0;
+                const poids_chargement = parseFloat(poidsChargementInput.value) || 0;
+                const nombre_essieux = parseInt(nombreEssieuxInput.value) || 1;
+
+                const dolly_pv = dollyCheckbox.checked ? (parseFloat(dollyPvInput.value) || 0) : 0;
+
+                const remorque2_pv = remorque2Checkbox.checked ? (parseFloat(remorque2PvInput.value) || 0) : 0;
+                const remorque2_ptac_sup = remorque2Checkbox.checked ? (parseFloat(remorque2PtacSupInput.value) || 0) : 0;
+
+                // --- Affichage des valeurs intermédiaires ---
+
+                // 1. PTRA (valeur saisie) - affiche toujours la valeur du champ PTRA
+                 premiereValeurSpan.textContent = formatTonnage(ptra_saisi);
+
+
+                // 2. Nombre d'essieux
+                 essieuxResultatSpan.textContent = formatEssieux(nombre_essieux);
+                 let pma_autorise_essieux = (nombre_essieux >= 1 && nombre_essieux <= 4) ? 40 : (nombre_essieux > 4 ? 44 : 0);
+
+
+                // 3. Calcul et affichage de la 3ème valeur (PV/PTAC Véhicule + PTAC Remorque(s) + PV Dolly si présente)
+                let troisieme_valeur_calculee = 0;
+                let label_troisieme_texte = "";
+
+                if (typeVehicule === 'tracteur') {
+                    troisieme_valeur_calculee = tracteur_pv + remorque_ptac + remorque2_ptac_sup + dolly_pv;
+                    label_troisieme_texte = 'PV Tracteur + PTAC Remorque(s)';
+                } else { // Porteur
+                    troisieme_valeur_calculee = tracteur_ptac + remorque_ptac + remorque2_ptac_sup + dolly_pv;
+                    label_troisieme_texte = 'PTAC Porteur + PTAC Remorque(s)';
+                }
+
+                if (dollyCheckbox.checked) {
+                     label_troisieme_texte += ' + PV Dolly';
+                }
+
+
+                troisiemeValeurSpan.textContent = formatTonnage(troisieme_valeur_calculee);
+                labelTroisiemeValeur.textContent = label_troisieme_texte;
+
+
+                // --- Calcul du PMA Final ---
+                // Le PMA final est le minimum de :
+                // 1. Le PTRA saisi
+                // 2. La limite basée sur le nombre d'essieux (40 ou 44 t)
+                // 3. La somme (PV/PTAC Véhicule + PTAC Remorque(s) + PV Dolly si présente) - la troisieme valeur calculée
+
+                 let limites = [];
+                 if (ptra_saisi > 0) limites.push(ptra_saisi);
+                 if (pma_autorise_essieux > 0) limites.push(pma_autorise_essieux);
+                 if (troisieme_valeur_calculee > 0) limites.push(troisieme_valeur_calculee);
+
+
+                 pma_final_calcule = (limites.length > 0) ? Math.min(...limites) : 0;
+
+
+                // Afficher le PMA final
+                pmaFinalSpan.textContent = formatTonnage(pma_final_calcule);
+
+                // --- Calcul Poids Réel ou Charge Utile (CU) ---
+                let poids_vide_total = tracteur_pv + remorque_pv + dolly_pv + remorque2_pv;
+
+
+                if (poids_chargement > 0) {
+                    let poids_reel_calcule = poids_vide_total + poids_chargement;
+                    poidsReelResultatSpan.textContent = formatTonnage(poids_reel_calcule);
+                    poidsReelLabelSpan.textContent = "Poids Réel";
+
+                    if (!isNaN(poids_reel_calcule) && !isNaN(pma_final_calcule)) {
+                        if (poids_reel_calcule > pma_final_calcule && pma_final_calcule > 0) {
+                            poidsReelResultatSpan.style.color = 'red';
+                        } else {
+                            poidsReelResultatSpan.style.color = 'blue';
+                        }
+                    } else {
+                         poidsReelResultatSpan.style.color = '';
+                    }
+
+                } else {
+                    let cu_calcule = pma_final_calcule - poids_vide_total;
+                    poidsReelResultatSpan.textContent = formatTonnage(cu_calcule);
+                    poidsReelLabelSpan.textContent = "Charge Utile (CU)";
+                    poidsReelResultatSpan.style.color = 'green';
+                }
+
+                resultatDiv.style.display = "block";
+            }
+
+            // ----- Form Clear Function -----
+            function viderFormulaire() {
+                document.getElementById("tracteur_pv").value = "";
+                document.getElementById("tracteur_ptac").value = "";
+                document.getElementById("tracteur_ptra").value = "";
+                document.getElementById("remorque_pv").value = "";
+                document.getElementById("remorque_ptac").value = "";
+                document.getElementById("nombre_essieux").value = "1";
+                document.getElementById("poids_chargement").value = "";
+
+                // Cacher et vider les options supplémentaires
+                dollyCheckbox.checked = false;
+                dollyPvInput.value = "";
+                dollyInfoDiv.style.display = 'none';
+
+                remorque2Checkbox.checked = false;
+                remorque2PvInput.value = "";
+                remorque2PtacSupInput.value = "";
+                remorque2InfoDiv.style.display = 'none';
+
+                resultatDiv.style.display = "none";
+                premiereValeurSpan.textContent = "";
+                essieuxResultatSpan.textContent = "";
+                troisiemeValeurSpan.textContent = "";
+                pmaFinalSpan.textContent = "";
+                poidsReelResultatSpan.textContent = "";
+                poidsReelLabelSpan.textContent = "Poids Réel";
+                poidsReelResultatSpan.style.color = '';
+            }
+
+             // ----- Event Listeners -----
+
+             calculateBtn.addEventListener('click', calculer);
+             clearBtn.addEventListener('click', viderFormulaire);
+
+            dollyCheckbox.addEventListener('change', function() {
+                dollyInfoDiv.style.display = this.checked ? 'block' : 'none';
+            });
+
+            remorque2Checkbox.addEventListener('change', function() {
+                remorque2InfoDiv.style.display = this.checked ? 'block' : 'none';
+            });
+
+             // Initial state: hide optional sections
+             dollyInfoDiv.style.display = 'none';
+             remorque2InfoDiv.style.display = 'none';
+
+        }); // End DOMContentLoaded
+    </script>
 </body>
+<footer>
+    <p>&copy; 2025 TLM CF - Tous droits réservés</p>
+</footer>
 </html>
