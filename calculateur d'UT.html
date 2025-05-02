@@ -11,10 +11,9 @@
             padding: 20px;
             line-height: 1.6;
             background-color: #f4f4f4;
-            /* Removed flexbox properties that caused extra space: */
-            /* display: flex; */
-            /* flex-direction: column; */
-            /* min-height: 100vh; */
+            display: flex; /* Use flexbox for body to push footer down */
+            flex-direction: column; /* Stack children vertically */
+            min-height: 100vh; /* Make body at least viewport height */
         }
 
         #calculator-container {
@@ -24,8 +23,7 @@
             padding: 20px 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Removed flex-grow: */
-            /* flex-grow: 1; */
+            flex-grow: 1; /* Allow container to grow and push footer down */
         }
 
         h1, h2 {
@@ -267,8 +265,8 @@
             margin-top: 30px; /* Add some space above the footer */
             color: #6c757d;
             font-size: 0.9em;
-             /* Removed flex-shrink as body is no longer flex container */
-            /* flex-shrink: 0; */
+             /* Prevent footer from shrinking */
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -416,7 +414,7 @@
                     <input type="hidden" name="hosted_button_id" value="PLTPDAX77WBLJ" />
                     <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Bouton Faites un don avec PayPal" />
                     <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
-                    </form>                    
+                </form>
             </div>
 
         </form>
@@ -692,7 +690,7 @@
             const maxTotalUtPossible = numTesters * maxUtPerTesterPerDay;
 
             resultsDiv.innerHTML += `<p class="result-line">Unités de test (UT) totales requises : <span class="success">${totalUtRequired.toFixed(2)} UT</span></p>`;
-            resultsDiv.innerHTML += `<p class="result-line">Unités de test (UT) maximales réalisables par jour avec <span class="math-inline">\{numTesters\} testeur\(s\) \: <span class\="result\-line"\></span>{maxTotalUtPossible.toFixed(2)} UT</span></p>`;
+            resultsDiv.innerHTML += `<p class="result-line">Unités de test (UT) maximales réalisables par jour avec ${numTesters} testeur(s) : <span class="result-line">${maxTotalUtPossible.toFixed(2)} UT</span></p>`;
 
             const averageUtPerTester = totalUtRequired / numTesters;
 
@@ -804,7 +802,7 @@
 
                 tableHtml += '<tfoot><tr><td><strong>Total Attribué</strong></td>';
                 uniqueIncludedCategories.forEach(catId => {
-                     tableHtml += `<td><strong>${totalAssignedCategories[catId].toFixed(2)}</strong></td>`;
+                     tableHtml += `<td><strong>${totalAssignedCategories[catId]}</strong></td>`;
                 });
                  const finalTotalAssignedUt = testerAssignments.reduce((sum, tester) => sum + tester.totalUt, 0);
                  tableHtml += `<td><strong>${finalTotalAssignedUt.toFixed(2)}</strong></td></tr></tfoot>`;
@@ -818,13 +816,18 @@
 
             } else {
                 const testersNeeded = Math.ceil(totalUtRequired / maxUtPerTesterPerDay);
-                 resultsDiv.innerHTML += `<p class="warning">Attention : Cette tâche (<span class="math-inline">\{totalUtRequired\.toFixed\(2\)\} UT\) dépasse la capacité d'une journée \(</span>{maxTotalUtPossible.toFixed(2)} UT) pour ${numTesters} testeur(s).</p>`;
+                 resultsDiv.innerHTML += `<p class="warning">Attention : Cette tâche (${totalUtRequired.toFixed(2)} UT) dépasse la capacité d'une journée (${maxTotalUtPossible.toFixed(2)} UT) pour ${numTesters} testeur(s).</p>`;
 
-                 if (averageUtPerTesterPerTesaverageUtPerTester > maxUtPerTesterPerDay + 1e-9) {
-                          // ... (le message d'erreur a été affiché plus haut)
-                     } else {
-                          // ... (le message d'avertissement a été affiché plus haut)
-                     }
+                 if (averageUtPerTester > maxUtPerTesterPerDay + 1e-9) {
+                      resultsDiv.innerHTML += `<p class="error">Chaque testeur devrait gérer environ ${averageUtPerTester.toFixed(2)} UT par jour si la tâche était réalisée sur plusieurs jours, ce qui dépasse la limite individuelle de ${maxUtPerTesterPerDay} UT par jour.</p>`;
+                      resultsDiv.innerHTML += `<p class="warning">Estimation : Il faudrait au moins <span class="error">${testersNeeded} testeurs</span> pour réaliser cette tâche en une seule journée, ou la répartir sur plusieurs jours avec ${numTesters} testeur(s).</p>`;
+                      assignmentResultsDiv.innerHTML = '<p class="info">La charge totale dépasse la capacité journalière. Une répartition détaillée pour une seule journée dans la limite de 6 UT par testeur n\'est pas possible telle quelle.</p>';
+
+                 } else {
+                       resultsDiv.innerHTML += `<p class="warning">Bien que la charge moyenne par testeur (${averageUtPerTester.toFixed(2)} UT) soit dans la limite individuelle de ${maxUtPerTesterPerDay} UT, la charge totale nécessite plus d\'une journée avec ${numTesters} testeur(s).</p>`;
+                       resultsDiv.innerHTML += `<p class="warning">Estimation : La tâche prendra plus d\'une journée avec ${numTesters} testeur(s).</p>`;
+                        assignmentResultsDiv.innerHTML = '<p class="info">La charge totale nécessite plus d\'une journée. Le tableau ci-dessous montre une distribution indicative de la <strong>charge totale de la tâche</strong> par testeur (sur plusieurs jours), basée sur une répartition proportionnelle des UT.</p>';
+                 }
 
 
                  if (totalUtRequired > 0) {
@@ -910,19 +913,16 @@
                 }
             }
 
-            isCalculating = false; // Reset flag at the very end
-        } // End of calculateLoad function
+            isCalculating = false;
+        }
 
-        // Initialiser l'affichage des champs de catégorie au chargement de la page
         document.addEventListener('DOMContentLoaded', () => {
-             // Ensure checkboxes are unchecked by default on load and hide fieldsets
              rCodes.forEach(rCode => {
                  const checkbox = document.getElementById(`${rCode}Checkbox`);
                  if (checkbox) checkbox.checked = false;
-                 handleRCodeToggle(rCode); // This will hide fieldset and reset inputs
+                 handleRCodeToggle(rCode);
              });
 
-             // Reset the R489 category type select to the first option (value="3")
              const numCategoryTypesSelect = document.getElementById('numCategoryTypesSelect');
              if (numCategoryTypesSelect) {
                  numCategoryTypesSelect.value = '3';
