@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Charge de Test Multi-Catégories</title>
+    <title>Calculateur de Charge de Tests Multi-Catégories</title>
     <style>
         body {
             font-family: sans-serif;
@@ -274,26 +274,21 @@
 
     <div id="calculator-container">
 
-        <h1>Calculateur de Charge de Test</h1>
+        <h1>Calculateur de Charge de Tests</h1>
 
         <form id="calculatorForm">
             <div>
-                <label for="numTestersSelect">Nombre de testeurs attribués :</label>
+                <label for="numTestersSelect">Nombre de testeurs :</label>
                 <select id="numTestersSelect">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
                     </select>
             </div>
 
-            <h2>Codes de Catégories à Inclure :</h2>
+            <h2>Catégories à Inclure :</h2>
             <div class="checkbox-group">
                  <div>
                     <input type="checkbox" id="r482Checkbox" onchange="handleRCodeToggle('r482')">
@@ -331,11 +326,11 @@
                 <legend>Catégories R484 (Ponts Roulants & Portiques)</legend>
 
                 <div id="r484_cat1_group" class="category-input-group">
-                    <label for="r484_cat1">Catégorie 1 (Commande au sol - 1 UT/unité) :</label>
+                    <label for="r484_cat1">Catégorie 1 (Commande au sol - 1 UT) :</label>
                     <input type="number" id="r484_cat1" min="0" value="0" required>
                 </div>
                 <div id="r484_cat2_group" class="category-input-group">
-                    <label for="r484_cat2">Catégorie 2 (Commande en cabine - 0.75 UT/unité) :</label>
+                    <label for="r484_cat2">Catégorie 2 (Commande en cabine - 0.75 UT) :</label>
                     <input type="number" id="r484_cat2" min="0" value="0" required>
                 </div>
 
@@ -345,11 +340,11 @@
                 <legend>Catégories R485 (Gerbeurs à conducteur accompagnant)</legend>
 
                 <div id="r485_cat1_group" class="category-input-group">
-                    <label for="r485_cat1">Catégorie 1 (1,20m à 2,5m - 0.75 UT/unité) :</label>
+                    <label for="r485_cat1">Catégorie 1 (1,20m à 2,5m - 0.75 UT) :</label>
                     <input type="number" id="r485_cat1" min="0" value="0" required>
                 </div>
                 <div id="r485_cat2_group" class="category-input-group">
-                    <label for="r485_cat2">Catégorie 2 (> 2,5m - 0.75 UT/unité) :</label>
+                    <label for="r485_cat2">Catégorie 2 (> 2,5m - 0.75 UT) :</label>
                     <input type="number" id="r485_cat2" min="0" value="0" required>
                 </div>
 
@@ -359,11 +354,11 @@
                 <legend>Catégories R486 (PEMP)</legend>
 
                 <div id="r486_catA_group" class="category-input-group">
-                    <label for="r486_catA">Catégorie A (Verticale - 1 UT/unité) :</label>
+                    <label for="r486_catA">Catégorie A (Verticale - 1 UT) :</label>
                     <input type="number" id="r486_catA" min="0" value="0" required>
                 </div>
                 <div id="r486_catB_group" class="category-input-group">
-                    <label for="r486_catB">Catégorie B (Multidirectionnelle - 1 UT/unité) :</label>
+                    <label for="r486_catB">Catégorie B (Multidirectionnelle - 1 UT) :</label>
                     <input type="number" id="r486_catB" min="0" value="0" required>
                 </div>
                  </fieldset>
@@ -381,15 +376,15 @@
                 </div>
 
                 <div id="r489_cat3_4_group" class="category-input-group">
-                    <label for="r489_cat3_4">Catégorie 3 et 4 (1 UT/unité) :</label>
+                    <label for="r489_cat3_4">Catégorie 3 et 4 (1 UT) :</label>
                     <input type="number" id="r489_cat3_4" min="0" value="0" required>
                 </div>
                 <div id="r489_cat5_1b_group" class="category-input-group">
-                    <label for="r489_cat5_1b">Catégorie 5 et 1b (0.75 UT/unité) :</label>
+                    <label for="r489_cat5_1b">Catégorie 5 et 1b (0.75 UT) :</label>
                     <input type="number" id="r489_cat5_1b" min="0" value="0" required>
                 </div>
                 <div id="r489_cat1a_group" class="category-input-group">
-                    <label for="r489_cat1a">Catégorie 1a (0.50 UT/unité) :</label>
+                    <label for="r489_cat1a">Catégorie 1a (0.50 UT) :</label>
                     <input type="number" id="r489_cat1a" min="0" value="0" required>
                 </div>
 
@@ -398,7 +393,7 @@
              <fieldset id="r490Categories" class="hidden">
                  <legend>Catégorie R490 (Grues de chargement)</legend>
                   <div id="r490_units_group" class="category-input-group">
-                     <label for="r490_units">Unités (1.75 UT/unité) :</label>
+                     <label for="r490_units">Unités (1.50 UT) :</label>
                      <input type="number" id="r490_units" min="0" value="0" required>
                  </div>
              </fieldset>
@@ -410,7 +405,7 @@
                     <button type="button" id="clearButton" onclick="clearForm()">Vider</button>
                 </div>
 
-                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                <form action="https://www.paypal.com/donate?token=whXpAjRF9HxIZrl3jIswThVncJUyivVM2zf0JjDIdboYCu5A9cMn9twsTZpGd8_9UVQGk37XI75sXLk7" method="post" target="_top">
                     <input type="hidden" name="hosted_button_id" value="PLTPDAX77WBLJ" />
                     <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Bouton Faites un don avec PayPal" />
                     <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
@@ -445,7 +440,7 @@
             r484_cat2: 0.75,
             r486_catA: 1,
             r486_catB: 1,
-            r490_units: 1.75
+            r490_units: 1.50
              // R482 still needs UT values per unit if applicable
         };
 
@@ -843,7 +838,7 @@
                          else if (catId.startsWith('r490_')) headerText = 'R490 ' + headerText.replace('R490 ', '');
                         tableHtml += `<th>${headerText} (approx.)</th>`;
                     });
-                    tableHtml += '<th>Total UT de la Tâche (approx.)</th></tr></thead>';
+                    tableHtml += '<th>Total UT de la Tâche </th></tr></thead>';
                     tableHtml += '<tbody>';
 
                     const utPerTesterTotalTask = totalUtRequired / numTesters;
