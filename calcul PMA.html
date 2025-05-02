@@ -94,8 +94,6 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            /* MODIFIÉ : Supprime le margin-right par défaut pour mieux gérer l'espacement avec Flexbox */
-            /* margin-right: 10px; */
             font-size: 1em;
             transition: background-color 0.3s ease;
         }
@@ -116,21 +114,31 @@
 
         /* Styles pour le conteneur des boutons calculer/vider/don */
         .button-group {
-            display: flex; /* Active Flexbox */
-            align-items: center; /* Alignement vertical centré */
-            justify-content: space-between; /* Pousse les deux groupes (calculer/vider et don) aux extrémités */
-            margin-bottom: 20px; /* Espace sous ce groupe de boutons */
-            flex-wrap: wrap; /* Permet aux groupes de passer à la ligne sur petits écrans */
-            gap: 10px; /* Ajoute un petit espace si jamais les groupes wrap */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px; /* Ajoute un petit espace entre les deux groupes */
         }
 
-        /* NOUVEAU : Styles pour le conteneur des boutons Calculer et Vider */
+        /* Styles pour le conteneur des boutons Calculer et Vider */
         .calc-clear-buttons {
-            display: flex; /* Active Flexbox pour les boutons internes */
-            gap: 10px; /* Crée l'espace entre Calculer et Vider */
-            align-items: center; /* Alignement vertical interne */
-            /* Permet à ce groupe de rester ensemble s'il y a peu de place */
-            /* Vous pouvez ajouter flex-shrink: 0; si vous voulez absolument qu'ils ne rétrécissent pas */
+            display: flex;
+            gap: 10px; /* Espace entre Calculer et Vider */
+            align-items: center;
+            /* NOUVEAU : Ajout d'un z-index pour s'assurer qu'il est au-dessus du formulaire PayPal */
+            position: relative; /* Nécessaire pour que z-index fonctionne */
+            z-index: 1;
+        }
+
+        /* Styles pour le formulaire PayPal dans le groupe de boutons */
+        /* NOUVEAU : Ajouter un z-index plus bas pour s'assurer qu'il est en dessous */
+        .button-group form {
+            position: relative; /* Nécessaire pour que z-index fonctionne */
+            z-index: 0;
+             /* Optionnel : ajuster la marge ou le positionnement du formulaire PayPal si nécessaire */
+             /* margin-left: auto; pour le pousser à droite si justify-content n'était pas space-between */
         }
 
 
@@ -196,7 +204,7 @@
              color: #666;
         }
 
-        /* Styles pour la section de don (texte explicatif) */
+        /* Styles pour la section de texte de don (sans le bouton qui a été déplacé) */
         .donation-box {
             margin-top: 25px;
             padding: 15px;
@@ -213,24 +221,10 @@
             margin-bottom: 0;
         }
 
-
-        /* Styles pour le bouton de don (lien stylisé) */
-        .donation-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #28a745; /* Bouton vert */
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-            /* margin-left: auto; S'il n'y avait que 2 éléments dans button-group */
-            /* Avec 3 éléments et space-between, la marge auto n'est pas nécessaire */
-        }
-
-        .donation-button:hover {
-            background-color: #218838;
-        }
+        /* Styles pour le bouton de don (le code PayPal gère l'apparence de l'image) */
+        /* Ces styles ne sont probablement plus nécessaires si vous utilisez l'image PayPal */
+        /* .donation-button { ... } */
+        /* .donation-button:hover { ... } */
 
 
         footer {
@@ -245,8 +239,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Calcul "PMA, MMA, CU"</h1>
+    <div class="container"> <h1>Calcul "PMA, MMA, CU"</h1>
 
         <div style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 10px; flex-wrap: wrap;">
             <div class="vehicle-type">
@@ -315,8 +308,8 @@
                 <input type="hidden" name="hosted_button_id" value="PLTPDAX77WBLJ" />
                 <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Bouton Faites un don avec PayPal" />
                 <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
-                </form>                                
-        </div>
+            </form>
+            </div>
         <div id="resultat">
             <h3>Résultats :</h3>
             <p>1. PTRA : <span id="premiere_valeur"></span> t</p>
@@ -332,10 +325,8 @@
 
         <div class="donation-box">
             <p>Si ce calculateur vous est utile, un petit don serait grandement apprécié !</p>
-            </div>
         </div>
-
-    <script>
+        </div> <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ----- DOM Elements References -----
             const porteurRadio = document.getElementById('porteur');
@@ -357,7 +348,7 @@
 
 
             const poidsChargementInput = document.getElementById('poids_chargement');
-            const nombreEssieuxInput = documentgetElementById('nombre_essieux');
+            const nombreEssieuxInput = document.getElementById('nombre_essieux');
 
             const calculateBtn = document.getElementById('calculateBtn');
             const clearBtn = document.getElementById('clearBtn');
