@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Charge de Test Multi-Catégories</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        #calculator-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .checkbox-group {
+             margin-bottom: 15px;
+             padding: 10px;
+             border: 1px dashed #ccc;
+             border-radius: 5px;
+             background-color: #fcfcfc;
+        }
+         .checkbox-group label {
+             font-weight: bold;
+             width: auto;
+             margin-right: 15px;
+             cursor: pointer;
+             color: #0056b3;
+         }
+         .checkbox-group input[type="checkbox"] {
+              vertical-align: middle;
+              margin-top: 0;
+              margin-bottom: 0;
+              padding: 0;
+              width: auto;
+         }
+
+
+        label {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            width: 250px;
+            vertical-align: top;
+        }
+        select, input[type="number"] {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100px;
+            display: inline-block;
+            vertical-align: top;
+        }
+         input[type="number"] {
+             width: 80px;
+         }
+
+        .category-input-group {
+            margin-bottom: 8px;
+        }
+         .category-input-group label,
+         .category-input-group input {
+             margin-bottom: 0;
+         }
+
+        /* Fieldset for grouping categories by R code */
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+        }
+        legend {
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 0 10px;
+            color: #0056b3;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Button Container for side-by-side layout */
+        .button-container {
+            display: flex; /* Use flexbox */
+            gap: 15px; /* Space between buttons */
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button#calculateButton { /* Specific ID for Calculate button */
+            background-color: #28a745;
+            color: white;
+        }
+        button#calculateButton:hover {
+            background-color: #218838;
+        }
+         button#calculateButton:active {
+             background-color: #1e7e34;
+         }
+
+         button#clearButton { /* Specific ID for Clear button */
+            background-color: #ffcdd2; /* Light red */
+            color: #d32f2f; /* Darker red text */
+            border: 1px solid #ef9a9a; /* Border to match background */
+        }
+         button#clearButton:hover {
+             background-color: #ef9a9a; /* Slightly darker on hover */
+             color: #b71c1c; /* Darker text on hover */
+             border-color: #ef9a9a;
+         }
+          button#clearButton:active {
+             background-color: #e57373;
+             border-color: #e57373;
+          }
+
+
+        #results {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .result-line {
+            margin-bottom: 8px;
+        }
+        .warning {
+            color: orange;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+             color: green;
+             font-weight: bold;
+        }
+         .info {
+             color: #0056b3;
+         }
+         .hidden {
+             display: none;
+         }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 0.9em;
+        }
+         /* Style specifically for the assignment table */
+        #assignmentResults table {
+            width: 98%;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 6px;
+            text-align: right;
+        }
+         td:first-child {
+             text-align: left;
+             font-weight: normal;
+             color: #333;
+         }
+        th {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
+         td {
+              white-space: nowrap;
+         }
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+
+         caption {
+             caption-side: top;
+             text-align: left;
+             font-size: 1.1em;
+             font-weight: bold;
+             margin-bottom: 10px;
+             color: #333;
+         }
+    </style>
+</head>
+<body>
+
+    <div id="calculator-container">
+
+        <h1>Calculateur de Charge de Test</h1>
+
+        <form id="calculatorForm">
+            <div>
+                <label for="numTestersSelect">Nombre de testeurs attribués :</label>
+                <select id="numTestersSelect">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    </select>
+            </div>
+
+            <h2>Codes de Catégories à Inclure :</h2>
+            <div class="checkbox-group">
+                <input type="checkbox" id="r489Checkbox" onchange="handleRCodeToggle('r489')">
+                <label for="r489Checkbox">R489</label>
+
+                <input type="checkbox" id="r485Checkbox" onchange="handleRCodeToggle('r485')">
+                <label for="r485Checkbox">R485</label>
+
+                 <input type="checkbox" id="r484Checkbox" onchange="handleRCodeToggle('r484')">
+                <label for="r484Checkbox">R484</label>
+
+                 <input type="checkbox" id="r486Checkbox" onchange="handleRCodeToggle('r486')">
+                <label for="r486Checkbox">R486</label>
+
+                 </div>
+
+
+            <fieldset id="r489Categories" class="hidden">
+                <legend>Catégories R489</legend>
+
+                 <div>
+                    <label for="numCategoryTypesSelect">Nombre de types de catégories R489 à inclure :</label>
+                    <select id="numCategoryTypesSelect" onchange="toggleR489CategoryInputs()">
+                        <option value="3">3 types (Cat 3/4, 5/1b, 1a)</option>
+                        <option value="2">2 types (Cat 3/4, 5/1b)</option>
+                        <option value="1">1 type (Cat 3/4)</option>
+                    </select>
+                </div>
+
+                <div id="r489_cat3_4_group" class="category-input-group">
+                    <label for="r489_cat3_4">Catégorie 3 et 4 (1 UT/unité) :</label>
+                    <input type="number" id="r489_cat3_4" min="0" value="0" required>
+                </div>
+                <div id="r489_cat5_1b_group" class="category-input-group">
+                    <label for="r489_cat5_1b">Catégorie 5 et 1b (0.75 UT/unité) :</label>
+                    <input type="number" id="r489_cat5_1b" min="0" value="0" required>
+                </div>
+                <div id="r489_cat1a_group" class="category-input-group">
+                    <label for="r489_cat1a">Catégorie 1a (0.50 UT/unité) :</label>
+                    <input type="number" id="r489_cat1a" min="0" value="0" required>
+                </div>
+
+            </fieldset>
+
+             <fieldset id="r485Categories" class="hidden">
+                <legend>Catégories R485 (Hypothèse : Cat 1 = 1 UT, Cat 2 = 0.75 UT)</legend>
+
+                <div id="r485_cat1_group" class="category-input-group">
+                    <label for="r485_cat1">Catégorie 1 (1 UT/unité approx.) :</label>
+                    <input type="number" id="r485_cat1" min="0" value="0" required>
+                </div>
+                <div id="r485_cat2_group" class="category-input-group">
+                    <label for="r485_cat2">Catégorie 2 (0.75 UT/unité approx.) :</label>
+                    <input type="number" id="r485_cat2" min="0" value="0" required>
+                </div>
+
+            </fieldset>
+
+            <fieldset id="r484Categories" class="hidden">
+                <legend>Catégories R484 (Hypothèse : Cat 1 = 1 UT, Cat 2 = 0.75 UT)</legend>
+
+                <div id="r484_cat1_group" class="category-input-group">
+                    <label for="r484_cat1">Catégorie 1 (1 UT/unité approx.) :</label>
+                    <input type="number" id="r484_cat1" min="0" value="0" required>
+                </div>
+                <div id="r484_cat2_group" class="category-input-group">
+                    <label for="r484_cat2">Catégorie 2 (0.75 UT/unité approx.) :</label>
+                    <input type="number" id="r484_cat2" min="0" value="0" required>
+                </div>
+
+            </fieldset>
+
+             <fieldset id="r486Categories" class="hidden">
+                <legend>Catégories R486 (Hypothèse : Cat A = 1 UT, Cat B = 0.75 UT)</legend>
+
+                <div id="r486_catA_group" class="category-input-group">
+                    <label for="r486_catA">Catégorie A (1 UT/unité approx.) :</label>
+                    <input type="number" id="r486_catA" min="0" value="0" required>
+                </div>
+                <div id="r486_catB_group" class="category-input-group">
+                    <label for="r486_catB">Catégorie B (0.75 UT/unité approx.) :</label>
+                    <input type="number" id="r486_catB" min="0" value="0" required>
+                </div>
+
+            </fieldset>
+
+            <div class="button-container">
+                <button type="button" id="calculateButton" onclick="calculateLoad()">Calculer la charge</button>
+                <button type="button" id="clearButton" onclick="clearForm()">Vider</button>
+            </div>
+
+        </form>
+
+        <div id="results">
+            </div>
+
+         <div id="assignmentResults">
+            </div>
+
+    </div> <script>
+
+        // Define UT values for all potential categories
+        const utValues = {
+            r489_cat3_4: 1,
+            r489_cat5_1b: 0.75,
+            r489_cat1a: 0.50,
+            r485_cat1: 1,    // Hypothesis
+            r485_cat2: 0.75, // Hypothesis
+            r484_cat1: 1,    // Hypothesis
+            r484_cat2: 0.75, // Hypothesis
+            r486_catA: 1,    // Hypothesis
+            r486_catB: 0.75  // Hypothesis
+             // Add UT values for R490, R482 etc. here if categories are defined
+        };
+
+        const maxUtPerTesterPerDay = 6;
+
+         // List of all R codes
+        const rCodes = ['r489', 'r485', 'r484', 'r486']; // Add new R codes here
+
+
+        // Function to show/hide a specific R Code categories fieldset
+        function handleRCodeToggle(rCode) {
+            const checkbox = document.getElementById(`${rCode}Checkbox`);
+            const fieldset = document.getElementById(`${rCode}Categories`);
+            // Results clearing moved to clearForm or calculateLoad start
+
+            if (checkbox.checked) {
+                fieldset.classList.remove('hidden');
+                // For R489, also trigger the sub-category toggle based on its select
+                if (rCode === 'r489') {
+                     toggleR489CategoryInputs();
+                }
+                // Add logic here if other R codes have similar sub-toggles
+
+            } else {
+                fieldset.classList.add('hidden');
+                // When hiding, reset all contained inputs to 0
+                const inputs = fieldset.querySelectorAll('input[type="number"]');
+                inputs.forEach(input => input.value = 0);
+
+            }
+             // Clear results whenever any R code section is toggled, as the input data changes
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('assignmentResults').innerHTML = '';
+        }
+
+
+        // Function to show/hide the specific category input groups within R489 fieldset
+        function toggleR489CategoryInputs() {
+             // Only operate if the R489 fieldset is currently visible
+             const r489Fieldset = document.getElementById('r489Categories');
+             if (r489Fieldset.classList.contains('hidden')) {
+                 // If R489 is hidden, the categories are also hidden, do nothing here
+                 return;
+             }
+
+            const numTypes = parseInt(document.getElementById('numCategoryTypesSelect').value);
+            document.getElementById('r489_cat3_4_group').classList.add('hidden');
+            document.getElementById('r489_cat5_1b_group').classList.add('hidden');
+            document.getElementById('r489_cat1a_group').classList.add('hidden');
+
+            if (numTypes >= 1) {
+                document.getElementById('r489_cat3_4_group').classList.remove('hidden');
+            }
+            if (numTypes >= 2) {
+                document.getElementById('r489_cat5_1b_group').classList.remove('hidden');
+            }
+            if (numTypes >= 3) {
+                document.getElementById('r489_cat1a_group').classList.remove('hidden');
+            }
+
+             // Reset values of hidden inputs to 0 to avoid calculating them
+             if (numTypes < 3) document.getElementById('r489_cat1a').value = 0;
+             if (numTypes < 2) document.getElementById('r489_cat5_1b').value = 0;
+
+             // Clear results when the inputs visibility changes
+             document.getElementById('results').innerHTML = '';
+             document.getElementById('assignmentResults').innerHTML = '';
+        }
+
+        // Function to clear the form and results
+        function clearForm() {
+             // Reset number of testers select to the first option (value="1")
+             document.getElementById('numTestersSelect').value = '1';
+
+             // Uncheck all R code checkboxes and toggle their fieldsets off
+             rCodes.forEach(rCode => {
+                  const checkbox = document.getElementById(`${rCode}Checkbox`);
+                  if (checkbox) {
+                      checkbox.checked = false;
+                      handleRCodeToggle(rCode); // This will hide fieldset and reset inputs
+                  }
+             });
+
+             // Reset the R489 category type select to the first option (value="3")
+             document.getElementById('numCategoryTypesSelect').value = '3';
+
+             // Clear the results and assignment divs
+             document.getElementById('results').innerHTML = '';
+             document.getElementById('assignmentResults').innerHTML = '';
+        }
+
+
+        function calculateLoad() {
+            // Récupérer les valeurs des champs d'entrée pour le nombre de testeurs
+            const numTesters = parseInt(document.getElementById('numTestersSelect').value);
+
+            // Collect quantities for all categories from checked R codes
+            const quantities = {
+                r489_cat3_4: 0, r489_cat5_1b: 0, r489_cat1a: 0,
+                r485_cat1: 0, r485_cat2: 0,
+                r484_cat1: 0, r484_cat2: 0,
+                r486_catA: 0, r486_catB: 0
+                 // Add new category keys here
+            };
+
+            // List of all R codes and their category input IDs
+            const rCodeCategoryInputs = {
+                r489: ['r489_cat3_4', 'r489_cat5_1b', 'r489_cat1a'],
+                r485: ['r485_cat1', 'r485_cat2'],
+                r484: ['r484_cat1', 'r484_cat2'],
+                r486: ['r486_catA', 'r486_catB']
+                 // Add new R codes and their category input IDs here
+            };
+
+            let totalUtRequired = 0;
+            const includedCategories = []; // To build dynamic table headers/assignment logic
+
+
+            // Iterate through R codes and collect quantities if checked
+            for (const rCode in rCodeCategoryInputs) {
+                const checkbox = document.getElementById(`${rCode}Checkbox`);
+                if (checkbox && checkbox.checked) {
+                    const fieldset = document.getElementById(`${rCode}Categories`);
+                     if (fieldset) { // Ensure fieldset exists
+                         // For R489, respect the internal category type selection
+                         if (rCode === 'r489') {
+                             const numTypesSelectedR489 = parseInt(document.getElementById('numCategoryTypesSelect').value);
+                              if (numTypesSelectedR489 >= 1) {
+                                 const inputElement = document.getElementById('r489_cat3_4');
+                                 if (inputElement && !isNaN(parseInt(inputElement.value)) && parseInt(inputElement.value) >= 0) {
+                                    quantities.r489_cat3_4 = parseInt(inputElement.value);
+                                    totalUtRequired += quantities.r489_cat3_4 * utValues.r489_cat3_4;
+                                    includedCategories.push('r489_cat3_4');
+                                 } else {
+                                     document.getElementById('results').innerHTML = `<p class="error">Veuillez entrer une valeur numérique valide (>= 0) pour ${document.querySelector('label[for="r489_cat3_4"]').textContent}.</p>`;
+                                     document.getElementById('assignmentResults').innerHTML = ''; return; // Clear table and stop
+                                 }
+                              }
+                               if (numTypesSelectedR489 >= 2) {
+                                  const inputElement = document.getElementById('r489_cat5_1b');
+                                   if (inputElement && !isNaN(parseInt(inputElement.value)) && parseInt(inputElement.value) >= 0) {
+                                      quantities.r489_cat5_1b = parseInt(inputElement.value);
+                                      totalUtRequired += quantities.r489_cat5_1b * utValues.r489_cat5_1b;
+                                       includedCategories.push('r489_cat5_1b');
+                                  } else {
+                                       document.getElementById('results').innerHTML = `<p class="error">Veuillez entrer une valeur numérique valide (>= 0) pour ${document.querySelector('label[for="r489_cat5_1b"]').textContent}.</p>`;
+                                       document.getElementById('assignmentResults').innerHTML = ''; return; // Clear table and stop
+                                   }
+                               }
+                                if (numTypesSelectedR489 >= 3) {
+                                  const inputElement = document.getElementById('r489_cat1a');
+                                   if (inputElement && !isNaN(parseInt(inputElement.value)) && parseInt(inputElement.value) >= 0) {
+                                      quantities.r489_cat1a = parseInt(inputElement.value);
+                                      totalUtRequired += quantities.r489_cat1a * utValues.r489_cat1a;
+                                       includedCategories.push('r489_cat1a');
+                                  } else {
+                                        document.getElementById('results').innerHTML = `<p class="error">Veuillez entrer une valeur numérique valide (>= 0) pour ${document.querySelector('label[for="r489_cat1a"]').textContent}.</p>`;
+                                        document.getElementById('assignmentResults').innerHTML = ''; return; // Clear table and stop
+                                    }
+                                }
+                         } else {
+                             // For other R codes, include all their categories if checked and valid
+                             let currentRCodeError = false;
+                             rCodeCategoryInputs[rCode].forEach(catId => {
+                                const inputElement = document.getElementById(catId);
+                                 if (inputElement) {
+                                     const quantity = parseInt(inputElement.value);
+                                     if (!isNaN(quantity) && quantity >= 0) {
+                                        quantities[catId] = quantity;
+                                        totalUtRequired += quantities[catId] * utValues[catId];
+                                        includedCategories.push(catId);
+                                     } else {
+                                         document.getElementById('results').innerHTML = `<p class="error">Veuillez entrer une valeur numérique valide (>= 0) pour ${document.querySelector('label[for="' + catId + '"]').textContent}.</p>`;
+                                         document.getElementById('assignmentResults').innerHTML = ''; // Clear table
+                                         currentRCodeError = true;
+                                     }
+                                 }
+                             });
+                              if (currentRCodeError) return; // Stop if validation failed for this R code
+                         }
+                     }
+                }
+            }
+
+
+            const resultsDiv = document.getElementById('results');
+            const assignmentResultsDiv = document.getElementById('assignmentResults');
+
+            // Clear previous results (already done at the start of calculateLoad)
+            // resultsDiv.innerHTML = '';
+            // assignmentResultsDiv.innerHTML = '';
+
+
+            // Re-check if totalUtRequired is 0 after collecting all inputs
+             if (totalUtRequired === 0 && includedCategories.length > 0) {
+                 resultsDiv.innerHTML = '<p class="info">Les catégories sélectionnées ont 0 UT total requis. Veuillez vérifier les quantités.</p>';
+                  assignmentResultsDiv.innerHTML = '<p class="info">Aucune unité de test à répartir.</p>';
+                 return;
+             }
+             if (totalUtRequired === 0 && includedCategories.length === 0) {
+                 resultsDiv.innerHTML = '<p class="info">Aucune catégorie de test n\'est sélectionnée.</p>';
+                 assignmentResultsDiv.innerHTML = '<p class="info">Aucune unité de test à répartir.</p>';
+                 return;
+             }
+
+
+            // Calculer les UT maximales réalisables par jour avec le nombre de testeurs
+            const maxTotalUtPossible = numTesters * maxUtPerTesterPerDay;
+
+            // Afficher les résultats principaux
+            resultsDiv.innerHTML += `<p class="result-line">Unités de test (UT) totales requises : <span class="success">${totalUtRequired.toFixed(2)} UT</span></p>`;
+            resultsDiv.innerHTML += `<p class="result-line">Unités de test (UT) maximales réalisables par jour avec ${numTesters} testeur(s) : <span class="result-line">${maxTotalUtPossible.toFixed(2)} UT</span></p>`;
+
+             // Calculer la charge moyenne par testeur
+            const averageUtPerTester = totalUtRequired / numTesters;
+
+            // Afficher la répartition par testeur dans les résultats principaux (Moyenne)
+            resultsDiv.innerHTML += `<h3>Répartition de la charge par testeur (Moyenne) :</h3>`;
+            resultsDiv.innerHTML += `<p class="result-line info">Charge moyenne par testeur : <span>${averageUtPerTester.toFixed(2)} UT</span></p>`;
+
+
+            // --- Logique de répartition et génération du tableau ---
+
+            // Create a unique list of category IDs that are included (already done during collection)
+             const uniqueIncludedCategories = includedCategories; // Already unique and ordered by R code/sub-type order
+
+
+            if (totalUtRequired <= maxTotalUtPossible) {
+                // Tâche réalisable en une journée : tenter une répartition unitaire
+                 resultsDiv.innerHTML += `<p class="success">Cette tâche est réalisable en une journée avec ${numTesters} testeur(s).</p>`;
+                 if (averageUtPerTester <= maxUtPerTesterPerDay + 1e-9) { // Tolerance for float comparison
+                      resultsDiv.innerHTML += `<p class="success">La charge moyenne par testeur (${averageUtPerTester.toFixed(2)} UT) respecte la limite individuelle de ${maxUtPerTesterPerDay} UT par jour.</p>`;
+                 } else {
+                       // Should not happen based on totalUtRequired <= maxTotalUtPossible, but include as safeguard
+                        resultsDiv.innerHTML += `<p class="warning">Attention : Bien que la charge totale soit gérable, la charge moyenne par testeur (${averageUtPerTester.toFixed(2)} UT) semble dépasser la limite individuelle de ${maxUtPerTesterPerDay} UT. Vérifiez les valeurs.</p>`;
+                 }
+
+
+                // --- Générer le tableau de répartition indicative (essai glouton unitaire) ---
+                assignmentResultsDiv.innerHTML += '<caption>Répartition Indicative des Unités par Testeur (pour une journée)</caption>';
+                let tableHtml = '<table>';
+                tableHtml += '<thead><tr><th>Testeur</th>';
+                // Add headers for included categories
+                uniqueIncludedCategories.forEach(catId => {
+                    // Improve category header display
+                    let headerText = catId.replace('_group', '').replace('_', ' ').toUpperCase(); // Basic formatting
+                     if (catId.startsWith('r489_')) headerText = headerText.replace('R489 ', 'R489 '); // Keep R489 prefix space
+                     else if (catId.startsWith('r485_')) headerText = headerText.replace('R485 ', 'R485 ');
+                     else if (catId.startsWith('r484_')) headerText = headerText.replace('R484 ', 'R484 ');
+                     else if (catId.startsWith('r486_')) headerText = headerText.replace('R486 ', 'R486 ');
+
+                    tableHtml += `<th>${headerText}</th>`;
+                });
+
+                tableHtml += '<th>Total UT (Journée)</th></tr></thead>';
+                tableHtml += '<tbody>';
+
+                // Initialize assignment tracking for each tester
+                const testerAssignments = [];
+                for (let i = 0; i < numTesters; i++) {
+                    const assignment = { totalUt: 0 };
+                    uniqueIncludedCategories.forEach(catId => assignment[catId] = 0); // Initialize category counts
+                    testerAssignments.push(assignment);
+                }
+
+                // Units remaining to be assigned (only included categories)
+                const remainingUnits = {};
+                uniqueIncludedCategories.forEach(catId => remainingUnits[catId] = quantities[catId]);
+
+
+                // Greedy assignment loop (round-robin testers, prioritize categories by UT value descending)
+                let unitsAssignedInPass;
+                let currentTesterIndex = 0;
+                 // Sort included categories by UT value descending
+                const categoryOrder = [...uniqueIncludedCategories].sort((a, b) => utValues[b] - utValues[a]);
+
+
+                do {
+                    unitsAssignedInPass = 0;
+                    for (let i = 0; i < numTesters; i++) {
+                        const testerIndex = (currentTesterIndex + i) % numTesters;
+                        const tester = testerAssignments[testerIndex];
+
+                        // Try assigning units category by category (in prioritized order)
+                        for (const categoryId of categoryOrder) {
+
+                            if (remainingUnits[categoryId] > 0) {
+                                if (tester.totalUt + utValues[categoryId] <= maxUtPerTesterPerDay + 1e-9) { // Add tolerance for float comparison
+                                    tester[categoryId]++;
+                                    tester.totalUt += utValues[categoryId];
+                                    remainingUnits[categoryId]--;
+                                    unitsAssignedInPass++;
+                                    // If a unit was assigned, break from category loop for this tester and move to next tester
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                     // Only move the starting tester if units were assigned in this pass,
+                     // otherwise, the next pass will start with the same tester to give them
+                     // another chance if other testers couldn't take units.
+                     if (unitsAssignedInPass > 0) {
+                        currentTesterIndex = (currentTesterIndex + 1) % numTesters;
+                     } else {
+                        // If no units were assigned in a full pass, it means remaining units cannot fit
+                        // within the 6 UT limit for any tester. Break the do-while loop.
+                        break;
+                     }
+
+                } while (true); // Loop until explicitly broken
+
+
+                // Check if all units were assigned
+                let totalRemainingUnits = 0;
+                uniqueIncludedCategories.forEach(catId => totalRemainingUnits += remainingUnits[catId]);
+
+                 if (Math.abs(totalRemainingUnits) > 1e-9) { // Check if remaining units are significant
+                      // This indicates the greedy algorithm couldn't assign all units.
+                      // This can happen with specific unit combinations and the strict 6 UT limit.
+                      // It's a limitation of this simple greedy approach.
+                      // We'll display the attempted assignment and add a note.
+                      assignmentResultsDiv.innerHTML += `<p class="warning">Attention : ${totalRemainingUnits.toFixed(0)} unités n'ont pas pu être attribuées par l'algorithme dans la limite de 6 UT par jour par testeur. Des ajustements manuels pourraient être nécessaires.</p>`;
+                 }
+
+
+                // Populate table rows
+                let totalAssignedUt = 0;
+                 const totalAssignedCategories = {};
+                 uniqueIncludedCategories.forEach(catId => totalAssignedCategories[catId] = 0);
+
+
+                for (let i = 0; i < numTesters; i++) {
+                    const tester = testerAssignments[i];
+                    tableHtml += '<tr>';
+                    tableHtml += `<td>Testeur ${i + 1}</td>`;
+                    uniqueIncludedCategories.forEach(catId => {
+                        tableHtml += `<td>${tester[catId]}</td>`;
+                        totalAssignedCategories[catId] += tester[catId];
+                    });
+                    tableHtml += `<td>${tester.totalUt.toFixed(2)}</td>`; // Display total UT for the tester
+                    tableHtml += '</tr>';
+
+                    totalAssignedUt += tester.totalUt;
+                }
+
+                // Add Total Row
+                tableHtml += '<tfoot><tr><td><strong>Total Attribué</strong></td>';
+                uniqueIncludedCategories.forEach(catId => {
+                     tableHtml += `<td><strong>${totalAssignedCategories[catId]}</strong></td>`;
+                });
+                 tableHtml += `<td><strong>${totalAssignedUt.toFixed(2)}</strong></td></tr></tfoot>`;
+
+
+                tableHtml += '</tbody>';
+                tableHtml += '</table>';
+                assignmentResultsDiv.innerHTML += tableHtml;
+                assignmentResultsDiv.innerHTML += '<p class="info"><em>Cette répartition est une proposition basée sur l\'attribution séquentielle des unités en respectant la limite de 6 UT par testeur pour une journée. Elle peut ne pas être la seule ou la plus équilibrée possible en termes de UT totaux par testeur, et des unités peuvent rester non attribuées si elles ne peuvent pas l\'être dans la limite.</em></p>';
+
+
+            } else {
+                // Tâche non réalisable en une journée
+                const testersNeeded = Math.ceil(totalUtRequired / maxUtPerTesterPerDay);
+                 resultsDiv.innerHTML += `<p class="warning">Attention : Cette tâche (${totalUtRequired.toFixed(2)} UT) dépasse la capacité d'une journée (${maxTotalUtPossible.toFixed(2)} UT) pour ${numTesters} testeur(s).</p>`;
+
+                 if (averageUtPerTester > maxUtPerTesterPerDay + 1e-9) { // Tolerance for float comparison
+                      resultsDiv.innerHTML += `<p class="error">Chaque testeur devrait gérer environ ${averageUtPerTester.toFixed(2)} UT par jour si la tâche était réalisée sur plusieurs jours, ce qui dépasse la limite individuelle de ${maxUtPerTesterPerDay} UT par jour.</p>`;
+                      resultsDiv.innerHTML += `<p class="warning">Estimation : Il faudrait au moins <span class="error">${testersNeeded} testeurs</span> pour réaliser cette tâche en une seule journée, ou la répartir sur plusieurs jours avec ${numTesters} testeur(s).</p>`;
+                      assignmentResultsDiv.innerHTML = '<p class="info">La charge totale dépasse la capacité journalière. Une répartition détaillée pour une seule journée dans la limite de 6 UT par testeur n\'est pas possible telle quelle.</p>';
+
+                 } else {
+                      // This case could happen if total load > total capacity but average per tester is <= 6 UT
+                      // This would imply that the task requires more than 1 day even if individual capacity isn't exceeded (e.g. 1 tester, 7 UT total)
+                       resultsDiv.innerHTML += `<p class="warning">Bien que la charge moyenne par testeur (${averageUtPerTester.toFixed(2)} UT) soit dans la limite individuelle de ${maxUtPerTesterPerDay} UT, la charge totale nécessite plus d'une journée avec ${numTesters} testeur(s).</p>`;
+                       resultsDiv.innerHTML += `<p class="warning">Estimation : La tâche prendra plus d'une journée avec ${numTesters} testeur(s).</p>`;
+                        assignmentResultsDiv.innerHTML = '<p class="info">La charge totale nécessite plus d\'une journée. Le tableau ci-dessous montre une distribution indicative de la <strong>charge totale de la tâche</strong> par testeur (sur plusieurs jours), basée sur une répartition proportionnelle des UT.</p>';
+                 }
+
+
+                 // --- Générer le tableau de répartition indicative de la CHARGE TOTALE (proportionnelle) ---
+                 if (totalUtRequired > 0) {
+
+                    let tableHtml = '<table>';
+                    tableHtml += '<thead><tr><th>Testeur</th>';
+                    // Add headers for included categories (approximate units)
+                     uniqueIncludedCategories.forEach(catId => {
+                         let headerText = catId.replace('_group', '').replace('_', ' ').toUpperCase(); // Basic formatting
+                         if (catId.startsWith('r489_')) headerText = headerText.replace('R489 ', 'R489 ');
+                         else if (catId.startsWith('r485_')) headerText = headerText.replace('R485 ', 'R485 ');
+                         else if (catId.startsWith('r484_')) headerText = headerText.replace('R484 ', 'R484 ');
+                         else if (catId.startsWith('r486_')) headerText = headerText.replace('R486 ', 'R486 ');
+                        tableHtml += `<th>${headerText} (approx.)</th>`;
+                    });
+                    tableHtml += '<th>Total UT de la Tâche (approx.)</th></tr></thead>';
+                    tableHtml += '<tbody>';
+
+                    const utPerTesterTotalTask = totalUtRequired / numTesters; // Total UT of the whole task per tester
+
+                    // Calculate UT proportion of each category in the total required UT
+                    let utTotalAllCategories = 0;
+                    // Use original quantities for proportion calculation
+                     for(const catId in quantities) {
+                         // Only include categories that are part of the calculation (from uniqueIncludedCategories)
+                          if (uniqueIncludedCategories.includes(catId)) {
+                             utTotalAllCategories += quantities[catId] * utValues[catId];
+                          }
+                     }
+
+
+                    const utProportions = {};
+                    uniqueIncludedCategories.forEach(catId => {
+                        utProportions[catId] = (utTotalAllCategories > 1e-9) ? (quantities[catId] * utValues[catId]) / utTotalAllCategories : 0; // Add tolerance for division by zero
+                    });
+
+
+                    let totalAssignedUt = 0;
+                    const totalAssignedCategories = {};
+                    uniqueIncludedCategories.forEach(catId => totalAssignedCategories[catId] = 0);
+
+
+                    for (let i = 1; i <= numTesters; i++) {
+                        tableHtml += '<tr>';
+                        tableHtml += `<td>Testeur ${i}</td>`;
+
+                        // Calculate approximate UT and units for this tester based on total task UT distribution
+                        const testerUtLoad = utPerTesterTotalTask; // Each tester gets an equal share of total task UT
+
+                        const testerUtLoadsByCategory = {};
+                         const approxUnitsByCategory = {};
+                         let testerTotalUtThisRow = 0;
+
+                        uniqueIncludedCategories.forEach(catId => {
+                             testerUtLoadsByCategory[catId] = testerUtLoad * utProportions[catId];
+                             approxUnitsByCategory[catId] = (utValues[catId] > 1e-9) ? testerUtLoadsByCategory[catId] / utValues[catId] : 0; // Add tolerance for division by zero
+                             testerTotalUtThisRow += testerUtLoadsByCategory[catId];
+
+                             tableHtml += `<td>${approxUnitsByCategory[catId].toFixed(2)}</td>`;
+                              totalAssignedCategories[catId] += approxUnitsByCategory[catId];
+                        });
+
+
+                        tableHtml += `<td>${testerTotalUtThisRow.toFixed(2)}</td>`;
+                        totalAssignedUt += testerTotalUtThisRow;
+
+
+                        tableHtml += '</tr>';
+                    }
+
+                    // Add Total Row (should match initial inputs approximately due to rounding)
+                    tableHtml += '<tfoot><tr><td><strong>Total</strong></td>';
+                    uniqueIncludedCategories.forEach(catId => {
+                         tableHtml += `<td><strong>${totalAssignedCategories[catId].toFixed(2)}</strong></td>`;
+                    });
+                    tableHtml += `<td><strong>${totalAssignedUt.toFixed(2)}</strong></td></tr></tfoot>`;
+
+
+                    tableHtml += '</tbody>';
+                    tableHtml += '</table>';
+                     assignmentResultsDiv.innerHTML += tableHtml;
+                    assignmentResultsDiv.innerHTML += '<p class="info"><em>Cette répartition montre une distribution indicative de la charge totale (potentiellement sur plusieurs jours) basée sur la proportion des UT totales. Les quantités d\'unités par catégorie sont approximatives.</em></p>';
+
+
+                } else { // totalUtRequired is 0
+                     assignmentResultsDiv.innerHTML = '<p class="info">Aucune unité de test à répartir.</p>';
+                }
+            }
+        }
+
+        // Initialiser l'affichage des champs de catégorie au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+             // Handle initial state of all R code checkboxes
+             rCodes.forEach(rCode => {
+                 // Ensure checkboxes are unchecked by default in HTML or uncheck them here if needed
+                 const checkbox = document.getElementById(`${rCode}Checkbox`);
+                 if (checkbox) checkbox.checked = false; // Ensure unchecked on load
+
+                 handleRCodeToggle(rCode); // Hide fieldsets on load
+             });
+
+             // Also ensure R489 sub-toggle is applied if R489 is checked by default in HTML
+             // (Currently R489 fieldset is hidden by default, so its internal state is not visible)
+        });
+
+    </script>
+
+</body>
+</html>
