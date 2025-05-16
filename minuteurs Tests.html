@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deux Minuteurs Synchronisés Avancés avec Sons Forts</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .timers-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        .timer-container {
+            background-color: #fff; /* Default background */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 280px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: background-color 0.5s ease; /* Smooth color transition for container */
+        }
+
+         /* Add styles for phase colors on the second timer container */
+        .timer-container.phase-1 {
+            background-color: #e0f2f7; /* Light blue/teal */
+        }
+        .timer-container.phase-2 {
+            background-color: #fff9c4; /* Light yellow/orange */
+        }
+        .timer-container.phase-3 {
+            background-color: #e8f5e9; /* Light green */
+        }
+        /* Add more phase classes (phase-4, phase-5, etc.) here if you add more phases */
+
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        /* Styles for the select dropdown (Main Timer) */
+        .time-select-container {
+            margin-bottom: 20px;
+        }
+        .time-select-container label {
+             margin-right: 10px;
+             font-size: 1em;
+             color: #555;
+        }
+        .time-select-container select {
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+         .time-select-container select:disabled {
+             background-color: #f8f8f8;
+             cursor: not-allowed;
+         }
+
+         /* Styles for the second timer's phase display */
+         .phase-display {
+             font-size: 1.2em;
+             /* Default text color handled by .timer-container.phase-X below */
+             margin-bottom: 15px;
+             min-height: 1.2em;
+             transition: color 0.2s ease, font-weight 0.2s ease; /* Smooth transition for text color states */
+         }
+
+        /* Styles for time displays */
+        #time-display {
+            font-size: 4em; /* Increased font size for the main timer */
+            margin: 10px 0;
+            color: #007bff; /* Default color for main timer */
+            min-width: 150px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #time2-display {
+            font-size: 3em;
+            margin: 10px 0;
+            /* Default text color handled by .timer-container.phase-X below */
+            min-width: 150px;
+            font-variant-numeric: tabular-nums;
+            transition: color 0.2s ease, font-weight 0.2s ease; /* Smooth transition for text color states */
+        }
+
+
+         /* Persistent Text Colors for #time2-display and .phase-display based on Container Phase */
+        .timer-container.phase-1 #time2-display,
+        .timer-container.phase-1 .phase-display {
+             color: #0277bd; /* Darker blue for Phase 1 text */
+        }
+         .timer-container.phase-2 #time2-display,
+        .timer-container.phase-2 .phase-display {
+             color: #f57f17; /* Darker orange for Phase 2 text */
+        }
+         .timer-container.phase-3 #time2-display,
+        .timer-container.phase-3 .phase-display {
+             color: #388e3c; /* Darker green for Phase 3 text */
+        }
+         /* Add more rules for other phases if needed */
+
+
+        /* Add styles for 10% warning color */
+        /* Apply !important to ensure these override the persistent phase colors */
+        #time2-display.warning-low-time,
+        .phase-display.warning-low-time {
+            color: red !important; /* Red color for warning */
+             font-weight: bold;
+        }
+
+
+        /* Color when a phase is complete (brief flash) */
+        #time2-display.phase-complete,
+        .phase-display.phase-complete {
+            color: #ff0000; /* Bright red for a brief flash (can keep same as warning or different) */
+             font-weight: bold;
+        }
+
+         /* Color when the entire sequence is complete */
+         #time2-display.sequence-complete,
+         .phase-display.sequence-complete {
+             color: #666; /* Grey color for finished sequence */
+             font-weight: normal;
+         }
+
+
+        .controls {
+            margin-top: 0;
+            text-align: center;
+        }
+        .controls button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        #startButton {
+            background-color: #28a745;
+        }
+        #startButton:hover:not(:disabled) {
+            background-color: #218838;
+        }
+        #pauseButton {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        #pauseButton:hover:not(:disabled) {
+            background-color: #e0a800;
+        }
+        #resetButton {
+             background-color: #dc3545;
+        }
+         #resetButton:hover:not(:disabled) {
+             background-color: #c82333;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="timers-container">
+        <div class="timer-container">
+            <h1>Minuteur Principal</h1>
+
+            <div class="time-select-container">
+                <label for="timeSelect">Choisir un temps :</label>
+                <select id="timeSelect">
+                    <option value="">-- Sélectionner --</option>
+                    <option value="3600">60 Minutes</option>
+                    <option value="2700">45 Minutes</option>
+                    <option value="1800">30 Minutes</option>
+                     <option value="60">1 Minute</option>
+                     <option value="300">5 Minutes</option>
+                </select>
+            </div>
+
+            <div id="time-display">00:00</div>
+
+        </div>
+
+        <div class="timer-container" id="timer2Container"> <h1>Minuteur par Temps</h1>
+            <div class="phase-display" id="phaseDisplay"></div>
+            <div id="time2-display">00:00</div>
+        </div>
+    </div>
+
+     <div class="controls">
+        <button id="startButton" disabled>Démarrer</button>
+        <button id="pauseButton" disabled>Pause</button>
+        <button id="resetButton" disabled>Réinitialiser</button>
+    </div>
+
+
+    <script>
+        // --- Main Timer Variables ---
+        let timerInterval;
+        let timeRemaining = 0; // Time in seconds for main timer
+
+        // --- Second Timer Phase Data ---
+        // Durations in seconds and names for phases based on main timer selection
+        const phaseData = {
+            "3600": { // 60 minutes selected (8m + 50m + 2m = 60m)
+                durations: [480, 3000, 120],
+                names: ["Prise de poste", "Conduite du chariot", "Fin de poste"]
+            },
+            "2700": { // 45 minutes selected (8m + 50m + 35m = 93m total phase time)
+                durations: [480, 3000, 2100],
+                names: ["Prise de poste", "Conduite du chariot", "Fin de poste"]
+            },
+            "1800": { // 30 minutes selected (5m + 23m + 2m = 30m)
+                durations: [300, 1380, 120],
+                names: ["Prise de poste", "Conduite du chariot", "Fin de poste"]
+            },
+             "60": { // 1 minute selected (simple case)
+                 durations: [60],
+                 names: ["Temps sélectionné"]
+             },
+              "300": { // 5 minutes selected (simple case)
+                 durations: [300],
+                 names: ["Temps sélectionné"]
+              }
+        };
+
+        // --- Second Timer Variables ---
+        let timer2Interval;
+        let time2Remaining = 0; // Time in seconds for second timer
+        let timer2Phases = []; // This will hold the durations for the selected time
+        let phaseNames = []; // This will hold the names for the selected time
+        let currentPhaseIndex = 0;
+
+        // --- Global State Variable ---
+        let isPaused = false; // Paused state applies to both timers
+
+        // --- Audio Elements ---
+        // Create an Audio object for the phase end sound (for each phase of Timer 2)
+        // <<== REMPLACEZ 'path/to/your/beep.mp3' par le chemin réel de votre fichier son pour les fins de phase de Timer 2.
+        const phaseEndSound = new Audio('path/to/your/beep.mp3');
+         phaseEndSound.onerror = (e) => console.error("Erreur de chargement du son de fin de phase:", e);
+         phaseEndSound.volume = 1.0; // Set volume to max
+
+
+        // Create an Audio object for the main timer end sound
+        // <<== REMPLACEZ 'path/to/your/main_timer_end_sound.mp3' par le chemin réel de votre fichier son pour la fin du Minuteur Principal.
+        const mainTimerEndSound = new Audio('path/to/your/main_timer_end_sound.mp3');
+         mainTimerEndSound.onerror = (e) => console.error("Erreur de chargement du son principal:", e);
+         mainTimerEndSound.volume = 1.0; // Set volume to max
+
+
+        // --- DOM Elements ---
+        const timeDisplay = document.getElementById('time-display');
+        const time2Display = document.getElementById('time2-display');
+        const phaseDisplay = document.getElementById('phaseDisplay');
+        const timeSelect = document.getElementById('timeSelect');
+        const startButton = document.getElementById('startButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const resetButton = document.getElementById('resetButton');
+        const timer2Container = document.getElementById('timer2Container'); // Get the second timer's container
+
+
+        // --- Helper Functions ---
+        function formatTime(seconds) {
+            if (seconds < 0) seconds = 0; // Prevent negative display
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const displayMinutes = String(minutes).padStart(2, '0');
+            const displaySeconds = String(remainingSeconds).padStart(2, '0');
+            return `${displayMinutes}:${displaySeconds}`;
+        }
+
+        function updateTimerDisplay() {
+            timeDisplay.textContent = formatTime(timeRemaining);
+        }
+
+        // updateTimer2Display now handles text/phase content, container color, and end-state text classes
+         function updateTimer2Display(isPhaseComplete = false, isSequenceComplete = false) {
+            time2Display.textContent = formatTime(time2Remaining);
+            const phaseDuration = (currentPhaseIndex < timer2Phases.length) ? Math.floor(timer2Phases[currentPhaseIndex] / 60) : 0;
+            const phaseName = (currentPhaseIndex < phaseNames.length) ? phaseNames[currentPhaseIndex] : "Séquence terminée";
+
+            phaseDisplay.textContent = `${phaseName}` + (currentPhaseIndex < phaseNames.length ? `: ${phaseDuration} Minutes` : '');
+
+
+            // --- Update Container Background Color Based on Phase ---
+            // Remove any existing phase classes from the second timer container
+            timer2Container.classList.remove('phase-1', 'phase-2', 'phase-3'); // Add more if needed
+
+            // Add the class for the current phase if it exists and sequence is not complete
+            if (currentPhaseIndex >= 0 && currentPhaseIndex < phaseNames.length && !isSequenceComplete) {
+                timer2Container.classList.add(`phase-${currentPhaseIndex + 1}`);
+            }
+            // If sequence is finished, default white background applies (or add a 'finished' class)
+
+
+            // --- Manage End-State Text Color Classes (Flash or Sequence Complete) ---
+            // Remove previous state classes that indicate completion state
+            time2Display.classList.remove('phase-complete', 'sequence-complete');
+            phaseDisplay.classList.remove('phase-complete', 'sequence-complete');
+
+            if (isPhaseComplete) {
+                // Apply phase complete color class briefly (class removed by setTimeout in interval)
+                 time2Display.classList.add('phase-complete');
+                 phaseDisplay.classList.add('phase-complete');
+            } else if (isSequenceComplete) {
+                // Apply sequence complete color permanently (until reset)
+                time2Display.classList.add('sequence-complete');
+                phaseDisplay.classList.add('sequence-complete');
+            }
+            // Persistent per-phase text color and warning color are handled by CSS classes applied elsewhere
+            // and are not removed here to allow them to apply when phase/sequence complete classes are absent.
+
+        }
+
+
+        // Function to update button/select states
+        function updateControlStates(state) {
+             console.log("Updating state to:", state);
+             // State can be 'initial', 'selected', 'running', 'paused'
+            if (state === 'initial') {
+                startButton.disabled = true;
+                pauseButton.disabled = true;
+                resetButton.disabled = true;
+                timeSelect.disabled = false;
+                timeSelect.value = ""; // Reset select to default option
+
+                timeDisplay.textContent = "00:00"; // Reset main display text
+                timeRemaining = 0; // Ensure main timeRemaining is 0
+                isPaused = false; // Ensure not paused
+
+                 // Remove any leftover warning or end-state classes on reset
+                 time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                 phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+
+
+                // Reset second timer state and display using default/initial phase data
+                // Let's load the 60min data as the initial displayed state if available
+                const initialPhaseData = phaseData["3600"]; // Default to 60min display
+                if (initialPhaseData) {
+                     timer2Phases = initialPhaseData.durations;
+                     phaseNames = initialPhaseData.names;
+                } else {
+                     timer2Phases = [];
+                     phaseNames = [];
+                }
+                currentPhaseIndex = 0;
+                 if (timer2Phases.length > 0) {
+                     time2Remaining = timer2Phases[0];
+                 } else {
+                     time2Remaining = 0;
+                 }
+                updateTimer2Display(); // This call will set the initial phase color and text (default color)
+
+            } else if (state === 'selected') { // A valid time is selected from dropdown
+                startButton.disabled = false;
+                pauseButton.disabled = true;
+                resetButton.disabled = false;
+                timeSelect.disabled = false; // Keep enabled so user can change selection before starting
+
+                // Remove any leftover warning or end-state classes on new selection
+                time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+
+
+                 // Phase data is already loaded in the change listener, just update display
+                 currentPhaseIndex = 0;
+                 if (timer2Phases.length > 0) {
+                     time2Remaining = timer2Phases[0];
+                 } else {
+                     time2Remaining = 0;
+                 }
+                 updateTimer2Display(); // This call will set the phase color and text (default color) for the selected time
+
+            } else if (state === 'running') {
+                startButton.disabled = true;
+                pauseButton.disabled = false;
+                resetButton.disabled = false;
+                timeSelect.disabled = true; // Disable select while running
+            } else if (state === 'paused') {
+                startButton.disabled = false; // Allow resuming
+                pauseButton.disabled = true;
+                resetButton.disabled = false;
+                timeSelect.disabled = true; // Disable select while paused
+            }
+        }
+
+
+        // --- Timer Control Functions ---
+        function startTimer() {
+            console.log("Start button clicked. timeRemaining:", timeRemaining, "isPaused:", isPaused);
+
+            // Check if a time is selected for the main timer or if we are resuming
+            if (timeRemaining <= 0 && !isPaused) {
+                alert("Veuillez sélectionner un temps pour le minuteur principal avant de démarrer.");
+                // Don't call updateControlStates('initial') here, as it would reset phase selection
+                return;
+            }
+
+            // If starting from scratch (not resuming)
+            if (!isPaused && timerInterval === undefined) {
+                 console.log("Starting timers from scratch.");
+                 // Phase data should have been loaded by the timeSelect listener
+                 // Re-initialize second timer state just in case or if resuming from fully finished state
+                 currentPhaseIndex = 0;
+                 if (timer2Phases.length > 0) {
+                     time2Remaining = timer2Phases[0];
+                 } else {
+                     time2Remaining = 0; // Handle case with no phases
+                 }
+                 updateTimer2Display(); // Update second timer display and phase (default text color) before starting
+            } else {
+                 console.log("Resuming timers.");
+            }
+
+
+            isPaused = false;
+            updateControlStates('running');
+
+            // Start Main Timer Interval
+            // Only start if not already running
+            if (timerInterval === undefined) {
+                 timerInterval = setInterval(() => {
+                     // console.log("Main Timer tick:", timeRemaining); // Keep log for debugging if needed
+                     if (timeRemaining > 0) {
+                         timeRemaining--;
+                         updateTimerDisplay();
+                     } else {
+                         clearInterval(timerInterval);
+                         timerInterval = undefined; // Clear reference
+                         alert("Temps principal écoulé !");
+                          // Play sound when the main timer finishes
+                         mainTimerEndSound.play().catch(e => console.error("Erreur de lecture du son principal:", e));
+                          // Decide what happens when main timer finishes: Reset both timers
+                         resetTimer();
+                     }
+                 }, 1000);
+            }
+
+
+            // Start Second Timer Interval
+            // Only start if not already running and there are phases left or time remaining in current phase
+            if (timer2Interval === undefined && (currentPhaseIndex < timer2Phases.length || time2Remaining > 0)) {
+                 timer2Interval = setInterval(() => {
+                      // console.log("Timer 2 tick:", time2Remaining, "Phase:", currentPhaseIndex); // Log for timer2 if needed
+
+                      // --- Check for 10% Warning ---
+                      const currentPhaseTotalDuration = timer2Phases[currentPhaseIndex];
+                      // Only apply warning if there's a defined phase duration to calculate 10% from and time is still > 0
+                      if (currentPhaseIndex < timer2Phases.length && currentPhaseTotalDuration > 0 && time2Remaining <= 0.1 * currentPhaseTotalDuration && time2Remaining > 0) {
+                          // Add warning class if below 10% and time is still > 0
+                          time2Display.classList.add('warning-low-time');
+                          phaseDisplay.classList.add('warning-low-time'); // Apply warning to phase text too
+                      } else {
+                          // Remove warning class if above 10%, or time is 0 or less, or currentPhaseTotalDuration is 0
+                          time2Display.classList.remove('warning-low-time');
+                          phaseDisplay.classList.remove('warning-low-time');
+                      }
+
+
+                      if (time2Remaining > 0) {
+                         time2Remaining--;
+                         updateTimer2Display(); // Update display and container color. Text color handled by CSS/warning class
+                      } else {
+                         // Phase finished
+                         console.log("Phase", currentPhaseIndex + 1, "finished.");
+                         // Play sound when a phase finishes
+                         if (currentPhaseIndex < timer2Phases.length - 1 || (currentPhaseIndex === timer2Phases.length - 1 && time2Remaining === 0 && timer2Phases.length > 0)) {
+                             phaseEndSound.play().catch(e => console.error("Erreur de lecture du son:", e)); // Play sound here
+                         }
+
+                         // --- Apply Phase Complete Text Color Flash ---
+                         // Call updateTimer2Display with true to apply flash class BEFORE setTimeout
+                         // The warning class is removed just before this block.
+                         updateTimer2Display(true, false);
+
+                         setTimeout(() => {
+                            // After a short delay, remove the flash class and move to the next phase or finish
+                            time2Display.classList.remove('phase-complete');
+                            phaseDisplay.classList.remove('phase-complete');
+
+                            currentPhaseIndex++; // Move to the next phase
+
+                            if (currentPhaseIndex < timer2Phases.length) {
+                                // Start the next phase
+                                console.log("Starting Phase", currentPhaseIndex + 1);
+                                time2Remaining = timer2Phases[currentPhaseIndex];
+                                // When starting a new phase, re-evaluate the warning state immediately
+                                // Need to use the duration of the *new* phase here
+                                const nextPhaseTotalDuration = timer2Phases[currentPhaseIndex];
+                                if (nextPhaseTotalDuration > 0 && time2Remaining <= 0.1 * nextPhaseTotalDuration && time2Remaining > 0) {
+                                     time2Display.classList.add('warning-low-time');
+                                     phaseDisplay.classList.add('warning-low-time');
+                                } else {
+                                     time2Display.classList.remove('warning-low-time');
+                                     phaseDisplay.classList.remove('warning-low-time');
+                                }
+                                updateTimer2Display(); // Update display, phase info, AND CONTAINER COLOR for the new phase (text color reverts to default per-phase color or warning)
+
+                            } else {
+                                // All phases finished
+                                console.log("All phases finished.");
+                                clearInterval(timer2Interval);
+                                timer2Interval = undefined; // Clear reference
+                                 time2Remaining = 0; // Ensure display shows 00:00
+                                 updateTimer2Display(false, true); // Update display to 00:00 and phase to "Séquence terminée", apply sequence complete TEXT color
+                                // The second timer has finished, the main timer might still be running
+                            }
+
+                         }, 400); // Flash color for 400ms
+
+
+                  }
+              }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            console.log("Pause button clicked.");
+            clearInterval(timerInterval);
+            timerInterval = undefined; // Clear reference
+            clearInterval(timer2Interval);
+             timer2Interval = undefined; // Clear reference
+
+            isPaused = true;
+            updateControlStates('paused');
+        }
+
+        function resetTimer() {
+            console.log("Reset button clicked.");
+            clearInterval(timerInterval);
+            timerInterval = undefined; // Clear reference
+            clearInterval(timer2Interval);
+             timer2Interval = undefined; // Clear reference
+
+            updateControlStates('initial'); // Reset state and display/timeRemaining/phase, resets colors
+        }
+
+        // --- Event Listeners ---
+
+        // Time Select dropdown (Main Timer)
+        timeSelect.addEventListener('change', () => {
+            const selectedTimeValue = timeSelect.value; // Get the string value
+            const selectedTimeSeconds = parseInt(selectedTimeValue);
+            console.log("Time selected value:", selectedTimeValue, "parsed seconds:", selectedTimeSeconds);
+
+            // Check if a valid time option with corresponding phase data is selected
+            if (!isNaN(selectedTimeSeconds) && selectedTimeSeconds > 0 && phaseData[selectedTimeValue]) {
+
+                // Load the phase data for the selected main timer duration
+                const selectedPhaseData = phaseData[selectedTimeValue];
+                timer2Phases = selectedPhaseData.durations;
+                phaseNames = selectedPhaseData.names;
+                currentPhaseIndex = 0; // Start from the first phase for the new selection
+
+                // Set initial time remaining for main timer and the first phase of timer2
+                timeRemaining = selectedTimeSeconds;
+                 if (timer2Phases.length > 0) {
+                     time2Remaining = timer2Phases[0];
+                 } else {
+                     time2Remaining = 0;
+                 }
+
+                isPaused = false; // Ensure not in paused state when selecting new time
+
+                // Remove any leftover warning or end-state classes on new selection
+                time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+
+
+                updateTimerDisplay(); // Update main timer display
+                updateControlStates('selected'); // Set state to selected (ready to start), updates timer2 display and color (default text color)
+
+            } else {
+                // If the default option is selected or no phase data found (shouldn't happen with current data)
+                updateControlStates('initial'); // Go back to initial state
+            }
+        });
+
+        // Start button (Controls both timers)
+        startButton.addEventListener('click', startTimer);
+
+        // Pause button (Controls both timers)
+        pauseButton.addEventListener('click', pauseTimer);
+
+        // Reset button (Controls both timers)
+        resetButton.addEventListener('click', resetTimer);
+
+        // --- Initial Setup ---
+         // Set initial state for controls and displays, including loading the default phase data (60min) and setting initial color/text
+        updateControlStates('initial');
+
+    </script>
+
+</body>
+</html>
