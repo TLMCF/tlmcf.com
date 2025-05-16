@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minuteur avec Contrôles</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .timer-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .time-input-container {
+            margin-bottom: 20px;
+        }
+        .time-input-container label {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        .time-input-container input[type="number"] {
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 80px;
+            text-align: center;
+        }
+        #time-display {
+            font-size: 3em;
+            margin: 20px 0;
+            color: #007bff;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .controls button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        #startButton {
+            background-color: #28a745; /* Green */
+        }
+        #startButton:hover {
+            background-color: #218838;
+        }
+        #pauseButton {
+            background-color: #ffc107; /* Yellow/Orange */
+            color: #212529;
+        }
+        #pauseButton:hover {
+            background-color: #e0a800;
+        }
+        #resetButton {
+             background-color: #dc3545; /* Red */
+        }
+         #resetButton:hover {
+             background-color: #c82333;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="timer-container">
+        <h1>Minuteur</h1>
+
+        <div class="time-input-container">
+            <label for="minutesInput">Définir les minutes :</label>
+            <input type="number" id="minutesInput" value="30" min="1">
+        </div>
+
+        <div id="time-display">00:00</div>
+
+        <div class="controls">
+            <button id="startButton">Démarrer</button>
+            <button id="pauseButton" disabled>Pause</button>
+            <button id="resetButton" disabled>Réinitialiser</button>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeRemaining = 0; // Time in seconds
+        let isPaused = false;
+        const timeDisplay = document.getElementById('time-display');
+        const minutesInput = document.getElementById('minutesInput');
+        const startButton = document.getElementById('startButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const resetButton = document.getElementById('resetButton');
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const displayMinutes = String(minutes).padStart(2, '0');
+            const displaySeconds = String(remainingSeconds).padStart(2, '0');
+            return `${displayMinutes}:${displaySeconds}`;
+        }
+
+        function updateTimerDisplay() {
+            timeDisplay.textContent = formatTime(timeRemaining);
+        }
+
+        function startTimer() {
+            if (!isPaused) {
+                // If not paused, get time from input
+                const minutes = parseInt(minutesInput.value);
+                if (isNaN(minutes) || minutes <= 0) {
+                    alert("Veuillez entrer un nombre de minutes valide.");
+                    return;
+                }
+                timeRemaining = minutes * 60;
+                updateTimerDisplay(); // Initial display update
+            }
+
+            isPaused = false;
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+            resetButton.disabled = false;
+            minutesInput.disabled = true; // Disable input while running
+
+            timerInterval = setInterval(() => {
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    alert("Temps écoulé !");
+                    resetTimer(); // Reset after time is up
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isPaused = true;
+            startButton.disabled = false; // Allow resuming
+            pauseButton.disabled = true;
+            // resetButton.disabled = false; // Keep reset enabled
+            minutesInput.disabled = true; // Input remains disabled while paused
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isPaused = false;
+            timeRemaining = 0;
+            updateTimerDisplay();
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            resetButton.disabled = true;
+            minutesInput.disabled = false; // Enable input after reset
+            minutesInput.value = "30"; // Reset input value
+        }
+
+        // Event Listeners
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+        // Initial setup
+        updateTimerDisplay(); // Display 00:00 initially
+        minutesInput.value = "30"; // Set a default value
+
+    </script>
+
+</body>
+</html>
