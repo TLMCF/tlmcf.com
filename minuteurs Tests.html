@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deux Minuteurs Synchronisés Avancés avec Sons Forts</title>
+    <title>Deux Minuteurs Synchronisés Avancés (Continu en Arrière-plan)</title>
     <style>
         body {
             font-family: sans-serif;
@@ -20,7 +20,7 @@
         .timers-container {
             display: flex;
             gap: 30px;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Allows timers to stack vertically on smaller screens */
             justify-content: center;
             width: 100%;
             max-width: 700px;
@@ -32,8 +32,8 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            min-width: 280px;
-            flex-grow: 1;
+            min-width: 280px; /* Ensure a minimum width */
+            flex-grow: 1; /* Allows timers to grow and fill space if available */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -97,7 +97,16 @@
             color: #007bff; /* Default color for main timer */
             min-width: 150px;
             font-variant-numeric: tabular-nums;
+            font-weight: bold; /* Made the main timer font bold */
+            transition: color 0.2s ease; /* Add transition for color change */
         }
+
+         /* Add styles for main timer warning color */
+         #time-display.main-timer-warning {
+             color: orange; /* Orange warning color for main timer */
+             /* font-weight is already bold from the base style */
+         }
+
 
         #time2-display {
             font-size: 3em;
@@ -125,7 +134,7 @@
          /* Add more rules for other phases if needed */
 
 
-        /* Add styles for 10% warning color */
+        /* Add styles for 25% warning color */
         /* Apply !important to ensure these override the persistent phase colors */
         #time2-display.warning-low-time,
         .phase-display.warning-low-time {
@@ -186,6 +195,53 @@
             background-color: #cccccc;
             cursor: not-allowed;
         }
+
+        /* Custom Modal Styles */
+        #customAlertModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker semi-transparent overlay */
+            z-index: 1000; /* Above everything else */
+            justify-content: center;
+            align-items: center;
+             /* This display property will be set to 'flex' by JS to show the modal */
+        }
+
+        #customAlertModal > div {
+            background-color: white;
+            padding: 30px; /* Increased padding */
+            border-radius: 8px; /* Rounded corners */
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+            max-width: 90%; /* Ensure it fits on small screens */
+            min-width: 250px; /* Minimum width for the modal content */
+        }
+
+        #customAlertMessage {
+            margin-top: 0;
+            margin-bottom: 20px; /* Increased margin */
+            font-size: 1.3em; /* Increased font size */
+            color: #333;
+        }
+
+        #customAlertCloseButton {
+             padding: 10px 20px; /* Increased padding */
+             cursor: pointer;
+             border: none;
+             border-radius: 5px; /* Rounded corners */
+             background-color: #007bff;
+             color: white;
+             font-size: 1em;
+             transition: background-color 0.2s ease;
+        }
+        #customAlertCloseButton:hover {
+             background-color: #0056b3;
+        }
+
     </style>
 </head>
 <body>
@@ -222,11 +278,28 @@
         <button id="resetButton" disabled>Réinitialiser</button>
     </div>
 
+    <div id="customAlertModal">
+        <div>
+            <p id="customAlertMessage">Temps principal écoulé !</p>
+            <button id="customAlertCloseButton">Fermer</button>
+        </div>
+    </div>
+
 
     <script>
         // --- Main Timer Variables ---
         let timerInterval;
         let timeRemaining = 0; // Time in seconds for main timer
+        let initialMainTime = 0; // Variable to store the initial selected time in seconds
+
+        // Define the warning thresholds for the main timer in seconds
+        const mainTimerWarningThresholds = {
+            "3600": 14 * 60, // 14 minutes in seconds for 60 minutes total
+            "2700": 11 * 60, // 11 minutes in seconds for 45 minutes total
+            "1800": 7 * 60   // 7 minutes in seconds for 30 minutes total
+            // No warning for 1min or 5min as the thresholds are short
+        };
+
 
         // --- Second Timer Phase Data ---
         // Durations in seconds and names for phases based on main timer selection
@@ -265,17 +338,52 @@
 
         // --- Audio Elements ---
         // Create an Audio object for the phase end sound (for each phase of Timer 2)
-        // <<== REMPLACEZ 'path/to/your/beep.mp3' par le chemin réel de votre fichier son pour les fins de phase de Timer 2.
-        const phaseEndSound = new Audio('path/to/your/beep.mp3');
+        // <<== REMPLACEZ 'Sons/beep.mp3' par le chemin réel de votre fichier son pour les fins de phase de Timer 2.
+        // N'oubliez pas l'extension du fichier (.mp3, .wav, etc.)
+        const phaseEndSound = new Audio("Sons/Gong.mp3"); /* Exemple avec .mp3 */
          phaseEndSound.onerror = (e) => console.error("Erreur de chargement du son de fin de phase:", e);
          phaseEndSound.volume = 1.0; // Set volume to max
 
 
         // Create an Audio object for the main timer end sound
-        // <<== REMPLACEZ 'path/to/your/main_timer_end_sound.mp3' par le chemin réel de votre fichier son pour la fin du Minuteur Principal.
-        const mainTimerEndSound = new Audio('path/to/your/main_timer_end_sound.mp3');
+        // <<== REMPLACEZ 'Sons/main_timer_end_sound.mp3' par le chemin réel de votre fichier son pour la fin du Minuteur Principal.
+         // N'oubliez pas l'extension du fichier (.mp3, .wav, etc.)
+        const mainTimerEndSound = new Audio("Sons/Gong_fort.mp3"); /* Exemple avec .mp3 */
          mainTimerEndSound.onerror = (e) => console.error("Erreur de chargement du son principal:", e);
          mainTimerEndSound.volume = 1.0; // Set volume to max
+
+
+        // --- Screen Wake Lock Variable ---
+        let wakeLock = null;
+
+        // Function to request a wake lock
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator && !wakeLock) { // Check if API supported and no lock is active
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock est actif !');
+                    wakeLock.addEventListener('release', () => {
+                         console.log('Wake Lock a été relâché.');
+                         wakeLock = null; // Clear the variable when the lock is released
+                    });
+                } catch (err) {
+                    console.error('Échec de l\'acquisition du wake lock :', err);
+                }
+            } else if (wakeLock) {
+                 console.log('Wake Lock est déjà actif.');
+            } else {
+                console.warn('API Wake Lock non prise en charge.');
+            }
+        }
+
+        // Function to release the wake lock
+        function releaseWakeLock() {
+            if (wakeLock) {
+                wakeLock.release();
+                // The 'release' event listener will set wakeLock = null
+                // console.log('Wake Lock est relâché.'); // Log moved to event listener
+            }
+        }
 
 
         // --- DOM Elements ---
@@ -287,6 +395,11 @@
         const pauseButton = document.getElementById('pauseButton');
         const resetButton = document.getElementById('resetButton');
         const timer2Container = document.getElementById('timer2Container'); // Get the second timer's container
+
+        // Custom Modal Elements
+        const customAlertModal = document.getElementById('customAlertModal');
+        const customAlertMessage = document.getElementById('customAlertMessage');
+        const customAlertCloseButton = document.getElementById('customAlertCloseButton');
 
 
         // --- Helper Functions ---
@@ -301,6 +414,8 @@
 
         function updateTimerDisplay() {
             timeDisplay.textContent = formatTime(timeRemaining);
+            // Warning color for main timer is handled in the interval based on remaining time
+            // The default color is handled by CSS unless the warning class is applied.
         }
 
         // updateTimer2Display now handles text/phase content, container color, and end-state text classes
@@ -356,11 +471,17 @@
 
                 timeDisplay.textContent = "00:00"; // Reset main display text
                 timeRemaining = 0; // Ensure main timeRemaining is 0
+                initialMainTime = 0; // Reset initial time
                 isPaused = false; // Ensure not paused
 
                  // Remove any leftover warning or end-state classes on reset
                  time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
                  phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                 timeDisplay.classList.remove('main-timer-warning'); // Remove main timer warning
+
+
+                 // Hide custom alert modal on reset
+                 customAlertModal.style.display = 'none';
 
 
                 // Reset second timer state and display using default/initial phase data
@@ -382,6 +503,7 @@
                 updateTimer2Display(); // This call will set the initial phase color and text (default color)
 
             } else if (state === 'selected') { // A valid time is selected from dropdown
+                // initialMainTime is set in the change listener BEFORE this state is set
                 startButton.disabled = false;
                 pauseButton.disabled = true;
                 resetButton.disabled = false;
@@ -390,9 +512,13 @@
                 // Remove any leftover warning or end-state classes on new selection
                 time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
                 phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                 timeDisplay.classList.remove('main-timer-warning'); // Remove main timer warning
 
 
-                 // Phase data is already loaded in the change listener, just update display
+                 // Hide custom alert modal on new selection
+                 customAlertModal.style.display = 'none';
+
+                 // Phase data is already loaded...
                  currentPhaseIndex = 0;
                  if (timer2Phases.length > 0) {
                      time2Remaining = timer2Phases[0];
@@ -446,6 +572,10 @@
             isPaused = false;
             updateControlStates('running');
 
+            // Request wake lock when timers start running
+            requestWakeLock();
+
+
             // Start Main Timer Interval
             // Only start if not already running
             if (timerInterval === undefined) {
@@ -454,14 +584,39 @@
                      if (timeRemaining > 0) {
                          timeRemaining--;
                          updateTimerDisplay();
+
+                         // --- Check for Main Timer Warning ---
+                         // Get the warning threshold for the initial selected time
+                         const warningThreshold = mainTimerWarningThresholds[initialMainTime.toString()]; // initialMainTime is number, need string key
+
+                         // Apply warning if threshold exists for this time, remaining time is <= threshold, and time is still > 0
+                         if (warningThreshold !== undefined && timeRemaining <= warningThreshold && timeRemaining > 0) {
+                              timeDisplay.classList.add('main-timer-warning');
+                         } else {
+                             // Remove warning class if above threshold, or time is 0 or less, or no threshold defined
+                             timeDisplay.classList.remove('main-timer-warning');
+                         }
+
+
                      } else {
+                         // Main Timer finished
+                         console.log("Minuteur Principal écoulé !");
                          clearInterval(timerInterval);
-                         timerInterval = undefined; // Clear reference
-                         alert("Temps principal écoulé !");
-                          // Play sound when the main timer finishes
+                         timerInterval = undefined;
+
+                         // Remove warning class when main timer finishes
+                         timeDisplay.classList.remove('main-timer-warning');
+
+
+                         // --- Play sound and show custom modal (instead of alert) ---
+                         // Sound plays immediately
                          mainTimerEndSound.play().catch(e => console.error("Erreur de lecture du son principal:", e));
-                          // Decide what happens when main timer finishes: Reset both timers
-                         resetTimer();
+                         // Then show the non-blocking modal
+                         customAlertMessage.textContent = "Temps principal écoulé !"; // Set message
+                         customAlertModal.style.display = 'flex'; // Show the modal using flex to center content
+
+                         // IMPORTANT: resetTimer() is NOT called here anymore.
+                         // It will be called when the custom modal is closed.
                      }
                  }, 1000);
             }
@@ -473,15 +628,15 @@
                  timer2Interval = setInterval(() => {
                       // console.log("Timer 2 tick:", time2Remaining, "Phase:", currentPhaseIndex); // Log for timer2 if needed
 
-                      // --- Check for 10% Warning ---
+                      // --- Check for 25% Warning ---
                       const currentPhaseTotalDuration = timer2Phases[currentPhaseIndex];
-                      // Only apply warning if there's a defined phase duration to calculate 10% from and time is still > 0
-                      if (currentPhaseIndex < timer2Phases.length && currentPhaseTotalDuration > 0 && time2Remaining <= 0.1 * currentPhaseTotalDuration && time2Remaining > 0) {
-                          // Add warning class if below 10% and time is still > 0
+                      // Only apply warning if there's a defined phase duration to calculate 25% from and time is still > 0
+                      if (currentPhaseIndex < timer2Phases.length && currentPhaseTotalDuration > 0 && time2Remaining <= 0.25 * currentPhaseTotalDuration && time2Remaining > 0) {
+                          // Add warning class if below 25% and time is still > 0
                           time2Display.classList.add('warning-low-time');
                           phaseDisplay.classList.add('warning-low-time'); // Apply warning to phase text too
                       } else {
-                          // Remove warning class if above 10%, or time is 0 or less, or currentPhaseTotalDuration is 0
+                          // Remove warning class if above 25%, or time is 0 or less, or currentPhaseTotalDuration is 0
                           time2Display.classList.remove('warning-low-time');
                           phaseDisplay.classList.remove('warning-low-time');
                       }
@@ -517,7 +672,7 @@
                                 // When starting a new phase, re-evaluate the warning state immediately
                                 // Need to use the duration of the *new* phase here
                                 const nextPhaseTotalDuration = timer2Phases[currentPhaseIndex];
-                                if (nextPhaseTotalDuration > 0 && time2Remaining <= 0.1 * nextPhaseTotalDuration && time2Remaining > 0) {
+                                if (nextPhaseTotalDuration > 0 && time2Remaining <= 0.25 * nextPhaseTotalDuration && time2Remaining > 0) {
                                      time2Display.classList.add('warning-low-time');
                                      phaseDisplay.classList.add('warning-low-time');
                                 } else {
@@ -553,6 +708,9 @@
 
             isPaused = true;
             updateControlStates('paused');
+
+            // Release wake lock when timers are paused
+            releaseWakeLock();
         }
 
         function resetTimer() {
@@ -563,7 +721,26 @@
              timer2Interval = undefined; // Clear reference
 
             updateControlStates('initial'); // Reset state and display/timeRemaining/phase, resets colors
+
+            // Release wake lock when timers are reset
+            releaseWakeLock();
         }
+
+        // Optional: Re-acquire wake lock if page becomes visible while timers were running
+        document.addEventListener('visibilitychange', () => {
+             console.log('Visibilité changée vers :', document.visibilityState);
+             // Re-acquire wake lock if the page becomes visible AND timers were previously running
+             // We check !isPaused and if either interval is defined as a proxy for "should be running"
+             // This check is simpler now - just see if isPaused is false and intervals are running.
+             if (document.visibilityState === 'visible' && !isPaused && (timerInterval !== undefined || timer2Interval !== undefined)) {
+                 console.log('Page visible à nouveau, essai de réacquisition du wake lock.');
+                requestWakeLock(); // Try to re-acquire
+             } else if (document.visibilityState === 'hidden' && wakeLock) {
+                 console.log('Page cachée, wake lock sera probablement relâché par le navigateur.');
+                 // No need to call release here, browser usually does it automatically
+             }
+        });
+
 
         // --- Event Listeners ---
 
@@ -575,6 +752,9 @@
 
             // Check if a valid time option with corresponding phase data is selected
             if (!isNaN(selectedTimeSeconds) && selectedTimeSeconds > 0 && phaseData[selectedTimeValue]) {
+
+                // Store the initial selected time for warning calculation
+                initialMainTime = selectedTimeSeconds;
 
                 // Load the phase data for the selected main timer duration
                 const selectedPhaseData = phaseData[selectedTimeValue];
@@ -595,6 +775,13 @@
                 // Remove any leftover warning or end-state classes on new selection
                 time2Display.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
                 phaseDisplay.classList.remove('warning-low-time', 'phase-complete', 'sequence-complete');
+                 timeDisplay.classList.remove('main-timer-warning'); // Remove main timer warning
+
+                 // Also release wake lock if a new time is selected while timers might be implicitly running/paused
+                 releaseWakeLock();
+
+                 // Hide custom alert modal if visible
+                 customAlertModal.style.display = 'none';
 
 
                 updateTimerDisplay(); // Update main timer display
@@ -602,6 +789,7 @@
 
             } else {
                 // If the default option is selected or no phase data found (shouldn't happen with current data)
+                initialMainTime = 0; // Reset initial time if selection is invalid
                 updateControlStates('initial'); // Go back to initial state
             }
         });
@@ -614,6 +802,17 @@
 
         // Reset button (Controls both timers)
         resetButton.addEventListener('click', resetTimer);
+
+        // Add listener for the custom modal close button
+        customAlertCloseButton.addEventListener('click', () => {
+            customAlertModal.style.display = 'none'; // Hide the modal
+            resetTimer(); // Now reset when the user closes the modal
+        });
+
+
+        // Optional: Listen for wake lock release event triggered by the browser
+        // The event listener is added within the requestWakeLock function now for robustness.
+
 
         // --- Initial Setup ---
          // Set initial state for controls and displays, including loading the default phase data (60min) and setting initial color/text
