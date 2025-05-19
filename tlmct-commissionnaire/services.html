@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <title>Nos services | TLMCF</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+<header>
+  <h1>TLMCF Transports</h1>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="a-propos.html">A propos</a>
+    <a href="demande-transport.html">Demande de Transport</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section>
+  <h3>Nos services</h3>
+  <div class="card">
+    <h4>Transport national & international</h4>
+    <p>Routier, maritime, aérien… nous optimisons tous vos acheminements.</p>
+  </div>
+  <div class="card">
+    <h4>Gestion douanière</h4>
+    <p>Nos experts vous accompagnent pour toutes les formalités administratives.</p>
+  </div>
+  <div class="card">
+    <h4>Suivi et traçabilité</h4>
+    <p>Suivi en temps réel des marchandises, alertes personnalisées, reporting dédié.</p>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 TLMCF Transports – Commissionnaire de transport
+</footer>
+
+</body>
+</html>

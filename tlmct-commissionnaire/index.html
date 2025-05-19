@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commissionnaire de Transport - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+  <header>
+    <h1>TLM Commissionnaire de Transports</h1>
+    <nav>
+    <a href="services.html">Services</a>
+    <a href="a-propos.html">A propos</a>
+    <a href="demande-transport.html">Demande de Transport</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+    <a href="contact.html">Contact</a>
+    <a href="contrat_type_commission.html">Contrat type commissionnaire</a>
+  </header>
+
+  <section class="hero">
+    <h2>Votre expert en transport et logistique</h2>
+  </section>
+
+  <section>
+    <h3>Pourquoi nous choisir ?</h3>
+    <div class="card">
+      <p>Nous sommes spécialisés dans la gestion de vos transports nationaux et internationaux, avec une expertise reconnue dans la coordination des flux logistiques.</p>
+    </div>
+    <div class="card">
+      <p>Un seul interlocuteur, un réseau fiable, des délais respectés.</p>
+    </div>
+    <section id="hero">
+      <h1>Solutions Logistiques et Commission de Transport</h1>
+      <p>Votre partenaire de confiance pour l'expédition de vos marchandises, en France et à l'international.</p>
+      <a href="demande-transport.html" class="cta-button">Obtenir un devis gratuit</a>
+  </section>
+
+  <footer>
+    &copy; 2025 TLMCF Transports – Commissionnaire de transport
+  </footer>
+
+</body>
+</html>

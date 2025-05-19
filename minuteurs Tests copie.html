@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Minuteur Flottant</title>
+  <style>
+    #floating-timer {
+      position: fixed;
+      top: 50px;
+      left: 50px;
+      width: 200px;
+      background-color: #333;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      z-index: 9999;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: move;
+    }
+
+    #timer-display {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .controls button {
+      flex: 1;
+      margin: 0 2px;
+      padding: 5px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      background-color: #555;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .controls button:hover {
+      background-color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="floating-timer">
+    <div id="timer-display">00:25:00</div>
+    <div class="controls">
+      <button onclick="startTimer()">▶</button>
+      <button onclick="pauseTimer()">⏸</button>
+      <button onclick="resetTimer()">⭯</button>
+    </div>
+  </div>
+
+  <script>
+    let timerDuration = 25 * 60; // 25 minutes
+    let timeRemaining = timerDuration;
+    let timerInterval = null;
+
+    function updateDisplay() {
+      const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+      const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+      document.getElementById("timer-display").textContent = `00:${minutes}:${seconds}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (timeRemaining > 0) {
+          timeRemaining--;
+          updateDisplay();
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          alert("Temps écoulé !");
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timeRemaining = timerDuration;
+      updateDisplay();
+    }
+
+    dragElement(document.getElementById("floating-timer"));
+
+    function dragElement(elmnt) {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      elmnt.onmousedown = dragMouseDown;
+
+      function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>

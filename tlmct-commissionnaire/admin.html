@@ -1,0 +1,63 @@
+<?php
+session_start();
+if (!isset($_SESSION["connecte"])) {
+    header("Location: admin-login.html");
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Candidatures</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    #form-ajout { margin-top: 20px; display: none; }
+  </style>
+</head>
+<body>
+  <h1>Panneau d’administration - Candidatures</h1>
+
+  <button onclick="document.getElementById('form-ajout').style.display='block'">➕ Ajouter une candidature</button>
+
+  <div id="form-ajout">
+    <form method="POST" action="ajouter-candidature.php">
+      <label>Nom : <input type="text" name="nom" required></label><br>
+      <label>Prénom : <input type="text" name="prenom" required></label><br>
+      <label>Email : <input type="email" name="email" required></label><br>
+      <label>Téléphone : <input type="text" name="telephone" required></label><br>
+      <label>Expérience : <input type="text" name="experience" required></label><br>
+      <label>Zone : <input type="text" name="zone" required></label><br>
+      <label>Véhicule : <input type="text" name="vehicule" required></label><br>
+      <label>Date : <input type="date" name="date" required></label><br>
+      <button type="submit">Enregistrer</button>
+    </form>
+  </div>
+
+  <h2>Tableau des candidatures</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th>
+        <th>Expérience</th><th>Zone</th><th>Véhicule</th><th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      if (($f = fopen("candidatures.csv", "r")) !== false) {
+          while (($ligne = fgetcsv($f)) !== false) {
+              echo "<tr>";
+              foreach ($ligne as $cellule) {
+                  echo "<td>" . htmlspecialchars($cellule) . "</td>";
+              }
+              echo "</tr>";
+          }
+          fclose($f);
+      }
+      ?>
+    </tbody>
+  </table>
+</body>
+</html>

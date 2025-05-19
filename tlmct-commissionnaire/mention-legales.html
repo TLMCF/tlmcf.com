@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commissionnaire de Transport - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+  <header>
+    <h1>TLM Commissionnaire de Transports</h1>
+    <nav>
+    <a href="index.html">Accueil</a>
+    <a href="services.html">Services</a>
+    <a href="a-propos.html">A propos</a>
+    <a href="demande-transport.html">Demande de Transport</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+    <a href="contact.html">Contact</a>
+  </header>
+    <main>
+        <section>
+            <h1>Mentions Légales</h1>
+
+            <h2>1. Éditeur du Site</h2>
+            <p><strong>Nom de l'entreprise / Raison sociale :</strong> [Votre Nom d'Entreprise / Raison Sociale]</p>
+            <p><strong>Forme juridique :</strong> [Ex: SARL, SAS, EURL]</p>
+            <p><strong>Adresse du siège social :</strong> [Votre Adresse Complète]</p>
+            <p><strong>Capital social :</strong> [Montant] €</p>
+            <p><strong>Numéro d'immatriculation au RCS :</strong> [Votre numéro RCS Ville]</p>
+            <p><strong>Numéro de TVA intracommunautaire :</strong> [Votre numéro de TVA]</p>
+            <p><strong>Directeur de la publication :</strong> [Votre Nom ou Nom du responsable]</p>
+            <p><strong>Contact :</strong> Téléphone : [Votre Numéro] / Email : [Votre Email]</p>
+
+            <h2>2. Hébergement du Site</h2>
+            <p><strong>Nom de l'hébergeur :</strong> [Nom de votre hébergeur]</p>
+            <p><strong>Adresse de l'hébergeur :</strong> [Adresse de l'hébergeur]</p>
+            <p><strong>Contact de l'hébergeur :</strong> [Téléphone/Email de l'hébergeur]</p>
+
+            <h2>3. Propriété Intellectuelle</h2>
+            <p>L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.</p>
+            <p>La reproduction de tout ou partie de ce site sur un support électronique quel qu'il soit est formellement interdite sauf autorisation expresse du directeur de la publication.</p>
+
+            <h2>4. Données Personnelles</h2>
+            <p>Pour plus d'informations sur la gestion de vos données personnelles, veuillez consulter notre <a href="politique-confidentialite.html">Politique de Confidentialité</a>.</p>
+            
+            <h2>5. Responsabilité</h2>
+            <p>[Adaptez ce paragraphe. Exemple : L'éditeur s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site, et se réserve le droit de corriger, à tout moment et sans préavis, le contenu. Toutefois, l'éditeur ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations mises à disposition sur ce site.]</p>
+            
+            <h2>6. Liens Hypertextes</h2>
+            <p>[Adaptez ce paragraphe si vous avez des liens sortants. Exemple : Les liens hypertextes mis en place dans le cadre du présent site internet en direction d'autres ressources présentes sur le réseau Internet ne sauraient engager la responsabilité de l'éditeur.]</p>
+
+            </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Votre Nom d'Entreprise - Commissionnaire de Transport. Tous droits réservés.</p>
+        <p><a href="mentions-legales.html">Mentions Légales</a> | <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
+    </footer>
+</body>
+</html>

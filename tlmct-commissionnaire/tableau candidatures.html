@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des Candidatures | TLMCF</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+  <style>
+    /* Styles existants */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f5f5f5;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    input[type="search"] {
+      padding: 8px;
+      width: 300px;
+      margin-top: 20px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-right: 10px; /* Ajouter un peu d'espace à droite du champ de recherche */
+    }
+
+    /* Style pour le bouton Ajouter */
+    .add-button {
+        padding: 8px 15px;
+        background-color: #007bff; /* Couleur bleue */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-button:hover {
+        background-color: #0056b3; /* Bleu plus foncé au survol */
+    }
+
+    /* --- Styles pour la boîte de dialogue modale --- */
+    dialog {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        position: fixed; /* Pour être sûr qu'elle est centrée */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10; /* Pour être au-dessus du reste du contenu */
+        background-color: white;
+        max-width: 600px; /* Augmenter la largeur pour les détails véhicules */
+        width: 90%; /* Largeur relative */
+        max-height: 80vh; /* Limiter la hauteur et permettre le défilement */
+        overflow-y: auto; /* Ajouter une barre de défilement si le contenu dépasse */
+    }
+
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent derrière la modale */
+    }
+
+    dialog h3 {
+        margin-top: 0;
+        color: #0056b3;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    dialog form div {
+        margin-bottom: 10px;
+    }
+
+    dialog label {
+        display: block; /* Chaque label sur sa propre ligne */
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    dialog input[type="text"],
+    dialog input[type="email"],
+    dialog input[type="tel"],
+    dialog input[type="number"] { /* Inclure les inputs number */
+        width: calc(100% - 22px); /* Ajuster la largeur avec padding et border */
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    /* Styles pour la section détails véhicules */
+    #vehiclesContainer {
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+    }
+
+    .vehicle-entry {
+        border: 1px solid #eee;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        position: relative; /* Pour positionner le bouton supprimer */
+    }
+
+    .vehicle-entry h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 1em;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+
+    .vehicle-entry .remove-vehicle-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 2px 5px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+     .vehicle-entry .remove-vehicle-btn:hover {
+         background-color: #c82333;
+     }
+
+     #addVehicleBtn {
+         margin-top: 10px;
+         padding: 5px 10px;
+         background-color: #17a2b8; /* Couleur info/cyan */
+         color: white;
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+         font-size: 0.9em;
+     }
+      #addVehicleBtn:hover {
+          background-color: #138496;
+      }
+
+
+    dialog .button-group {
+        margin-top: 20px;
+        text-align: right; /* Aligner les boutons à droite */
+    }
+
+    dialog .button-group button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        margin-left: 10px;
+    }
+
+    dialog .button-group button[type="submit"] {
+        background-color: #28a745; /* Vert pour valider */
+        color: white;
+    }
+
+     dialog .button-group button[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    dialog .button-group button[type="button"] { /* Bouton Annuler */
+        background-color: #dc3545; /* Rouge pour annuler */
+        color: white;
+    }
+     dialog .button-group button[type="button"]:hover {
+        background-color: #c82333;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>TLMCF - Gestion des Candidatures</h1>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="rejoindre-flotte.html">Formulaire</a>
+    <a href="candidatures.html">Candidatures</a>
+  </nav>
+</header>
+
+<section>
+  <h3>Candidatures des transporteurs</h3>
+  <div>
+    <input type="search" id="searchInput" placeholder="Rechercher une société...">
+    <button id="addTransporteurBtn" class="add-button">Ajouter un Transporteur</button>
+  </div>
+
+  <table id="candidatureTable">
+    <thead>
+      <tr>
+        <th>Société</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Véhicules</th>
+        <th>Zone</th>
+        <th>Expérience</th>
+        <th>Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TransLog</td>
+        <td>Jean Martin</td>
+        <td>jm@translog.fr</td>
+        <td>0601020304</td>
+        <td>Frigorifique</td>
+        <td>France</td>
+        <td>8 ans</td>
+        <td>En attente</td>
+      </tr>
+      </tbody>
+  </table>
+</section>
+
+<dialog id="addTransporteurDialog">
+    <h3>Ajouter un nouveau transporteur</h3>
+    <form id="addTransporteurForm">
+        <div>
+            <label for="dialog_societe">Société :</label>
+            <input type="text" id="dialog_societe" name="societe" required>
+        </div>
+        <div>
+            <label for="dialog_nom">Nom :</label>
+            <input type="text" id="dialog_nom" name="nom" required>
+        </div>
+        <div>
+            <label for="dialog_email">Email :</label>
+            <input type="email" id="dialog_email" name="email" required>
+        </div>
+        <div>
+            <label for="dialog_telephone">Téléphone :</label>
+            <input type="tel" id="dialog_telephone" name="telephone" required>
+        </div>
+
+        <fieldset>
+            <legend>Détails des Véhicules</legend>
+            <div id="vehiclesContainer">
+                </div>
+            <button type="button" id="addVehicleBtn">Ajouter un véhicule</button>
+        </fieldset>
+        <div>
+            <label for="dialog_zone">Zone :</label>
+            <input type="text" id="dialog_zone" name="zone" required>
+        </div>
+        <div>
+            <label for="dialog_experience">Expérience :</label>
+            <input type="text" id="dialog_experience" name="experience" required>
+        </div>
+         <div>
+            <label for="dialog_statut">Statut :</label>
+            <input type="text" id="dialog_statut" name="statut" value="En attente" required>
+        </div>
+        <div class="button-group">
+            <button type="button" id="cancelAddBtn">Annuler</button>
+            <button type="submit">Ajouter</button>
+        </div>
+    </form>
+</dialog>
+
+
+<script>
+  // Script pour la recherche (inchangé)
+  document.getElementById("searchInput").addEventListener("keyup", function() {
+    var filter = this.value.toLowerCase();
+    var rows = document.querySelectorAll("#candidatureTable tbody tr");
+    rows.forEach(function(row) {
+      var text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+
+  // --- Nouveau script pour gérer la boîte de dialogue et l'ajout ---
+  const addTransporteurBtn = document.getElementById("addTransporteurBtn");
+  const addTransporteurDialog = document.getElementById("addTransporteurDialog");
+  const addTransporteurForm = document.getElementById("addTransporteurForm");
+  const cancelAddBtn = document.getElementById("cancelAddBtn");
+  const tableBody = document.querySelector("#candidatureTable tbody");
+  const vehiclesContainer = document.getElementById("vehiclesContainer"); // Conteneur pour les véhicules
+  const addVehicleBtn = document.getElementById("addVehicleBtn"); // Bouton pour ajouter un véhicule
+
+
+  // Fonction pour créer un bloc de champs pour un seul véhicule
+  function createVehicleEntry(vehicleNumber) {
+      const vehicleDiv = document.createElement("div");
+      vehicleDiv.classList.add("vehicle-entry");
+      vehicleDiv.innerHTML = `
+          <h4>Véhicule <span class="vehicle-number">${vehicleNumber}</span></h4>
+          <div>
+              <label for="vehicle_type_${vehicleNumber}">Type :</label>
+              <input type="text" class="vehicle-type" id="vehicle_type_${vehicleNumber}" required>
+          </div>
+          <div>
+              <label for="vehicle_payload_${vehicleNumber}">Charge utile (kg) :</label>
+              <input type="number" class="vehicle-payload" id="vehicle_payload_${vehicleNumber}" step="0.01" min="0">
+          </div>
+          <div>
+              <label for="vehicle_cubic_meter_${vehicleNumber}">Mètre cube (m³) :</label>
+              <input type="number" class="vehicle-cubic-meter" id="vehicle_cubic_meter_${vehicleNumber}" step="0.01" min="0">
+          </div>
+          <button type="button" class="remove-vehicle-btn">Supprimer</button>
+      `;
+
+      // Ajouter l'écouteur pour le bouton Supprimer
+      vehicleDiv.querySelector(".remove-vehicle-btn").addEventListener("click", function() {
+          vehicleDiv.remove(); // Supprimer ce bloc véhicule
+          updateVehicleNumbers(); // Mettre à jour les numéros après suppression
+      });
+
+      return vehicleDiv;
+  }
+
+  // Fonction pour mettre à jour les numéros des véhicules après ajout ou suppression
+  function updateVehicleNumbers() {
+      const vehicleEntries = vehiclesContainer.querySelectorAll(".vehicle-entry");
+      vehicleEntries.forEach((entry, index) => {
+          entry.querySelector(".vehicle-number").textContent = index + 1;
+          // Mettre à jour les IDs et for="" pour l'accessibilité si nécessaire
+          // entry.querySelector(".vehicle-type").id = `vehicle_type_${index + 1}`;
+          // entry.querySelector("label[for^='vehicle_type_']").setAttribute('for', `vehicle_type_${index + 1}`);
+          // etc. pour les autres champs
+      });
+  }
+
+
+  // Quand le bouton "Ajouter un Transporteur" est cliqué, ouvrir la boîte de dialogue
+  addTransporteurBtn.addEventListener("click", function() {
+    // Optionnel : ajouter un premier bloc véhicule par défaut à l'ouverture
+    if (vehiclesContainer.children.length === 0) {
+        vehiclesContainer.appendChild(createVehicleEntry(1));
+    }
+    addTransporteurDialog.showModal(); // Ouvre la boîte de dialogue comme modale
+  });
+
+  // Quand le bouton "Ajouter un véhicule" dans la boîte de dialogue est cliqué
+  addVehicleBtn.addEventListener("click", function() {
+      const nextVehicleNumber = vehiclesContainer.children.length + 1;
+      vehiclesContainer.appendChild(createVehicleEntry(nextVehicleNumber));
+       // Faire défiler la modale vers le bas pour voir le nouveau champ
+      addTransporteurDialog.scrollTop = addTransporteurDialog.scrollHeight;
+  });
+
+
+  // Quand le formulaire dans la boîte de dialogue est soumis
+  addTransporteurForm.addEventListener("submit", function(event) {
+    event.preventDefault(); // Empêcher le rechargement de la page
+
+    // Récupérer les données des champs fixes
+    const societe = document.getElementById("dialog_societe").value;
+    const nom = document.getElementById("dialog_nom").value;
+    const email = document.getElementById("dialog_email").value;
+    const telephone = document.getElementById("dialog_telephone").value;
+    const zone = document.getElementById("dialog_zone").value;
+    const experience = document.getElementById("dialog_experience").value;
+    const statut = document.getElementById("dialog_statut").value;
+
+    // --- Récupérer les données de tous les véhicules ajoutés ---
+    const vehicleEntries = vehiclesContainer.querySelectorAll(".vehicle-entry");
+    const vehiclesData = []; // Tableau pour stocker les détails de chaque véhicule
+
+    vehicleEntries.forEach(entry => {
+        const type = entry.querySelector(".vehicle-type").value;
+        const payload = entry.querySelector(".vehicle-payload").value;
+        const cubicMeter = entry.querySelector(".vehicle-cubic-meter").value;
+
+        if (type) { // N'ajouter que si le type de véhicule est renseigné
+             vehiclesData.push({
+                 type: type,
+                 payload: payload,
+                 cubicMeter: cubicMeter
+             });
+        }
+    });
+
+    // --- Formatter les informations véhicules pour l'affichage dans la table principale ---
+    let vehiclesDisplay = '';
+    if (vehiclesData.length > 0) {
+        vehiclesData.forEach(vehicle => {
+            vehiclesDisplay += `${vehicle.type} (${vehicle.payload}kg, ${vehicle.cubicMeter}m³); `;
+        });
+        vehiclesDisplay = vehiclesDisplay.slice(0, -2); // Supprimer le dernier "; "
+    } else {
+        vehiclesDisplay = 'Non spécifié';
+    }
+
+
+    // Créer une nouvelle ligne dans la table principale
+    const newRow = document.createElement("tr");
+
+    // Créer les cellules (td) et y ajouter les données
+    const cellSociete = document.createElement("td");
+    cellSociete.textContent = societe;
+    newRow.appendChild(cellSociete);
+
+    const cellNom = document.createElement("td");
+    cellNom.textContent = nom;
+    newRow.appendChild(cellNom);
+
+    const cellEmail = document.createElement("td");
+    cellEmail.textContent = email;
+    newRow.appendChild(cellEmail);
+
+    const cellTelephone = document.createElement("td");
+    cellTelephone.textContent = telephone;
+    newRow.appendChild(cellTelephone);
+
+    // Cellule Véhicules avec les données formatées
+    const cellVehicules = document.createElement("td");
+    cellVehicules.textContent = vehiclesDisplay;
+    newRow.appendChild(cellVehicules);
+
+    const cellZone = document.createElement("td");
+    cellZone.textContent = zone;
+    newRow.appendChild(cellZone);
+
+    const cellExperience = document.createElement("td");
+    cellExperience.textContent = experience;
+    newRow.appendChild(cellExperience);
+
+    const cellStatut = document.createElement("td");
+    cellStatut.textContent = statut;
+    newRow.appendChild(cellStatut);
+
+    // Ajouter la nouvelle ligne au tableau
+    tableBody.appendChild(newRow);
+
+    // Réinitialiser le formulaire et fermer la boîte de dialogue
+    addTransporteurForm.reset();
+    vehiclesContainer.innerHTML = ''; // Vider les champs véhicules ajoutés dynamiquement
+    addTransporteurDialog.close();
+
+    // Note : Cet ajout est toujours temporaire et disparaîtra au rechargement de la page.
+    // Pour un stockage permanent, il faudrait utiliser un backend (PHP, Node.js, etc.)
+    // et une base de données.
+  });
+
+  // Quand le bouton "Annuler" dans la boîte de dialogue est cliqué
+  cancelAddBtn.addEventListener("click", function() {
+    addTransporteurForm.reset(); // Réinitialiser le formulaire
+    vehiclesContainer.innerHTML = ''; // Vider les champs véhicules ajoutés dynamiquement
+    addTransporteurDialog.close(); // Fermer la boîte de dialogue
+  });
+
+  // Gérer la fermeture de la boîte de dialogue avec la touche Echap
+  addTransporteurDialog.addEventListener('cancel', function(event) {
+      event.preventDefault(); // Empêche la fermeture par défaut si vous voulez faire autre chose
+      addTransporteurForm.reset(); // Réinitialiser le formulaire
+      vehiclesContainer.innerHTML = ''; // Vider les champs véhicules ajoutés dynamiquement
+      addTransporteurDialog.close();
+  });
+
+
+</script>
+
+<footer>
+  <p>&copy; 2025 TLMCF Transports</p>
+</footer>
+
+</body>
+</html>

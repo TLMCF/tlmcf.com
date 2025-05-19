@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <title>À propos | TLMCF</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+<header>
+  <h1>TLMCF Transports</h1>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="services.html">Services</a>
+    <a href="demande-transport.html">Demande de Transport</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section>
+  <h3>Qui sommes-nous ?</h3>
+  <div class="card">
+    <p>TLMCF est un cabinet spécialisé en transport et logistique. Forts de 15 ans d’expérience, nous accompagnons les entreprises de toute taille dans l’optimisation de leurs flux logistiques.</p>
+    <p>Notre mission : simplifier vos démarches, garantir la fiabilité, et sécuriser vos expéditions.</p>
+    <h2>Nos Valeurs</h2>
+            <ul>
+                <li><strong>Fiabilité :</strong> Nous tenons nos engagements.</li>
+                <li><strong>Flexibilité :</strong> Nous nous adaptons à vos contraintes.</li>
+                <li><strong>Transparence :</strong> Une communication claire à chaque étape.</li>
+                <li><strong>Expertise :</strong> Une connaissance approfondie du secteur.</li>
+                <li><strong>Engagement Client :</strong> Votre satisfaction est notre priorité.</li>
+            </ul>
+  </div>
+  
+</section>
+
+<footer>
+  &copy; 2025 TLMCF Transports – Commissionnaire de transport
+</footer>
+
+</body>
+</html>

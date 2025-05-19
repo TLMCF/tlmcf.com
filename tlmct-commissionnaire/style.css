@@ -1,0 +1,110 @@
+/* style.css */
+:root {
+    --primary-color: #0a3d62;
+    --accent-color: #f39c12;
+    --bg-color: #f9f9f9;
+    --text-color: #2f3640;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  
+  nav {
+    margin-top: 1rem;
+  }
+  
+  nav a {
+    color: var(--white);
+    text-decoration: none;
+    margin-right: 2rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  nav a:hover {
+    color: var(--accent-color);
+  }
+  
+  .hero {
+    background: url('https://images.unsplash.com/photo-1595433562696-3d50a6a91e46?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .hero h2 {
+    font-size: 2.8rem;
+    background: rgba(10, 61, 98, 0.75);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+  }
+  
+  section {
+    padding: 3rem 2rem;
+  }
+  
+  section h3 {
+    color: var(--primary-color);
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+  }
+  
+  .card {
+    background: var(--white);
+    box-shadow: var(--shadow);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  footer {
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 4rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav a {
+      display: block;
+      margin: 0.5rem 0;
+    }
+  
+    .hero h2 {
+      font-size: 2rem;
+    }
+  }
+  

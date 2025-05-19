@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion Admin</title>
+    <style>
+        body { font-family: Arial; background-color: #f4f4f4; display: flex; height: 100vh; align-items: center; justify-content: center; }
+        form { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        input { display: block; margin-top: 10px; width: 100%; padding: 10px; }
+        button { margin-top: 20px; background: #4285f4; color: white; padding: 10px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<form action="auth.php" method="POST">
+    <h2>Connexion Admin</h2>
+    <input type="text" name="username" placeholder="Identifiant" required>
+    <input type="password" name="password" placeholder="Mot de passe" required>
+    <button type="submit">Se connecter</button>
+</form>
+
+</body>
+</html>

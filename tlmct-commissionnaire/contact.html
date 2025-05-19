@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commissionnaire de Transport - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+  <header>
+    <h1>TLMCF Transports</h1>
+    <nav>
+    <a href="index.html">Accueil</a>
+    <a href="services.html">Services</a>
+    <a href="a-propos.html">A propos</a>
+    <a href="demande-transport.html">Demande transport</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+
+  </header>
+
+    <main>
+        <section>
+            <h1>Contactez-Nous</h1>
+            <p>Pour toute question générale, demande d'information ou pour discuter de vos besoins logistiques spécifiques, n'hésitez pas à nous contacter.</p>
+
+            <div class="contact-info">
+                <h2>Nos Coordonnées</h2>
+                <p><strong>Nom de l'entreprise :</strong> [Votre Nom d'Entreprise]</p>
+                <p><strong>Adresse :</strong> [Votre Adresse Complète]</p>
+                <p><strong>Téléphone :</strong> <a href="tel:+33000000000">[Votre Numéro de Téléphone]</a></p>
+                <p><strong>Email :</strong> <a href="mailto:contact@votredomaine.com">[Votre Email de Contact]</a></p>
+                <p><strong>Horaires d'ouverture :</strong> Du Lundi au Vendredi, de 9h00 à 18h00.</p>
+            </div>
+
+            <div class="contact-form">
+                <h2>Formulaire de Contact Rapide</h2>
+                <form action="traitement-contact.php" method="POST">
+                    <div>
+                        <label for="nom_contact_rapide">Nom * :</label>
+                        <input type="text" id="nom_contact_rapide" name="nom_contact_rapide" required>
+                    </div>
+                    <div>
+                        <label for="email_rapide">Email * :</label>
+                        <input type="email" id="email_rapide" name="email_rapide" required>
+                    </div>
+                    <div>
+                        <label for="sujet_rapide">Sujet :</label>
+                        <input type="text" id="sujet_rapide" name="sujet_rapide">
+                    </div>
+                    <div>
+                        <label for="message_rapide">Votre Message * :</label>
+                        <textarea id="message_rapide" name="message_rapide" rows="6" required></textarea>
+                    </div>
+                    <button type="submit">Envoyer le Message</button>
+                </form>
+            </div>
+
+            <div class="map">
+                <h2>Notre Localisation</h2>
+                <img src="placeholder-map.jpg" alt="Carte de notre localisation" style="width:100%; max-width:600px;">
+                </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Votre Nom d'Entreprise - Commissionnaire de Transport. Tous droits réservés.</p>
+        <p><a href="mentions-legales.html">Mentions Légales</a> | <a href="politique-confidentialite.html">Politique de confidentialité</a></p>
+    </footer>
+</body>
+</html>

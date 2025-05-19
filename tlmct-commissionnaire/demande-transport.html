@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="manifest.json">
+<script src="service-worker.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commissionnaire de Transport - Accueil</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker enregistré'))
+      .catch(err => console.error('Erreur Service Worker :', err));
+  }
+</script>
+
+</head>
+<body>
+
+  <header>
+    <h1>TLMCF Transports</h1>
+    <nav>
+    <a href="index.html">Accueil</a>
+    <a href="services.html">Services</a>
+    <a href="a-propos.html">A propos</a>
+    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+    <a href="contact.html">Contact</a>
+  </header>
+
+    <main>
+        <section>
+            <h1>Demande de Devis Transport</h1>
+            <p>Veuillez remplir ce formulaire avec le plus de détails possible afin que nous puissions vous fournir une cotation précise et rapide. Les champs marqués d'un * sont obligatoires.</p>
+
+            <form action="traitement-formulaire.php" method="POST">
+                <fieldset>
+                    <legend>Informations de Contact</legend>
+                    <div>
+                        <label for="societe">Nom de la société :</label>
+                        <input type="text" id="societe" name="societe" placeholder="Votre Société SARL">
+                    </div>
+                    <div>
+                        <label for="nom_contact">Nom du contact * :</label>
+                        <input type="text" id="nom_contact" name="nom_contact" required>
+                    </div>
+                    <div>
+                        <label for="email">Email * :</label>
+                        <input type="email" id="email" name="email" placeholder="contact@tlmcf.com" required>
+                    </div>
+                    <div>
+                        <label for="telephone">Téléphone * :</label>
+                        <input type="tel" id="telephone" name="telephone" placeholder="0123456789" required>
+                    </div>
+                    <div>
+                        <label for="siret_tva">N° SIRET / N° TVA Intracommunautaire :</label>
+                        <input type="text" id="siret_tva" name="siret_tva">
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Détails de l'Expédition</legend>
+                    <div>
+                        <label for="mode_transport">Mode de transport souhaité * :</label>
+                        <select id="mode_transport" name="mode_transport" required>
+                            <option value="">-- Choisir --</option>
+                            <option value="routier">Routier</option>
+                            <option value="maritime">Maritime</option>
+                            <option value="aerien">Aérien</option>
+                            <option value="ferroviaire">Ferroviaire</option>
+                            <option value="multimodal">Multimodal</option>
+                            <option value="pas_de_preference">Pas de préférence / Conseil attendu</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="incoterm">Incoterm (si applicable) :</label>
+                        <input type="text" id="incoterm" name="incoterm" placeholder="EXW, FOB, CIF...">
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Lieu d'Enlèvement (Origine)</legend>
+                    <div>
+                        <label for="origine_adresse">Adresse d'enlèvement * :</label>
+                        <input type="text" id="origine_adresse" name="origine_adresse" required>
+                    </div>
+                    <div>
+                        <label for="origine_cp">Code Postal * :</label>
+                        <input type="text" id="origine_cp" name="origine_cp" required>
+                    </div>
+                    <div>
+                        <label for="origine_ville">Ville * :</label>
+                        <input type="text" id="origine_ville" name="origine_ville" required>
+                    </div>
+                    <div>
+                        <label for="origine_pays">Pays * :</label>
+                        <input type="text" id="origine_pays" name="origine_pays" value="France" required>
+                    </div>
+                     <div>
+                        <label for="origine_instructions">Instructions spécifiques à l'enlèvement :</label>
+                        <textarea id="origine_instructions" name="origine_instructions" rows="3" placeholder="Horaires, contact sur place, nécessité d'un hayon..."></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Lieu de Livraison (Destination)</legend>
+                    <div>
+                        <label for="destination_adresse">Adresse de livraison * :</label>
+                        <input type="text" id="destination_adresse" name="destination_adresse" required>
+                    </div>
+                    <div>
+                        <label for="destination_cp">Code Postal * :</label>
+                        <input type="text" id="destination_cp" name="destination_cp" required>
+                    </div>
+                    <div>
+                        <label for="destination_ville">Ville * :</label>
+                        <input type="text" id="destination_ville" name="destination_ville" required>
+                    </div>
+                    <div>
+                        <label for="destination_pays">Pays * :</label>
+                        <input type="text" id="destination_pays" name="destination_pays" required>
+                    </div>
+                     <div>
+                        <label for="destination_instructions">Instructions spécifiques à la livraison :</label>
+                        <textarea id="destination_instructions" name="destination_instructions" rows="3" placeholder="Horaires, contact sur place, livraison en étage..."></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Description de la Marchandise</legend>
+                    <div>
+                        <label for="nature_marchandise">Nature de la marchandise * :</label>
+                        <input type="text" id="nature_marchandise" name="nature_marchandise" placeholder="Ex: Pièces automobiles, produits alimentaires secs, meubles..." required>
+                    </div>
+                    <div>
+                        <label for="code_douanier_hs">Code douanier (HS Code / Tarif douanier) si connu :</label>
+                        <input type="text" id="code_douanier_hs" name="code_douanier_hs" placeholder="Ex: 8708.10.90">
+                    </div>
+
+                    <p><strong>Colisage (décrivez chaque type de colis si multiples) :</strong></p>
+                    <div class="colis-item">
+                        <p><em>Type de Colis 1</em></p>
+                        <div>
+                            <label for="type_emballage1">Type d'emballage * :</label>
+                            <select id="type_emballage1" name="type_emballage1" required>
+                                <option value="">-- Choisir --</option>
+                                <option value="palette_europe">Palette Europe (80x120cm)</option>
+                                <option value="palette_standard">Palette Standard (100x120cm)</option>
+                                <option value="palette_hors_norme">Palette Hors Norme</option>
+                                <option value="carton">Carton</option>
+                                <option value="caisse_bois">Caisse en bois</option>
+                                <option value="fut">Fût</option>
+                                <option value="big_bag">Big Bag</option>
+                                <option value="vrac_solide">Vrac solide</option>
+                                <option value="vrac_liquide">Vrac liquide</option>
+                                <option value="autre_emballage">Autre (préciser)</option>
+                            </select>
+                            <input type="text" id="autre_emballage_details1" name="autre_emballage_details1" placeholder="Préciser si autre" style="display:none;">
+                            </div>
+                        <div>
+                            <label for="nombre_colis1">Nombre de colis de ce type * :</label>
+                            <input type="number" id="nombre_colis1" name="nombre_colis1" min="1" required>
+                        </div>
+                        <div>
+                            <label for="longueur_colis1">Longueur par colis (cm) :</label>
+                            <input type="number" id="longueur_colis1" name="longueur_colis1" step="0.1" min="0">
+                        </div>
+                        <div>
+                            <label for="largeur_colis1">Largeur par colis (cm) :</label>
+                            <input type="number" id="largeur_colis1" name="largeur_colis1" step="0.1" min="0">
+                        </div>
+                        <div>
+                            <label for="hauteur_colis1">Hauteur par colis (cm) :</label>
+                            <input type="number" id="hauteur_colis1" name="hauteur_colis1" step="0.1" min="0">
+                        </div>
+                        <div>
+                            <label for="poids_colis1">Poids par colis (kg) * :</label>
+                            <input type="number" id="poids_colis1" name="poids_colis1" step="0.01" min="0" required>
+                        </div>
+                         <div>
+                            <label for="colis_gerbable1">Marchandise gerbable (empilable) ?</label>
+                            <select id="colis_gerbable1" name="colis_gerbable1">
+                                <option value="oui">Oui</option>
+                                <option value="non">Non</option>
+                                <option value="partiellement">Partiellement (préciser)</option>
+                            </select>
+                             <input type="text" id="gerbable_details1" name="gerbable_details1" placeholder="Préciser si partiellement" style="display:none;">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="poids_total">Poids total brut de l'expédition (kg) * :</label>
+                        <input type="number" id="poids_total" name="poids_total" step="0.01" min="0" required>
+                    </div>
+                    <div>
+                        <label for="volume_total">Volume total de l'expédition (m³) :</label>
+                        <input type="number" id="volume_total" name="volume_total" step="0.01" min="0" placeholder="Calculé si dimensions fournies">
+                    </div>
+                    <div>
+                        <label for="valeur_marchandise">Valeur de la marchandise (pour assurance) :</label>
+                        <input type="number" id="valeur_marchandise" name="valeur_marchandise" step="0.01" min="0">
+                        <select id="devise_valeur" name="devise_valeur">
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="assurance_ad_valorem">Souhaitez-vous une assurance Ad Valorem ? *</label>
+                        <select id="assurance_ad_valorem" name="assurance_ad_valorem" required>
+                            <option value="non">Non</option>
+                            <option value="oui">Oui</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Nature Spécifique de la Marchandise</legend>
+                    <div>
+                        <label>La marchandise est-elle :</label>
+                        <input type="checkbox" id="dangereuse" name="specificites[]" value="dangereuse">
+                        <label for="dangereuse">Dangereuse (ADR, IMO, IATA)</label>
+                        <div id="details_dangereux" style="margin-left: 20px; display:none;">
+                            <label for="classe_onu">Classe / N° ONU :</label>
+                            <input type="text" id="classe_onu" name="classe_onu" placeholder="Ex: Classe 3, UN1203">
+                            <label for="fiche_securite">Fiche de données de sécurité (FDS/MSDS) disponible ?</label>
+                            <select id="fiche_securite" name="fiche_securite">
+                                <option value="oui">Oui</option>
+                                <option value="non">Non</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="temperature_dirigee" name="specificites[]" value="temperature_dirigee">
+                        <label for="temperature_dirigee">Sous température dirigée</label>
+                        <div id="details_temperature" style="margin-left: 20px; display:none;">
+                            <label for="temperature_requise">Température requise (°C) :</label>
+                            <input type="text" id="temperature_requise" name="temperature_requise" placeholder="Ex: +2°C à +8°C ou -18°C">
+                        </div>
+                    </div>
+                     <div>
+                        <input type="checkbox" id="fragile" name="specificites[]" value="fragile">
+                        <label for="fragile">Fragile</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="hors_gabarit" name="specificites[]" value="hors_gabarit">
+                        <label for="hors_gabarit">Hors gabarit / Convoi exceptionnel</label>
+                    </div>
+                     <div>
+                        <input type="checkbox" id="vivante" name="specificites[]" value="vivante">
+                        <label for="vivante">Vivante (animaux)</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="perissable" name="specificites[]" value="perissable">
+                        <label for="perissable">Périssable (autre que température dirigée)</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Dates et Documents</legend>
+                    <div>
+                        <label for="date_enlevement_souhaitee">Date d'enlèvement souhaitée * :</label>
+                        <input type="date" id="date_enlevement_souhaitee" name="date_enlevement_souhaitee" required>
+                    </div>
+                    <div>
+                        <label for="date_livraison_imperative">Date de livraison impérative (si applicable) :</label>
+                        <input type="date" id="date_livraison_imperative" name="date_livraison_imperative">
+                    </div>
+                    <div>
+                        <label>Documents disponibles :</label>
+                        <input type="checkbox" id="doc_facture" name="documents[]" value="facture_commerciale">
+                        <label for="doc_facture">Facture commerciale</label><br>
+                        <input type="checkbox" id="doc_packing_list" name="documents[]" value="packing_list">
+                        <label for="doc_packing_list">Liste de colisage (Packing List)</label><br>
+                         <input type="checkbox" id="doc_cert_origine" name="documents[]" value="certificat_origine">
+                        <label for="doc_cert_origine">Certificat d'origine</label><br>
+                        </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Informations Complémentaires</legend>
+                    <div>
+                        <label for="budget_approx">Budget approximatif (si défini) :</label>
+                        <input type="text" id="budget_approx" name="budget_approx" placeholder="Ex: 500 EUR">
+                    </div>
+                    <div>
+                        <label for="commentaires">Commentaires ou instructions additionnelles :</label>
+                        <textarea id="commentaires" name="commentaires" rows="5" placeholder="Toute information que vous jugez utile de nous communiquer..."></textarea>
+                    </div>
+                    <div>
+                        <label for="reference_interne">Votre référence interne pour ce dossier :</label>
+                        <input type="text" id="reference_interne" name="reference_interne">
+                    </div>
+                     <div>
+                        <label for="fichier_joint">Joindre un fichier (Ex: packing list, photo - max 5Mo) :</label>
+                        <input type="file" id="fichier_joint" name="fichier_joint" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png">
+                    </div>
+                    <div>
+                        <input type="checkbox" id="perissable" name="specificites[]" value="perissable">
+                        <label for="contrat">je certifie avoir lu et accepté le contrat de transport Commissionnaire</label>
+                    </div>
+                </fieldset>
+
+                <button type="submit">Envoyer ma demande de devis</button>
+                <button type="reset">Réinitialiser le formulaire</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TLMCT - Commissionnaire de Transport. Tous droits réservés.</p>
+        <a href="mention-legales.html">Mentions Légales</a> | <a href="politique-confidentialite.html">Politique de confidentialité</p>
+    </footer>
+
+    <script>
+        // Affichage conditionnel pour emballage "Autre"
+        const emballageSelect1 = document.getElementById('type_emballage1');
+        const autreEmballageDetails1 = document.getElementById('autre_emballage_details1');
+        if (emballageSelect1 && autreEmballageDetails1) {
+            emballageSelect1.addEventListener('change', function() {
+                autreEmballageDetails1.style.display = this.value === 'autre_emballage' ? 'inline-block' : 'none';
+                if (this.value !== 'autre_emballage') {
+                    autreEmballageDetails1.value = ''; // Clear if not "Autre"
+                }
+            });
+        }
+        
+        // Affichage conditionnel pour détails gerbable
+        const gerbableSelect1 = document.getElementById('colis_gerbable1');
+        const gerbableDetails1 = document.getElementById('gerbable_details1');
+        if (gerbableSelect1 && gerbableDetails1) {
+            gerbableSelect1.addEventListener('change', function() {
+                gerbableDetails1.style.display = this.value === 'partiellement' ? 'inline-block' : 'none';
+                 if (this.value !== 'partiellement') {
+                    gerbableDetails1.value = '';
+                }
+            });
+        }
+
+        // Affichage conditionnel pour marchandises dangereuses
+        const checkboxDangereuse = document.getElementById('dangereuse');
+        const detailsDangereuxDiv = document.getElementById('details_dangereux');
+        if (checkboxDangereuse && detailsDangereuxDiv) {
+            checkboxDangereuse.addEventListener('change', function() {
+                detailsDangereuxDiv.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) {
+                    // Clear fields if unchecked
+                    document.getElementById('classe_onu').value = '';
+                    document.getElementById('fiche_securite').value = 'non'; // Ou une valeur par défaut
+                }
+            });
+        }
+
+        // Affichage conditionnel pour température dirigée
+        const checkboxTemperature = document.getElementById('temperature_dirigee');
+        const detailsTemperatureDiv = document.getElementById('details_temperature');
+        if (checkboxTemperature && detailsTemperatureDiv) {
+            checkboxTemperature.addEventListener('change', function() {
+                detailsTemperatureDiv.style.display = this.checked ? 'block' : 'none';
+                 if (!this.checked) {
+                    document.getElementById('temperature_requise').value = '';
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

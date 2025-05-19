@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<style>
+        .error-message {
+            color: #d9534f; /* Rouge pour indiquer une erreur */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #d9534f;
+            background-color: #f2dede;
+            border-radius: 5px;
+        }
+        .error-details {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #a94442;
+        }
+         .error-page-links {
+             margin-top: 20px;
+         }
+         .error-page-links a {
+             margin-right: 15px;
+             color: #0056b3;
+             text-decoration: none;
+         }
+         .error-page-links a:hover {
+             text-decoration: underline;
+         }
+    </style>
+</head>
+<body>
+
+
+    <main>
+        <section>
+            <h1>Oups, une erreur est survenue !</h1>
+        </section>
+    </main>
+
+  
+    <script>
+        // Petit script pour afficher les détails de l'erreur si présents dans l'URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get('error');
+             const errorsList = urlParams.get('errors'); // Pour les erreurs de validation multiples
+
+            const errorDetailsElement = document.getElementById('error-details');
+
+            if (errorsList) {
+                 // Afficher la liste des erreurs de validation
+                 errorDetailsElement.textContent = 'Détails : ' + decodeURIComponent(errorsList).replace(/,/g, ', ');
+                 errorDetailsElement.style.display = 'block';
+            } else if (errorMessage) {
+                // Afficher un message générique basé sur le code d'erreur
+                let detail = '';
+                switch (errorMessage) {
+                    case 'method_not_allowed':
+                        detail = 'La méthode de soumission du formulaire n\'est pas autorisée.';
+                        break;
+                    case 'mail_failed':
+                        detail = 'L\'envoi de l\'email a échoué. Veuillez réessayer ou nous contacter.';
+                        break;
+                    // Ajoutez d'autres cas si vous passez d'autres codes d'erreur depuis le PHP
+                    default:
+                        detail = 'Une erreur inconnue est survenue.';
+                        break;
+                }
+                errorDetailsElement.textContent = 'Détails : ' + detail;
+                errorDetailsElement.style.display = 'block';
+            } else {
+                 // Cacher le paragraphe de détails si aucune erreur n'est passée
+                 errorDetailsElement.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Merci pour votre demande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f0fe;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .message {
+            background-color: #fff;
+            padding: 30px;
+            margin: auto;
+            width: 50%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #34a853;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+       
+    <div class="error-message">
+        <p>Nous sommes désolés, mais une erreur s'est produite lors du traitement de votre demande de devis.</p>
+        <p id="error-details" class="error-details"></p> </div>
+       <p>Veuillez réessayer ultérieurement ou nous contacter directement par téléphone ou email si le probleme persiste.</p>
+
+       <div class="error-page-links">
+        <a href="quote.html">Retourner au formulaire de devis</a>
+        <a href="index.html">Retourner à l'accueil</a>
+        <a href="contact.html">Nous contacter directement</a>
+    </div>
+    </div>
+
+</body>
+</html>
