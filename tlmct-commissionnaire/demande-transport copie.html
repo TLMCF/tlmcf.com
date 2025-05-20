@@ -1,231 +1,168 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="manifest" href="manifest.json">
-<script src="service-worker.js"></script>
+    <meta charset="UTF-8" />
+    <link rel="manifest" href="manifest.json">
+    <script src="service-worker.js"></script>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commissionnaire de Transport - Accueil</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker enregistré'))
-      .catch(err => console.error('Erreur Service Worker :', err));
-  }
-</script>
-<style>
-    /* Styles pour les boutons du formulaire (submit et reset) */
-    /* Ces styles sont appliqués directement aux boutons sans classe spécifique */
-    form button[type="submit"],
-    form button[type="reset"] {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1.1em;
-        transition: background-color 0.3s ease;
-        margin-left: 10px; /* Ajoute un petit espace entre les boutons */
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commissionnaire de Transport - Accueil</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('Service Worker enregistré'))
+                .catch(err => console.error('Erreur Service Worker :', err));
+        }
+    </script>
+    <style>
+        /* Styles pour le bouton PDF */
+        .pdf-button {
+            padding: 10px 20px;
+            background-color: #dc3545; /* Rouge */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Espace au-dessus du bouton */
+            display: block; /* Pour qu'il prenne toute la largeur disponible ou soit centré */
+            width: fit-content; /* S'adapte au contenu */
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    form button[type="submit"] {
-        background-color: #28a745; /* Vert */
-        color: white;
-    }
+        .pdf-button:hover {
+            background-color: #c82333; /* Rouge plus foncé au survol */
+        }
 
-    form button[type="submit"]:hover {
-        background-color: #218838;
-    }
+        /* Styles de base pour le formulaire (à compléter/ajuster dans style.css) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
 
-    form button[type="reset"] {
-        background-color: #6c757d; /* Gris */
-        color: white;
-    }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
 
-    form button[type="reset"]:hover {
-        background-color: #5a6268;
-    }
+        nav {
+            background-color: #444;
+            padding: 0.5em 0;
+            text-align: center;
+        }
 
-    /* Styles pour le bouton PDF, en les alignant avec les autres boutons */
-    #generatePdfBtn {
-        padding: 10px 20px; /* Même padding */
-        background-color: #dc3545; /* Rouge */
-        color: white;
-        border: none;
-        border-radius: 5px; /* Même bordure arrondie */
-        cursor: pointer;
-        font-size: 1.1em; /* Même taille de police */
-        transition: background-color 0.3s ease;
-        margin-top: 20px; /* Espace au-dessus du bouton */
-        display: block; /* Pour qu'il prenne toute la largeur disponible */
-        width: fit-content; /* S'adapte au contenu */
-        margin-left: auto; /* Centre le bouton si display: block */
-        margin-right: auto;
-    }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0 15px;
+        }
 
-    #generatePdfBtn:hover {
-        background-color: #c82333; /* Rouge plus foncé au survol */
-    }
+        main {
+            padding: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    /* --- Styles existants du formulaire (ajustés pour la clarté) --- */
-    body {
-        font-family: sans-serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-        color: #333;
-    }
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
 
-    header {
-        background-color: #0056b3;
-        color: white;
-        padding: 1rem 0;
-        text-align: center;
-    }
+        legend {
+            font-weight: bold;
+            color: #0056b3;
+            padding: 0 10px;
+        }
 
-    header h1 {
-        margin: 0;
-        padding-bottom: 10px;
-    }
+        form div {
+            margin-bottom: 10px;
+        }
 
-    nav a {
-        color: white;
-        text-decoration: none;
-        margin: 0 15px;
-        font-weight: bold;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
 
-    nav a:hover {
-        text-decoration: underline;
-    }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: calc(100% - 22px); /* Ajuste la largeur pour le padding */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Inclut padding et border dans la largeur */
+        }
 
-    main {
-        padding: 20px;
-        max-width: 900px;
-        margin: 20px auto;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        textarea {
+            resize: vertical;
+        }
 
-    section h1 {
-        color: #0056b3;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
 
-    section p {
-        margin-bottom: 20px;
-    }
+        button[type="reset"] {
+            background-color: #6c757d;
+        }
 
-    form {
-        margin-top: 20px;
-    }
+        button:hover {
+            background-color: #0056b3;
+        }
 
-    fieldset {
-        border: 1px solid #ccc;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-    }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #333;
+            color: white;
+        }
 
-    legend {
-        font-weight: bold;
-        color: #0056b3;
-        padding: 0 10px;
-        margin-left: -5px; /* Pour un léger chevauchement */
-        font-size: 1.2em;
-    }
-
-    form div {
-        margin-bottom: 15px;
-    }
-
-    form label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    form input[type="text"],
-    form input[type="email"],
-    form input[type="tel"],
-    form input[type="number"],
-    form input[type="date"],
-    form select,
-    form textarea {
-        width: calc(100% - 22px); /* Ajuste la largeur pour le padding et la bordure */
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
-    }
-
-    form textarea {
-        resize: vertical; /* Permet de redimensionner verticalement */
-    }
-
-    form input[type="checkbox"],
-    form input[type="radio"] {
-        margin-right: 8px;
-    }
-
-    form input[type="file"] {
-        padding: 5px;
-        border: none;
-        background-color: transparent;
-    }
-
-    .colis-item {
-        border: 1px dashed #ddd;
-        padding: 10px;
-        margin-bottom: 15px;
-        background-color: #fff;
-        border-radius: 4px;
-    }
-
-    .colis-item p {
-        font-weight: bold;
-        margin-top: 0;
-    }
-
-    footer {
-        text-align: center;
-        padding: 20px;
-        margin-top: 20px;
-        background-color: #0056b3;
-        color: white;
-        font-size: 0.9em;
-    }
-
-    footer a {
-        color: white;
-        text-decoration: none;
-        margin: 0 5px;
-    }
-
-    footer a:hover {
-        text-decoration: underline;
-    }
-
-</style>
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>TLMCF Transports</h1>
-    <nav>
-    <a href="index.html">Accueil</a>
-    <a href="services.html">Services</a>
-    <a href="a-propos.html">A propos</a>
-    <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
-    <a href="contact.html">Contact</a>
-  </header>
+    <header>
+        <h1>TLMCF Transports</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="services.html">Services</a>
+            <a href="a-propos.html">A propos</a>
+            <a href="rejoindre-flotte.html">Rejoindre notre Flotte</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
 
     <main>
         <section>
@@ -271,7 +208,7 @@
                             <option value="pas_de_preference">Pas de préférence / Conseil attendu</option>
                         </select>
                     </div>
-                     <div>
+                    <div>
                         <label for="incoterm">Incoterm (si applicable) :</label>
                         <input type="text" id="incoterm" name="incoterm" placeholder="EXW, FOB, CIF...">
                     </div>
@@ -295,7 +232,7 @@
                         <label for="origine_pays">Pays * :</label>
                         <input type="text" id="origine_pays" name="origine_pays" value="France" required>
                     </div>
-                     <div>
+                    <div>
                         <label for="origine_instructions">Instructions spécifiques à l'enlèvement :</label>
                         <textarea id="origine_instructions" name="origine_instructions" rows="3" placeholder="Horaires, contact sur place, nécessité d'un hayon..."></textarea>
                     </div>
@@ -319,7 +256,7 @@
                         <label for="destination_pays">Pays * :</label>
                         <input type="text" id="destination_pays" name="destination_pays" required>
                     </div>
-                     <div>
+                    <div>
                         <label for="destination_instructions">Instructions spécifiques à la livraison :</label>
                         <textarea id="destination_instructions" name="destination_instructions" rows="3" placeholder="Horaires, contact sur place, livraison en étage..."></textarea>
                     </div>
@@ -355,7 +292,7 @@
                                 <option value="autre_emballage">Autre (préciser)</option>
                             </select>
                             <input type="text" id="autre_emballage_details1" name="autre_emballage_details1" placeholder="Préciser si autre" style="display:none;">
-                            </div>
+                        </div>
                         <div>
                             <label for="nombre_colis1">Nombre de colis de ce type * :</label>
                             <input type="number" id="nombre_colis1" name="nombre_colis1" min="1" required>
@@ -376,14 +313,14 @@
                             <label for="poids_colis1">Poids par colis (kg) * :</label>
                             <input type="number" id="poids_colis1" name="poids_colis1" step="0.01" min="0" required>
                         </div>
-                         <div>
+                        <div>
                             <label for="colis_gerbable1">Marchandise gerbable (empilable) ?</label>
                             <select id="colis_gerbable1" name="colis_gerbable1">
                                 <option value="oui">Oui</option>
                                 <option value="non">Non</option>
                                 <option value="partiellement">Partiellement (préciser)</option>
                             </select>
-                             <input type="text" id="gerbable_details1" name="gerbable_details1" placeholder="Préciser si partiellement" style="display:none;">
+                            <input type="text" id="gerbable_details1" name="gerbable_details1" placeholder="Préciser si partiellement" style="display:none;">
                         </div>
                     </div>
                     <div>
@@ -437,7 +374,7 @@
                             <input type="text" id="temperature_requise" name="temperature_requise" placeholder="Ex: +2°C à +8°C ou -18°C">
                         </div>
                     </div>
-                     <div>
+                    <div>
                         <input type="checkbox" id="fragile" name="specificites[]" value="fragile">
                         <label for="fragile">Fragile</label>
                     </div>
@@ -445,7 +382,7 @@
                         <input type="checkbox" id="hors_gabarit" name="specificites[]" value="hors_gabarit">
                         <label for="hors_gabarit">Hors gabarit / Convoi exceptionnel</label>
                     </div>
-                     <div>
+                    <div>
                         <input type="checkbox" id="vivante" name="specificites[]" value="vivante">
                         <label for="vivante">Vivante (animaux)</label>
                     </div>
@@ -471,9 +408,9 @@
                         <label for="doc_facture">Facture commerciale</label><br>
                         <input type="checkbox" id="doc_packing_list" name="documents[]" value="packing_list">
                         <label for="doc_packing_list">Liste de colisage (Packing List)</label><br>
-                         <input type="checkbox" id="doc_cert_origine" name="documents[]" value="certificat_origine">
+                        <input type="checkbox" id="doc_cert_origine" name="documents[]" value="certificat_origine">
                         <label for="doc_cert_origine">Certificat d'origine</label><br>
-                        </div>
+                    </div>
                 </fieldset>
 
                 <fieldset>
@@ -490,7 +427,7 @@
                         <label for="reference_interne">Votre référence interne pour ce dossier :</label>
                         <input type="text" id="reference_interne" name="reference_interne">
                     </div>
-                     <div>
+                    <div>
                         <label for="fichier_joint">Joindre un fichier (Ex: packing list, photo - max 5Mo) :</label>
                         <input type="file" id="fichier_joint" name="fichier_joint" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png">
                     </div>
@@ -502,14 +439,15 @@
 
                 <button type="submit">Envoyer ma demande de devis</button>
                 <button type="reset">Réinitialiser le formulaire</button>
+                <button type="button" id="generatePdfBtn" class="pdf-button">Générer le PDF de la demande</button>
             </form>
-            <button id="generatePdfBtn" type="button">Générer le PDF de la demande</button>
+
         </section>
     </main>
 
     <footer>
         <p>&copy; 2025 TLMCT - Commissionnaire de Transport. Tous droits réservés.</p>
-        <a href="mention-legales.html">Mentions Légales</a> | <a href="politique-confidentialite.html">Politique de confidentialité</p>
+        <a href="mention-legales.html">Mentions Légales</a> | <a href="politique-confidentialite.html">Politique de confidentialité</a>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -534,7 +472,7 @@
         if (gerbableSelect1 && gerbableDetails1) {
             gerbableSelect1.addEventListener('change', function() {
                 gerbableDetails1.style.display = this.value === 'partiellement' ? 'inline-block' : 'none';
-                 if (this.value !== 'partiellement') {
+                if (this.value !== 'partiellement') {
                     gerbableDetails1.value = '';
                 }
             });
@@ -560,7 +498,7 @@
         if (checkboxTemperature && detailsTemperatureDiv) {
             checkboxTemperature.addEventListener('change', function() {
                 detailsTemperatureDiv.style.display = this.checked ? 'block' : 'none';
-                 if (!this.checked) {
+                if (!this.checked) {
                     document.getElementById('temperature_requise').value = '';
                 }
             });
@@ -569,11 +507,14 @@
         // --- Logique de génération de PDF pour le formulaire ---
         const generatePdfBtn = document.getElementById("generatePdfBtn");
 
-        generatePdfBtn.addEventListener("click", function() {
+        generatePdfBtn.addEventListener("click", function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             let y = 20; // Position Y de départ sur le document
 
+            // Ajout d'un titre et d'une date de génération
             doc.setFontSize(18);
             doc.text("Demande de Devis Transport - TLMCF", 14, y);
             y += 10;
@@ -582,7 +523,12 @@
             y += 15;
 
             // Fonction pour ajouter une section au PDF
-            function addSection(title, fields) {
+            function addSection(title, fields, startNewPage = false) {
+                if (startNewPage || (y + 40 > doc.internal.pageSize.height - 20)) { // Vérifier si une nouvelle page est nécessaire avant d'ajouter la section
+                    doc.addPage();
+                    y = 20; // Réinitialiser la position Y
+                }
+
                 doc.setFontSize(14);
                 doc.text(title, 14, y);
                 y += 7;
@@ -593,9 +539,9 @@
                 y += 5;
 
                 fields.forEach(field => {
-                    if (field.value && field.value.trim() !== '') { // N'afficher que les champs qui ont une valeur non vide
+                    if (field.value && field.value.trim() !== '' && field.value.trim() !== ' ') { // N'afficher que les champs qui ont une valeur significative
                         const text = `${field.label}: ${field.value}`;
-                        if (y + 5 > doc.internal.pageSize.height - 20) { // Vérifier si une nouvelle page est nécessaire
+                        if (y + 5 > doc.internal.pageSize.height - 20) { // Vérifier si une nouvelle page est nécessaire pour le texte du champ
                             doc.addPage();
                             y = 20; // Réinitialiser la position Y
                             doc.setFontSize(14);
@@ -625,7 +571,7 @@
 
             // Détails de l'Expédition
             addSection("Détails de l'Expédition", [
-                { label: "Mode de transport souhaité", value: document.getElementById('mode_transport').options[document.getElementById('mode_transport').selectedIndex].text }, // Pour avoir le texte lisible
+                { label: "Mode de transport souhaité", value: document.getElementById('mode_transport').value },
                 { label: "Incoterm", value: document.getElementById('incoterm').value }
             ]);
 
@@ -648,47 +594,21 @@
             ]);
 
             // Description de la Marchandise
-            doc.setFontSize(14);
-            doc.text("Description de la Marchandise", 14, y);
-            y += 7;
-            doc.setFontSize(10);
-            doc.setDrawColor(0);
-            doc.setLineWidth(0.2);
-            doc.line(14, y, 200, y);
-            y += 5;
-
-            // Données de la marchandise (hors colisage)
-            const merchandiseFields = [
+            // Ces champs sont gérés séparément pour permettre l'autoTable
+            const merchandiseData = [
                 { label: "Nature de la marchandise", value: document.getElementById('nature_marchandise').value },
                 { label: "Code douanier (HS Code)", value: document.getElementById('code_douanier_hs').value },
                 { label: "Poids total brut (kg)", value: document.getElementById('poids_total').value },
                 { label: "Volume total (m³)", value: document.getElementById('volume_total').value },
-                { label: "Valeur de la marchandise", value: document.getElementById('valeur_marchandise').value ? `${document.getElementById('valeur_marchandise').value} ${document.getElementById('devise_valeur').value}` : '' },
+                { label: "Valeur de la marchandise", value: document.getElementById('valeur_marchandise').value + ' ' + document.getElementById('devise_valeur').value },
                 { label: "Assurance Ad Valorem", value: document.getElementById('assurance_ad_valorem').value }
             ];
+            addSection("Description de la Marchandise", merchandiseData);
 
-            merchandiseFields.forEach(field => {
-                if (field.value && field.value.trim() !== '') {
-                    if (y + 5 > doc.internal.pageSize.height - 20) {
-                        doc.addPage();
-                        y = 20;
-                        doc.setFontSize(14);
-                        doc.text("Description de la Marchandise (suite)", 14, y);
-                        y += 7;
-                        doc.setFontSize(10);
-                        doc.setDrawColor(0);
-                        doc.setLineWidth(0.2);
-                        doc.line(14, y, 200, y);
-                        y += 5;
-                    }
-                    doc.text(`${field.label}: ${field.value}`, 14, y);
-                    y += 5;
-                }
-            });
-            y += 5; // Little extra space before colisage
 
             // Colisage (utiliser autoTable pour cette partie)
-            doc.text("Détails du Colisage :", 14, y);
+            doc.setFontSize(12);
+            doc.text("Détails du Colisage", 14, y);
             y += 5;
 
             const colisHeaders = ["Type d'emballage", "Nombre", "L (cm)", "l (cm)", "H (cm)", "Poids (kg)", "Gerbable"];
@@ -696,12 +616,11 @@
 
             const typeEmballage = document.getElementById('type_emballage1').value;
             const autreEmballageDetails = document.getElementById('autre_emballage_details1').value;
-            const emballageDisplay = (typeEmballage === 'autre_emballage' && autreEmballageDetails) ? autreEmballageDetails : document.getElementById('type_emballage1').options[document.getElementById('type_emballage1').selectedIndex].text;
+            const emballageDisplay = (typeEmballage === 'autre_emballage' && autreEmballageDetails) ? autreEmballageDetails : typeEmballage;
 
             const gerbable = document.getElementById('colis_gerbable1').value;
             const gerbableDetails = document.getElementById('gerbable_details1').value;
-            const gerbableDisplay = (gerbable === 'partiellement' && gerbableDetails) ? `Partiellement (${gerbableDetails})` : gerbable;
-
+            const gerbableDisplay = (gerbable === 'partiellement' && gerbableDetails) ? `${gerbable} (${gerbableDetails})` : gerbable;
 
             colisData.push([
                 emballageDisplay,
@@ -728,29 +647,22 @@
                     textColor: 255,
                     fontStyle: 'bold'
                 },
-                didDrawPage: function (data) { // Pour gérer les débordements de page si le tableau est très long
+                didDrawPage: function (data) {
                     y = data.cursor.y + 10;
-                }
+                },
+                margin: { top: (y + 10 > doc.internal.pageSize.height - 20) ? 20 : y + 10 } // Start new page if not enough space
             });
             y = doc.autoTable.previous.finalY + 10; // Mettre à jour Y après le tableau
 
-            // Nature Spécifique de la Marchandise
-            doc.setFontSize(14);
-            doc.text("Nature Spécifique de la Marchandise", 14, y);
-            y += 7;
-            doc.setFontSize(10);
-            doc.setDrawColor(0);
-            doc.setLineWidth(0.2);
-            doc.line(14, y, 200, y);
-            y += 5;
 
+            // Nature Spécifique de la Marchandise
             let specificites = [];
             if (document.getElementById('dangereuse').checked) {
                 let dangerDetails = "Dangereuse";
                 const classeOnu = document.getElementById('classe_onu').value;
                 const ficheSecurite = document.getElementById('fiche_securite').value;
                 if (classeOnu) dangerDetails += ` (Classe/ONU: ${classeOnu})`;
-                dangerDetails += ` (FDS disponible: ${ficheSecurite === 'oui' ? 'Oui' : 'Non'})`;
+                dangerDetails += ` (FDS disponible: ${ficheSecurite})`;
                 specificites.push(dangerDetails);
             }
             if (document.getElementById('temperature_dirigee').checked) {
@@ -764,79 +676,36 @@
             if (document.getElementById('vivante').checked) specificites.push("Vivante (animaux)");
             if (document.getElementById('perissable').checked) specificites.push("Périssable (autre que température dirigée)");
 
-            if (specificites.length > 0) {
-                specificites.forEach(spec => {
-                     if (y + 5 > doc.internal.pageSize.height - 20) {
-                        doc.addPage();
-                        y = 20;
-                        doc.setFontSize(14);
-                        doc.text("Nature Spécifique de la Marchandise (suite)", 14, y);
-                        y += 7;
-                        doc.setFontSize(10);
-                        doc.setDrawColor(0);
-                        doc.setLineWidth(0.2);
-                        doc.line(14, y, 200, y);
-                        y += 5;
-                    }
-                    doc.text(`- ${spec}`, 14, y);
-                    y += 5;
-                });
-            } else {
-                doc.text("Aucune spécificité déclarée.", 14, y);
-                y += 5;
-            }
-            y += 10;
+            addSection("Nature Spécifique de la Marchandise", specificites.map(s => ({ label: "", value: s })));
 
 
             // Dates et Documents
+            let documentsDisponibles = [];
+            document.querySelectorAll('input[name="documents[]"]:checked').forEach(checkbox => {
+                documentsDisponibles.push(checkbox.nextElementSibling.textContent); // Prend le texte du label
+            });
+
             addSection("Dates et Documents", [
                 { label: "Date d'enlèvement souhaitée", value: document.getElementById('date_enlevement_souhaitee').value },
                 { label: "Date de livraison impérative", value: document.getElementById('date_livraison_imperative').value },
+                { label: "Documents disponibles", value: documentsDisponibles.length > 0 ? documentsDisponibles.join(', ') : "Aucun" }
             ]);
-
-            doc.setFontSize(10);
-            doc.text("Documents disponibles :", 14, y);
-            y += 5;
-            let documentsDisponibles = [];
-            if (document.getElementById('doc_facture').checked) documentsDisponibles.push("Facture commerciale");
-            if (document.getElementById('doc_packing_list').checked) documentsDisponibles.push("Liste de colisage (Packing List)");
-            if (document.getElementById('doc_cert_origine').checked) documentsDisponibles.push("Certificat d'origine");
-
-            if (documentsDisponibles.length > 0) {
-                documentsDisponibles.forEach(docText => {
-                    if (y + 5 > doc.internal.pageSize.height - 20) {
-                        doc.addPage();
-                        y = 20;
-                        doc.setFontSize(14);
-                        doc.text("Dates et Documents (suite)", 14, y);
-                        y += 7;
-                        doc.setFontSize(10);
-                        doc.setDrawColor(0);
-                        doc.setLineWidth(0.2);
-                        doc.line(14, y, 200, y);
-                        y += 5;
-                    }
-                    doc.text(`- ${docText}`, 14, y);
-                    y += 5;
-                });
-            } else {
-                doc.text("Aucun document spécifié comme disponible.", 14, y);
-                y += 5;
-            }
-            y += 10;
-
 
             // Informations Complémentaires
-            addSection("Informations Complémentaires", [
-                { label: "Budget approximatif", value: document.getElementById('budget_approx').value },
-                { label: "Commentaires ou instructions additionnelles", value: document.getElementById('commentaires').value },
-                { label: "Votre référence interne", value: document.getElementById('reference_interne').value },
-                { label: "Contrat de transport accepté", value: document.getElementById('contrat').checked ? 'Oui' : 'Non' }
-            ]);
+            const commentaires = document.getElementById('commentaires').value;
+            const budgetApprox = document.getElementById('budget_approx').value;
+            const referenceInterne = document.getElementById('reference_interne').value;
+            const fichierJoint = document.getElementById('fichier_joint').files[0] ? document.getElementById('fichier_joint').files[0].name : "Aucun";
+            const contratAccepte = document.getElementById('contrat').checked ? "Oui" : "Non (Attention: Champ obligatoire non coché)";
 
-            doc.save("demande_devis_TLMCF.pdf");
-        });
 
-    </script>
-</body>
-</html>
+            // Collecter toutes les informations qui pourraient être "supplémentaires" ou non mappables
+            let additionalInfo = [];
+            if (budgetApprox) additionalInfo.push({ label: "Budget approximatif", value: budgetApprox });
+            if (commentaires) additionalInfo.push({ label: "Commentaires ou instructions additionnelles", value: commentaires });
+            if (referenceInterne) additionalInfo.push({ label: "Votre référence interne", value: referenceInterne });
+            additionalInfo.push({ label: "Fichier joint (nom)", value: fichierJoint });
+            additionalInfo.push({ label: "Contrat de transport accepté", value: contratAccepte });
+
+
+            add
