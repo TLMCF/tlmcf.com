@@ -17,26 +17,202 @@
   }
 </script>
 <style>
-    /* Styles pour le bouton PDF */
-    .pdf-button {
+    /* Styles pour les boutons du formulaire (submit et reset) */
+    /* Ces styles sont appliqués directement aux boutons sans classe spécifique */
+    form button[type="submit"],
+    form button[type="reset"] {
         padding: 10px 20px;
-        background-color: #dc3545; /* Rouge */
-        color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 1.1em;
         transition: background-color 0.3s ease;
+        margin-left: 10px; /* Ajoute un petit espace entre les boutons */
+    }
+
+    form button[type="submit"] {
+        background-color: #28a745; /* Vert */
+        color: white;
+    }
+
+    form button[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    form button[type="reset"] {
+        background-color: #6c757d; /* Gris */
+        color: white;
+    }
+
+    form button[type="reset"]:hover {
+        background-color: #5a6268;
+    }
+
+    /* Styles pour le bouton PDF, en les alignant avec les autres boutons */
+    #generatePdfBtn {
+        padding: 10px 20px; /* Même padding */
+        background-color: #dc3545; /* Rouge */
+        color: white;
+        border: none;
+        border-radius: 5px; /* Même bordure arrondie */
+        cursor: pointer;
+        font-size: 1.1em; /* Même taille de police */
+        transition: background-color 0.3s ease;
         margin-top: 20px; /* Espace au-dessus du bouton */
-        display: block; /* Pour qu'il prenne toute la largeur disponible ou soit centré */
+        display: block; /* Pour qu'il prenne toute la largeur disponible */
         width: fit-content; /* S'adapte au contenu */
-        margin-left: auto;
+        margin-left: auto; /* Centre le bouton si display: block */
         margin-right: auto;
     }
 
-    .pdf-button:hover {
+    #generatePdfBtn:hover {
         background-color: #c82333; /* Rouge plus foncé au survol */
     }
+
+    /* --- Styles existants du formulaire (ajustés pour la clarté) --- */
+    body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    header {
+        background-color: #0056b3;
+        color: white;
+        padding: 1rem 0;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0;
+        padding-bottom: 10px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: bold;
+    }
+
+    nav a:hover {
+        text-decoration: underline;
+    }
+
+    main {
+        padding: 20px;
+        max-width: 900px;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section h1 {
+        color: #0056b3;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    section p {
+        margin-bottom: 20px;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    fieldset {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    legend {
+        font-weight: bold;
+        color: #0056b3;
+        padding: 0 10px;
+        margin-left: -5px; /* Pour un léger chevauchement */
+        font-size: 1.2em;
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="tel"],
+    form input[type="number"],
+    form input[type="date"],
+    form select,
+    form textarea {
+        width: calc(100% - 22px); /* Ajuste la largeur pour le padding et la bordure */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
+    }
+
+    form textarea {
+        resize: vertical; /* Permet de redimensionner verticalement */
+    }
+
+    form input[type="checkbox"],
+    form input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    form input[type="file"] {
+        padding: 5px;
+        border: none;
+        background-color: transparent;
+    }
+
+    .colis-item {
+        border: 1px dashed #ddd;
+        padding: 10px;
+        margin-bottom: 15px;
+        background-color: #fff;
+        border-radius: 4px;
+    }
+
+    .colis-item p {
+        font-weight: bold;
+        margin-top: 0;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #0056b3;
+        color: white;
+        font-size: 0.9em;
+    }
+
+    footer a {
+        color: white;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
 </style>
 </head>
 <body>
@@ -326,9 +502,8 @@
 
                 <button type="submit">Envoyer ma demande de devis</button>
                 <button type="reset">Réinitialiser le formulaire</button>
-                <button id="generatePdfBtn" class="pdf-button">Générer le PDF de la demande</button>
             </form>
-
+            <button id="generatePdfBtn" type="button">Générer le PDF de la demande</button>
         </section>
     </main>
 
@@ -418,7 +593,7 @@
                 y += 5;
 
                 fields.forEach(field => {
-                    if (field.value) { // N'afficher que les champs qui ont une valeur
+                    if (field.value && field.value.trim() !== '') { // N'afficher que les champs qui ont une valeur non vide
                         const text = `${field.label}: ${field.value}`;
                         if (y + 5 > doc.internal.pageSize.height - 20) { // Vérifier si une nouvelle page est nécessaire
                             doc.addPage();
@@ -450,7 +625,7 @@
 
             // Détails de l'Expédition
             addSection("Détails de l'Expédition", [
-                { label: "Mode de transport souhaité", value: document.getElementById('mode_transport').value },
+                { label: "Mode de transport souhaité", value: document.getElementById('mode_transport').options[document.getElementById('mode_transport').selectedIndex].text }, // Pour avoir le texte lisible
                 { label: "Incoterm", value: document.getElementById('incoterm').value }
             ]);
 
@@ -488,12 +663,12 @@
                 { label: "Code douanier (HS Code)", value: document.getElementById('code_douanier_hs').value },
                 { label: "Poids total brut (kg)", value: document.getElementById('poids_total').value },
                 { label: "Volume total (m³)", value: document.getElementById('volume_total').value },
-                { label: "Valeur de la marchandise", value: document.getElementById('valeur_marchandise').value + ' ' + document.getElementById('devise_valeur').value },
+                { label: "Valeur de la marchandise", value: document.getElementById('valeur_marchandise').value ? `${document.getElementById('valeur_marchandise').value} ${document.getElementById('devise_valeur').value}` : '' },
                 { label: "Assurance Ad Valorem", value: document.getElementById('assurance_ad_valorem').value }
             ];
 
             merchandiseFields.forEach(field => {
-                if (field.value && field.value.trim() !== ' ') { // Check for empty string or only spaces
+                if (field.value && field.value.trim() !== '') {
                     if (y + 5 > doc.internal.pageSize.height - 20) {
                         doc.addPage();
                         y = 20;
@@ -513,16 +688,19 @@
             y += 5; // Little extra space before colisage
 
             // Colisage (utiliser autoTable pour cette partie)
+            doc.text("Détails du Colisage :", 14, y);
+            y += 5;
+
             const colisHeaders = ["Type d'emballage", "Nombre", "L (cm)", "l (cm)", "H (cm)", "Poids (kg)", "Gerbable"];
             const colisData = [];
 
             const typeEmballage = document.getElementById('type_emballage1').value;
             const autreEmballageDetails = document.getElementById('autre_emballage_details1').value;
-            const emballageDisplay = (typeEmballage === 'autre_emballage' && autreEmballageDetails) ? autreEmballageDetails : typeEmballage;
+            const emballageDisplay = (typeEmballage === 'autre_emballage' && autreEmballageDetails) ? autreEmballageDetails : document.getElementById('type_emballage1').options[document.getElementById('type_emballage1').selectedIndex].text;
 
             const gerbable = document.getElementById('colis_gerbable1').value;
             const gerbableDetails = document.getElementById('gerbable_details1').value;
-            const gerbableDisplay = (gerbable === 'partiellement' && gerbableDetails) ? `${gerbable} (${gerbableDetails})` : gerbable;
+            const gerbableDisplay = (gerbable === 'partiellement' && gerbableDetails) ? `Partiellement (${gerbableDetails})` : gerbable;
 
 
             colisData.push([
@@ -550,7 +728,7 @@
                     textColor: 255,
                     fontStyle: 'bold'
                 },
-                didDrawPage: function (data) { // Pour gérer les débordements de page
+                didDrawPage: function (data) { // Pour gérer les débordements de page si le tableau est très long
                     y = data.cursor.y + 10;
                 }
             });
@@ -572,7 +750,7 @@
                 const classeOnu = document.getElementById('classe_onu').value;
                 const ficheSecurite = document.getElementById('fiche_securite').value;
                 if (classeOnu) dangerDetails += ` (Classe/ONU: ${classeOnu})`;
-                dangerDetails += ` (FDS disponible: ${ficheSecurite})`;
+                dangerDetails += ` (FDS disponible: ${ficheSecurite === 'oui' ? 'Oui' : 'Non'})`;
                 specificites.push(dangerDetails);
             }
             if (document.getElementById('temperature_dirigee').checked) {
@@ -653,10 +831,8 @@
                 { label: "Budget approximatif", value: document.getElementById('budget_approx').value },
                 { label: "Commentaires ou instructions additionnelles", value: document.getElementById('commentaires').value },
                 { label: "Votre référence interne", value: document.getElementById('reference_interne').value },
-                // Le fichier joint n'est pas directement exportable en PDF client-side
                 { label: "Contrat de transport accepté", value: document.getElementById('contrat').checked ? 'Oui' : 'Non' }
             ]);
-
 
             doc.save("demande_devis_TLMCF.pdf");
         });

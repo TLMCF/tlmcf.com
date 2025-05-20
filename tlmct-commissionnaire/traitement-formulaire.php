@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 
 // --- Configuration ---
 // L'adresse email où vous souhaitez recevoir les demandes
-$destinataire_email = 'contact@tlmcf.com'; // REMPLACEZ CECI PAR VOTRE ADRESSE EMAIL
+$destinataire_email = 'martinez.frederic33@outlook.fr'; // REMPLACEZ CECI PAR VOTRE ADRESSE EMAIL
 $sujet_email = 'Nouvelle demande de devis transport';
 $url_page_succes = 'merci.html'; // Page vers laquelle rediriger après succès
 $url_page_erreur = 'erreur.html'; // Page vers laquelle rediriger en cas d'erreur
