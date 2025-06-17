@@ -7,7 +7,9 @@
 
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
+    /* Styles pour le bouton Google (déjà présent) */
     .google-button {
       display: inline-flex;
       align-items: center;
@@ -28,6 +30,63 @@
       height: 24px;
       margin-right: 10px;
     }
+
+    /* NOUVEAUX STYLES OU MODIFICATIONS POUR LES CADRES DE FORMATION */
+    /* Styles pour les sections de formation */
+    .formations {
+        padding: 40px 20px; /* Ajoute un peu de marge intérieure autour de la section */
+        background-color: #f9f9f9; /* Ou la couleur de fond que vous souhaitez */
+        text-align: center; /* Pour centrer le titre "Nos Formations" */
+    }
+
+    .formations h2 {
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    /* Styles pour les conteneurs de cartes */
+    .formations .grid {
+        display: flex; /* Utilise flexbox pour centrer le contenu */
+        justify-content: center; /* Centre horizontalement le contenu */
+        margin-bottom: 20px; /* Espace entre les deux cadres */
+    }
+
+    /* Styles pour les cartes de formation individuelles */
+    .formations .card {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        /* --- Les propriétés clés pour réduire la largeur --- */
+        width: 100%; /* Par défaut, occupe toute la largeur disponible dans son parent */
+        max-width: 800px; /* Définir une largeur maximale, par exemple 800px */
+        /* Vous pouvez essayer 600px, 700px, etc., selon votre préférence */
+        /* max-width: 600px; */
+        /* -------------------------------------------------- */
+        box-sizing: border-box; /* S'assure que le padding n'augmente pas la largeur totale */
+    }
+
+    .formations .card a {
+        text-decoration: none;
+        color: #0056b3; /* Couleur du lien */
+        font-weight: 600;
+        font-size: 1.2em; /* Taille de police pour le texte du lien */
+        display: block; /* Pour que le lien occupe toute la surface de la carte */
+        padding: 10px; /* Padding interne au lien */
+    }
+
+    .formations .card a:hover {
+        color: #003366; /* Couleur du lien au survol */
+    }
+
+    /* Media Query pour la responsivité sur les petits écrans */
+    @media (max-width: 768px) {
+        .formations .card {
+            max-width: 90%; /* Sur les petits écrans, prend 90% de la largeur */
+        }
+    }
   </style>
 </head>
 
@@ -40,8 +99,8 @@
       </h1>
       <nav>
         <ul>
-          <li><a href="#">Accueil</a></li>
-          <li><a href="#formations">Formations</a></li>
+          <li><a href="#" onclick="window.history.back(); return false;">Retour</a></li>
+          <li><a href="index.html">Accueil</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -58,7 +117,10 @@
   <section id="formations" class="formations">
     <h2>Nos Formations</h2>
     <div class="grid">
-      <div class="card"><a href="caces® et autorisation de conduite.html">CACES et (A.C) Autorisation de Conduite</a></div>
+      <div class="card"><a href="Formation de Formateur.html">Formation de Formateur en autorisations de conduite</a></div>
+    </div>
+    <div class="grid">
+      <div class="card"><a href="caces® et autorisation de conduite.html">CACES et A.C (Autorisation de Conduite)</a></div>
     </div>
   </section>
 
@@ -69,25 +131,25 @@
         <section>
           <h2>Frédéric : Plus de 25 ans d'Expertise Transport & Logistique au Service de votre Formation !</h2>
           <p>Fort d'une solide expérience forgée sur le terrain depuis 1996 en tant que cariste et conducteur routier (dès 2009), Frédéric a toujours eu le transport et la logistique dans le sang. En 2017, il a naturellement évolué vers la transmission de son savoir-faire en devenant formateur.</p>
-      
+
           <h3>Un parcours riche et diversifié dans la formation transport :</h3>
           <ul>
               <li>Spécialisation initiale dans les <strong>Titres Professionnels CTRMP et CTRMTV</strong>.</li>
               <li>Expertise reconnue dans les formations <strong>FCO et FIMO</strong>.</li>
               <li>Titulaire des <strong>capacités de transport (marchandises, voyageurs et commissionnaire)</strong>, offrant une expertise en exploitation de transports.</li>
               <li>Compétences étendues aux formations d'engins de manutention : <strong>R485, R489 et R490</strong>.</li>
-              <li>Nouvelle formation proposée : <strong>R486</strong>.</li>
+              <li>Nouvelle formation proposée : <strong>R486</strong>.
               <li>Préparation au lancement de la formation : <strong>TP ECSR</strong> (Enseignement de la Conduite et de la Sécurité Routière).</li>
           </ul>
-      
+
           <p>En 2021, Frédéric a concrétisé sa vision en créant <strong>Transport Logistique Martinez, Conseils et Formations</strong>. Aujourd'hui, il met toute son expertise et sa passion au service de vos besoins en formation dans l'ensemble de ces domaines.</p>
-      
+
           <p><strong>Choisissez l'expérience et la polyvalence pour propulser vos compétences dans le transport et la logistique ! Contactez Frédéric Martinez.</strong></p>
       </section>
           </div>
-  
+
           <p class="trainer-vision">En 2021, son engagement l'a mené à fonder <strong>Transport Logistique Martinez, Conseils et Formations</strong>. Aujourd'hui, Frédéric met toute son expertise et sa passion au service de votre réussite.</p>
-  
+
           <p class="call-to-action-trainer"><strong>Prêt à propulser vos compétences ? Faites confiance à l'expérience et à la polyvalence de Frédéric Martinez !</strong></p>
       </div>
 
