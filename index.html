@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Styles pour le bouton Google (déjà présent) */
     .google-button {
       display: inline-flex;
       align-items: center;
@@ -28,20 +29,95 @@
       height: 24px;
       margin-right: 10px;
     }
-    #floating-timer {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ffffff;
-    color: #333;
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    font-size: 1.2em;
-    z-index: 9999;
-}
 
+    /* Style du minuteur flottant (déjà présent) */
+    #floating-timer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #ffffff;
+        color: #333;
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        font-size: 1.2em;
+        z-index: 9999;
+    }
+
+    /* NOUVEAUX STYLES OU MODIFICATIONS POUR LES CADRES DE FORMATION */
+    /* Ces styles devraient idéalement être dans style.css */
+    .formations {
+        padding: 40px 20px;
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+    .formations h2 {
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    /* La section 'actualites' utilise la même structure de grid/card pour les liens utiles */
+    .actualites .grid {
+        display: flex; /* Utilise flexbox pour centrer le contenu */
+        justify-content: center; /* Centre horizontalement le contenu */
+        flex-wrap: wrap; /* Permet aux cartes de passer à la ligne si l'espace est insuffisant */
+        gap: 20px; /* Espace entre les cartes */
+        margin-bottom: 20px;
+    }
+
+    /* Styles pour les cartes de formation individuelles et liens utiles */
+    .formations .card,
+    .actualites .card { /* Applique les styles aux cartes des deux sections */
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 100%;
+        max-width: 350px; /* Une largeur maximale pour les 3 cartes de formation et les liens utiles */
+        box-sizing: border-box;
+        margin-bottom: 20px; /* Espace sous chaque carte pour le mode colonne */
+    }
+
+    .formations .card a,
+    .actualites .card a {
+        text-decoration: none;
+        color: #0056b3;
+        font-weight: 600;
+        font-size: 1.2em;
+        display: block;
+        padding: 10px;
+    }
+
+    .formations .card a:hover,
+    .actualites .card a:hover {
+        color: #003366;
+    }
+
+    /* Media Query pour la responsivité */
+    @media (min-width: 769px) { /* Sur les écrans plus grands, les cartes s'alignent en ligne */
+        .formations .grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espace entre les cartes */
+        }
+        .formations .card {
+            width: calc(33.333% - 20px); /* Pour 3 cartes par ligne avec un espacement */
+            max-width: 350px; /* Limite la largeur individuelle des cartes */
+            margin-bottom: 0; /* Pas de marge en bas si elles sont en ligne */
+        }
+    }
+
+    /* Media Query pour les petits écrans pour les cartes des deux sections */
+    @media (max-width: 768px) {
+        .formations .card,
+        .actualites .card {
+            max-width: 90%; /* Occupe 90% de la largeur disponible sur les petits écrans */
+        }
+    }
   </style>
 </head>
 
@@ -54,7 +130,8 @@
       </h1>
       <nav>
         <ul>
-          <li><a href="#formations">Formations</a></li>
+          <li><a href="#" onclick="window.history.back(); return false;">Retour</a></li>
+          <li><a href="index.html">Accueil</a></li> <li><a href="#formations">Formations</a></li>
           <li><a href="#apropos">À propos</a></li>
           <li><a href="#entreprise">Espace entreprise</a></li>
           <li><a href="#actualites">Actualités</a></li>
@@ -77,7 +154,7 @@
     <h2>Nos Formations</h2>
     <div class="grid">
       <div class="card"><a href="Transport.html">Transport</a></div>
-      <div class="card"><a href="Sécurité au travail.html">Sécurité au travail</a></div> 
+      <div class="card"><a href="Sécurité au travail.html">Sécurité au travail</a></div>
       <div class="card"><a href="Logistique.html">Logistique</a></div>
     </div>
   </section>
@@ -89,30 +166,29 @@
         <section>
           <h2>Frédéric : Plus de 25 ans d'Expertise Transport & Logistique au Service de votre Formation !</h2>
           <p>Fort d'une solide expérience forgée sur le terrain depuis 1996 en tant que cariste et conducteur routier (dès 2009), Frédéric a toujours eu le transport et la logistique dans le sang. En 2017, il a naturellement évolué vers la transmission de son savoir-faire en devenant formateur.</p>
-      
+
           <h3>Un parcours riche et diversifié dans la formation transport :</h3>
           <ul>
               <li>Spécialisation initiale dans les <strong>Titres Professionnels CTRMP et CTRMTV</strong>.</li>
-              <li>Expertise reconnue dans les formations <strong>FCO et FIMO</strong>.</li>
+              <li>Expertise reconnue dans les formations <strong>FCO et FIMO</strong>.
               <li>Titulaire des <strong>capacités de transport (marchandises, voyageurs et commissionnaire)</strong>, offrant une expertise en exploitation de transports.</li>
               <li>Compétences étendues aux formations d'engins de manutention : <strong>R485, R489 et R490</strong>.</li>
               <li>Nouvelle formation proposée : <strong>R486</strong>.</li>
               <li>Préparation au lancement de la formation : <strong>TP ECSR</strong> (Enseignement de la Conduite et de la Sécurité Routière).</li>
           </ul>
-      
+
           <p>En 2021, Frédéric a concrétisé sa vision en créant <strong>Transport Logistique Martinez, Conseils et Formations</strong>. Aujourd'hui, il met toute son expertise et sa passion au service de vos besoins en formation dans l'ensemble de ces domaines.</p>
-      
+
           <p><strong>Choisissez l'expérience et la polyvalence pour propulser vos compétences dans le transport et la logistique ! Contactez Frédéric Martinez.</strong></p>
-      </section>
-          </div>
-  
-          <p class="trainer-vision">En 2021, son engagement l'a mené à fonder <strong>Transport Logistique Martinez, Conseils et Formations</strong>. Aujourd'hui, Frédéric met toute son expertise et sa passion au service de votre réussite.</p>
-  
-          <p class="call-to-action-trainer"><strong>Prêt à propulser vos compétences ? Faites confiance à l'expérience et à la polyvalence de Frédéric Martinez !</strong></p>
+        </section>
       </div>
-      </div>
-      <p><strong>Choisissez l'expérience et la polyvalence pour propulser vos compétences dans le transport et la logistique ! Contactez Frédéric Martinez.</strong></p>
+      <p class="trainer-vision">En 2021, son engagement l'a mené à fonder <strong>Transport Logistique Martinez, Conseils et Formations</strong>. Aujourd'hui, Frédéric met toute son expertise et sa passion au service de votre réussite.</p>
+
+      <p class="call-to-action-trainer"><strong>Prêt à propulser vos compétences ? Faites confiance à l'expérience et à la polyvalence de Frédéric Martinez !</strong></p>
+    </div>
+    <p><strong>Choisissez l'expérience et la polyvalence pour propulser vos compétences dans le transport et la logistique ! Contactez Frédéric Martinez.</strong></p>
   </section>
+
   <section id="entreprise" class="entreprise">
     <h2>Espace entreprise</h2>
     <p>Vous êtes une entreprise ? Contactez-nous pour former vos salariés.</p>
@@ -120,19 +196,12 @@
   </section>
 
   <section id="actualites" class="actualites">
-    <h2>Actualités</h2>
-    <section id="formations" class="formations">
-      <h2></h2>
-      <div class="grid">
-        <div class="card"><a href="minuteurs Tests.html">Lien utile : Minuteurs Tests</a></div>
-      </div>
-      <div class="grid">
-        <div class="card"><a href="calcul PMA.html">Lien utile : calculs de charges</a></div>
-      </div>
-      <div class="grid">
-        <div class="card"><a href="calculateur d'UT.html">Lien utile : calculs UT (Tests CACES)</a></div>
-      </div>
-    </section>
+    <h2>Actualités & Ressources Utiles</h2>
+    <div class="grid">
+      <div class="card"><a href="minuteurs Tests.html">Lien utile : Minuteurs Tests</a></div>
+      <div class="card"><a href="calcul PMA.html">Lien utile : calculs de charges</a></div>
+      <div class="card"><a href="calculateur d'UT.html">Lien utile : calculs UT (Tests CACES)</a></div>
+    </div>
   </section>
 
   <section id="temoignages" class="temoignages">
@@ -144,8 +213,8 @@
   </section>
 
   <section id="contact" class="contact">
-    <h2>Contactez-nous ((en construction) utilisez le mail)</h2>
-    <form action="sendmail.php" method="POST">
+    <h2>Contactez-nous (Formulaire ci-dessous ou par mail)</h2>
+    <form action="https://formspree.io/f/mjkrovrb" method="POST">
       <input type="text" name="nom" placeholder="Nom et prénom" required>
       <input type="email" name="email" placeholder="Email" required>
       <input type="tel" name="telephone" placeholder="Téléphone">
