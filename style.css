@@ -30,6 +30,34 @@ header {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1); /* optionnel : petit effet d'ombre */
 }
+.taux-reussite {
+  background-color: #f4f4f4;
+  padding: 30px 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin-top: 40px;
+  border-top: 3px solid #16a085;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.taux-reussite h3 {
+  font-size: 28px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.taux-reussite .pourcentage {
+  font-size: 22px;
+  color: #16a085;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.taux-reussite .confiance {
+  font-size: 16px;
+  color: #555;
+}
+
 
 .logo {
   font-size: 1.8rem;
