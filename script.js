@@ -8,17 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (pageTitleElement) {
     const titleText = pageTitleElement.textContent;
-    // Regex ajustée pour capturer l'ID après "Formation :" ou "Conduite " ou "Conduite "
-    const match = titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
-    // Si la regex ne trouve rien, essayer une regex plus simple si l'ID est à la fin
-    if (!match || !match[1]) {
-      const simpleMatch = titleText.match(/([A-Z0-9-]+)\s*$/i); // Cherche un ID à la fin de la chaîne
-      if (simpleMatch && simpleMatch[1]) {
-          formationId = simpleMatch[1].trim().toUpperCase();
-      }
+    // NOUVELLE REGEX: Capture l'ID à la fin de la chaîne ou après un mot clé
+    // Cela devrait mieux gérer "Formation Autorisation de Conduite AC-482"
+    const match = titleText.match(/([A-Z0-9-]+)\s*$/i) || titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
+
+    if (match && match[1]) {
+        formationId = match[1].trim().toUpperCase();
     } else {
-      formationId = match[1].trim().toUpperCase();
+        // Fallback si la première regex échoue, on tente une extraction plus générique
+        const genericMatch = titleText.match(/([A-Z]{1,2}-\d{3})/i); // Cherche des patterns comme R-482 ou AC-482
+        if (genericMatch && genericMatch[1]) {
+            formationId = genericMatch[1].trim().toUpperCase();
+        }
     }
+
 
     if (formationId) {
       console.log("Identifiant de formation extrait de la page :", formationId);
