@@ -11,17 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
       const headers = lines[0].split(",");
-      // Nettoyer les en-têtes pour enlever tout sauf les lettres, chiffres et tirets.
-      // Cela aide à ignorer les caractères invisibles ou les problèmes d'encodage.
+
+      // AFFICHAGE DES EN-TÊTES BRUTES POUR DÉBOGAGE
+      console.log("En-têtes brutes lues du CSV :", headers);
+
+      // Tenter de nettoyer les en-têtes pour enlever tout sauf les lettres, chiffres et tirets.
+      // Cela est plus agressif pour ignorer les caractères invisibles ou les problèmes d'encodage.
       const cleanedHeaders = headers.map(h => h.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''));
+
+      console.log("En-têtes nettoyées pour comparaison :", cleanedHeaders);
 
       const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite");
 
       if (tauxIndex === -1) {
-          // Afficher les en-têtes brutes et nettoyées pour faciliter le débogage si l'erreur persiste
-          console.error("En-têtes brutes du CSV :", headers);
-          console.error("En-têtes nettoyées :", cleanedHeaders);
-          throw new Error("Colonne 'taux-reussite' non trouvée après nettoyage. Vérifiez les en-têtes.");
+          throw new Error("Colonne 'taux-reussite' non trouvée. Veuillez vérifier les logs ci-dessus pour les en-têtes brutes et nettoyées.");
       }
 
       const dataLine = lines[1].split(",");
