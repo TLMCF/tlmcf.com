@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const lines = csv.trim().split("\n");
 
       // La ligne 1 (index 0) est "Taux de réussites" (titre fusionné)
-      // La ligne 2 (index 1) contient les en-têtes réelles : "Formation", "réussite", "echec", "taux-reussite"
+      // La ligne 2 (index 1) contient maintenant les en-têtes réelles : "Formation", "réussite", "echec", "taux-reussite"
       // La ligne 3 (index 2) contient les données pour "R-482" et le 80%
 
       const headers = lines[1].split(","); // LIRE LA DEUXIÈME LIGNE (INDEX 1) COMME EN-TÊTES
