@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (pageTitleElement) {
     const titleText = pageTitleElement.textContent;
-    console.log("Texte du titre de la page :", titleText); // Ajout d'un log pour le texte complet du titre
+    console.log("Texte du titre de la page :", titleText); // LIGNE AJOUTÉE POUR DÉBOGAGE
 
     // Nouvelle logique d'extraction : on cherche explicitement des patterns A-XXX, AC-XXX, R-XXX
     const specificMatch = titleText.match(/([AR][C]?-\d{3,})/i); // Capturera R-482, AC-482, A-123, etc.
