@@ -11,11 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
       const headers = lines[0].split(",");
-      // Tenter de rechercher "taux-reussite" sans accent, au cas où l'encodage poserait problème
-      // Si cela ne fonctionne pas, il faudra considérer une solution plus robuste pour l'encodage CSV.
-      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-reussite"); // REVENIR À SANS ACCENT ICI
+      // MODIFICATION ICI: Nettoyer les en-têtes pour enlever les caractères potentiellement problématiques
+      const cleanedHeaders = headers.map(h => h.trim().toLowerCase().replace(/[^a-z0-9-]/g, '')); // Supprime tout sauf lettres (minuscules), chiffres et tirets
 
-      if (tauxIndex === -1) throw new Error("Colonne 'taux-reussite' non trouvée (vérifiez l'encodage ou l'orthographe)"); // MODIFICATION DU MESSAGE D'ERREUR
+      const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite"); // Comparer avec la version nettoyée
+
+      if (tauxIndex === -1) {
+          console.error("En-têtes brutes du CSV :", headers); // Utile pour le débogage si ça ne marche toujours pas
+          console.error("En-têtes nettoyées :", cleanedHeaders); // Utile pour le débogage
+          throw new Error("Colonne 'taux-reussite' non trouvée après nettoyage. Vérifiez les en-têtes.");
+      }
 
       const dataLine = lines[1].split(",");
       const taux = dataLine[tauxIndex].trim();
