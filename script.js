@@ -11,10 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
       const headers = lines[0].split(",");
-      // Change 'taux-reussite' to 'taux-réussite' to match your spreadsheet header
-      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-réussite"); // MODIFICATION ICI
+      // Tenter de rechercher "taux-reussite" sans accent, au cas où l'encodage poserait problème
+      // Si cela ne fonctionne pas, il faudra considérer une solution plus robuste pour l'encodage CSV.
+      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-reussite"); // REVENIR À SANS ACCENT ICI
 
-      if (tauxIndex === -1) throw new Error("Colonne 'taux-réussite' non trouvée"); // MODIFICATION ICI
+      if (tauxIndex === -1) throw new Error("Colonne 'taux-reussite' non trouvée (vérifiez l'encodage ou l'orthographe)"); // MODIFICATION DU MESSAGE D'ERREUR
 
       const dataLine = lines[1].split(",");
       const taux = dataLine[tauxIndex].trim();
