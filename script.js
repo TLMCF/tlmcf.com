@@ -11,16 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
       const headers = lines[0].split(",");
-      const tauxIndex = headers.indexOf("taux_reussite");
+      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-reussite");
 
-      if (tauxIndex === -1) throw new Error("Colonne 'taux_reussite' non trouvée");
+      if (tauxIndex === -1) throw new Error("Colonne 'taux-reussite' non trouvée");
 
       const dataLine = lines[1].split(",");
-      const taux = dataLine[tauxIndex];
+      const taux = dataLine[tauxIndex].trim();
 
       const el = document.querySelector('.pourcentage');
       if (el && taux) {
-        el.textContent = `📈 ${taux}% de réussite à l'examen !`;
+        el.textContent = `📈 ${taux} de réussite à l'examen !`;
       }
     })
     .catch(error => {
