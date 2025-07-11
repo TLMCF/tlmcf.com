@@ -11,26 +11,25 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
 
-      // La ligne 1 (index 0) est probablement le titre fusionné "Taux de réussites"
-      // La ligne 2 (index 1) contient maintenant les en-têtes réelles : "Formation", "réussite", "echec", "taux-reussite"
-      // La ligne 3 (index 2) contient les données pour "R-482"
+      // La ligne 1 (index 0) est "Taux de réussites" (titre fusionné)
+      // La ligne 2 (index 1) contient les en-têtes réelles : "Formation", "réussite", "echec", "taux-reussite"
+      // La ligne 3 (index 2) contient les données pour "R-482" et le 80%
 
-      const headers = lines[1].split(","); // Lire la DEUXIÈME ligne comme en-têtes
+      const headers = lines[1].split(","); // LIRE LA DEUXIÈME LIGNE (INDEX 1) COMME EN-TÊTES
       console.log("En-têtes brutes lues du CSV (ligne d'index 1) :", headers);
 
       const cleanedHeaders = headers.map(h => h.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''));
       console.log("En-têtes nettoyées pour comparaison :", cleanedHeaders);
 
-      const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite"); // Utiliser le nom sans accent, le plus simple
+      const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite");
 
       if (tauxIndex === -1) {
           throw new Error("Colonne 'taux-reussite' non trouvée dans les en-têtes réelles. Vérifiez les logs ci-dessus.");
       }
 
-      const dataLine = lines[2].split(","); // Lire la TROISIÈME ligne comme données
+      const dataLine = lines[2].split(","); // LIRE LA TROISIÈME LIGNE (INDEX 2) COMME DONNÉES
       console.log("Ligne de données brute (ligne d'index 2) :", dataLine);
 
-      // Vérifier que l'index existe avant d'essayer de l'accéder
       const taux = dataLine[tauxIndex] ? dataLine[tauxIndex].trim() : "N/A";
       console.log("Valeur de 'taux' extraite :", taux);
 
