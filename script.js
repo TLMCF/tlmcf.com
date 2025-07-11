@@ -8,25 +8,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (pageTitleElement) {
     const titleText = pageTitleElement.textContent;
-    // NOUVELLE REGEX: Capture l'ID à la fin de la chaîne ou après un mot clé
-    // Cela devrait mieux gérer "Formation Autorisation de Conduite AC-482"
-    const match = titleText.match(/([A-Z0-9-]+)\s*$/i) || titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
+    console.log("Texte du titre de la page :", titleText); // Ajout d'un log pour le texte complet du titre
 
-    if (match && match[1]) {
-        formationId = match[1].trim().toUpperCase();
+    // Nouvelle logique d'extraction : on cherche explicitement des patterns A-XXX, AC-XXX, R-XXX
+    const specificMatch = titleText.match(/([AR][C]?-\d{3,})/i); // Capturera R-482, AC-482, A-123, etc.
+
+    if (specificMatch && specificMatch[1]) {
+        formationId = specificMatch[1].trim().toUpperCase();
     } else {
-        // Fallback si la première regex échoue, on tente une extraction plus générique
-        const genericMatch = titleText.match(/([A-Z]{1,2}-\d{3})/i); // Cherche des patterns comme R-482 ou AC-482
+        console.warn("Impossible d'extraire un identifiant de formation de type 'Lettre-Chiffres' (ex: R-482, AC-482) du titre.");
+        // Fallback si aucun motif spécifique n'est trouvé, on tente l'ancienne regex pour voir
+        const genericMatch = titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
         if (genericMatch && genericMatch[1]) {
             formationId = genericMatch[1].trim().toUpperCase();
+        } else {
+            const simpleEndMatch = titleText.match(/([A-Z0-9-]+)\s*$/i);
+            if (simpleEndMatch && simpleEndMatch[1]) {
+                formationId = simpleEndMatch[1].trim().toUpperCase();
+            }
         }
     }
-
 
     if (formationId) {
       console.log("Identifiant de formation extrait de la page :", formationId);
     } else {
-      console.warn("Impossible d'extraire l'identifiant de formation du titre (H1 ou H2). Assurez-vous qu'il contient l'ID au format 'Formation : XXX' ou se termine par 'XXX'.");
+      console.error("Aucun identifiant de formation valide n'a pu être extrait du titre.");
     }
   }
 
