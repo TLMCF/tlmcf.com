@@ -11,9 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
       const headers = lines[0].split(",");
-      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-reussite");
+      // Change 'taux-reussite' to 'taux-réussite' to match your spreadsheet header
+      const tauxIndex = headers.findIndex(h => h.trim().toLowerCase() === "taux-réussite"); // MODIFICATION ICI
 
-      if (tauxIndex === -1) throw new Error("Colonne 'taux-reussite' non trouvée");
+      if (tauxIndex === -1) throw new Error("Colonne 'taux-réussite' non trouvée"); // MODIFICATION ICI
 
       const dataLine = lines[1].split(",");
       const taux = dataLine[tauxIndex].trim();
