@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(csv => {
       const lines = csv.trim().split("\n");
 
+      // La ligne 1 (index 0) est "Taux de réussites" (titre fusionné)
+      // La ligne 2 (index 1) contient les en-têtes réelles
       const headers = lines[1].split(",");
       console.log("En-têtes brutes lues du CSV (ligne d'index 1) :", headers);
 
@@ -65,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let foundTaux = "N/A";
 
+      // Parcourir toutes les lignes de données (à partir de l'index 2)
       for (let i = 2; i < lines.length; i++) {
         const currentDataLine = lines[i].split(",");
         if (currentDataLine.length > formationIdColIndex && currentDataLine.length > tauxIndex) {
