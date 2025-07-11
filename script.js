@@ -10,28 +10,32 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(csv => {
       const lines = csv.trim().split("\n");
-      const headers = lines[0].split(",");
 
-      // AFFICHAGE DES EN-TÊTES BRUTES POUR DÉBOGAGE
-      console.log("En-têtes brutes lues du CSV :", headers);
+      // La ligne 1 (index 0) est probablement le titre fusionné "Taux de réussites"
+      // La ligne 2 (index 1) contient maintenant les en-têtes réelles : "Formation", "réussite", "echec", "taux-reussite"
+      // La ligne 3 (index 2) contient les données pour "R-482"
 
-      // Tenter de nettoyer les en-têtes pour enlever tout sauf les lettres, chiffres et tirets.
-      // Cela est plus agressif pour ignorer les caractères invisibles ou les problèmes d'encodage.
+      const headers = lines[1].split(","); // Lire la DEUXIÈME ligne comme en-têtes
+      console.log("En-têtes brutes lues du CSV (ligne d'index 1) :", headers);
+
       const cleanedHeaders = headers.map(h => h.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''));
-
       console.log("En-têtes nettoyées pour comparaison :", cleanedHeaders);
 
-      const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite");
+      const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite"); // Utiliser le nom sans accent, le plus simple
 
       if (tauxIndex === -1) {
-          throw new Error("Colonne 'taux-reussite' non trouvée. Veuillez vérifier les logs ci-dessus pour les en-têtes brutes et nettoyées.");
+          throw new Error("Colonne 'taux-reussite' non trouvée dans les en-têtes réelles. Vérifiez les logs ci-dessus.");
       }
 
-      const dataLine = lines[1].split(",");
-      const taux = dataLine[tauxIndex].trim();
+      const dataLine = lines[2].split(","); // Lire la TROISIÈME ligne comme données
+      console.log("Ligne de données brute (ligne d'index 2) :", dataLine);
+
+      // Vérifier que l'index existe avant d'essayer de l'accéder
+      const taux = dataLine[tauxIndex] ? dataLine[tauxIndex].trim() : "N/A";
+      console.log("Valeur de 'taux' extraite :", taux);
 
       const el = document.querySelector('.pourcentage');
-      if (el && taux) {
+      if (el) {
         el.textContent = `📈 ${taux} de réussite à l'examen !`;
       }
     })
