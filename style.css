@@ -20,7 +20,7 @@ header {
 
 .container {
   width: 1550%;
-  max-width: 1500px; /* Réduit la largeur maximale du conteneur principal */
+  max-width: 1400px; /* Réduit la largeur maximale du conteneur principal */
   margin: auto;
   display: flex;
   justify-content: space-between;
