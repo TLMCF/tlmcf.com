@@ -1,176 +1,308 @@
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
 }
+
 body {
   line-height: 1.6;
-  background-color: #f9f9f9;
+  background-color: #f0f2f5; /* Fond clair et moderne */
   color: #333;
 }
+
 header {
-  background: #003c79;
+  background: #1a4e8d; /* Bleu plus profond pour l'en-tête */
   color: #fff;
-  padding: 1rem 0;
+  padding: 1.2rem 0; /* Augmentation légère du padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre subtile pour l'en-tête */
 }
+
 .container {
   width: 90%;
+  max-width: 1200px; /* Ajout d'une largeur maximale pour les grands écrans */
   margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .bloc {
   flex: 1 1 300px;
   min-width: 280px;
-  background-color: rgb(255, 251, 251); /* ✅ fond blanc */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* optionnel : petit effet d'ombre */
+  background-color: #ffffff; /* Fond blanc pur */
+  padding: 25px; /* Augmentation du padding */
+  border-radius: 12px; /* Coins plus arrondis */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Ombre plus prononcée mais douce */
+  transition: transform 0.3s ease-in-out; /* Animation au survol */
 }
+
+.bloc:hover {
+  transform: translateY(-8px); /* Effet de soulèvement plus marqué au survol */
+}
+
 .taux-reussite {
-  background-color: #f4f4f4;
-  padding: 30px 20px;
+  background-color: #e6f7ff; /* Fond bleu très clair pour la section */
+  padding: 40px 25px; /* Augmentation du padding */
   text-align: center;
   font-family: Arial, sans-serif;
-  margin-top: 40px;
-  border-top: 3px solid #16a085;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-top: 50px; /* Augmentation de la marge supérieure */
+  border-top: 4px solid #1abc9c; /* Bordure supérieure verte plus vive */
+  border-radius: 12px; /* Coins arrondis pour la section */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Ombre améliorée */
 }
 
 .taux-reussite h3 {
-  font-size: 28px;
+  font-size: 32px; /* Taille de police plus grande */
   color: #2c3e50;
-  margin-bottom: 10px;
+  margin-bottom: 15px; /* Marge inférieure accrue */
 }
 
 .taux-reussite .pourcentage {
-  font-size: 22px;
-  color: #16a085;
-  margin: 10px 0;
+  font-size: 28px; /* Taille de police plus grande */
+  color: #1abc9c; /* Vert plus vif */
+  margin: 15px 0; /* Marge accrue */
   font-weight: bold;
 }
 
 .taux-reussite .confiance {
-  font-size: 16px;
-  color: #555;
+  font-size: 18px; /* Taille de police légèrement plus grande */
+  color: #666; /* Gris plus doux */
 }
-
 
 .logo {
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 2rem; /* Logo plus grand */
+  font-weight: 700; /* Plus gras */
+  letter-spacing: -0.5px; /* Léger ajustement de l'espacement des lettres */
 }
+
 nav ul {
   list-style: none;
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem; /* Espacement plus grand entre les éléments de navigation */
 }
+
 nav ul li a {
-  color: rgb(254, 254, 254);
+  color: #fff;
   text-decoration: none;
+  font-weight: 500; /* Poids de police moyen */
+  transition: color 0.3s ease; /* Transition douce pour la couleur */
 }
+
+nav ul li a:hover {
+  color: #ffcc00; /* Jaune vif au survol */
+}
+
 .hero {
-  background: #0372da;
+  background: linear-gradient(135deg, #0372da, #1a4e8d); /* Dégradé de couleurs */
   color: white;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem; /* Plus de padding pour un aspect "hero" */
   text-align: center;
+  border-bottom-left-radius: 50px; /* Bords inférieurs arrondis pour un style moderne */
+  border-bottom-right-radius: 50px;
 }
+
+.hero h1 {
+  font-size: 3.5rem; /* Titre plus grand */
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 1.3rem; /* Texte du paragraphe plus grand */
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+}
+
 .hero .btn {
-  margin-top: 1rem;
+  margin-top: 1.5rem; /* Marge supérieure accrue */
   background: #ffcc00;
-  color: #003366;
-  padding: 0.75rem 1.5rem;
+  color: #1a4e8d; /* Couleur de texte assortie au bleu de l'en-tête */
+  padding: 1rem 2rem; /* Plus grand padding pour le bouton */
   text-decoration: none;
   display: inline-block;
-  border-radius: 5px;
+  border-radius: 30px; /* Bouton pillule */
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
+
+.hero .btn:hover {
+  background: #e6b800; /* Jaune légèrement plus foncé au survol */
+  transform: translateY(-3px); /* Effet de soulèvement */
+}
+
 #resultat {
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  margin-top: 30px; /* Marge supérieure augmentée */
+  padding: 20px; /* Padding accru */
+  border: 1px solid #dcdcdc; /* Bordure plus douce */
+  border-radius: 8px; /* Coins arrondis */
+  background-color: #fefefe; /* Fond presque blanc */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .result-box {
-  background-color: #f0f8ff;
-  border: 1px solid #add8e6;
-  border-radius: 3px;
-  padding: 10px;
-  margin-top: 10px;
+  background-color: #f0f8ff; /* Bleu clair */
+  border: 1px solid #aaddff; /* Bordure bleue plus claire */
+  border-radius: 5px; /* Coins légèrement arrondis */
+  padding: 15px; /* Padding accru */
+  margin-top: 15px; /* Marge supérieure accrue */
   text-align: center;
 }
 
 .pma-final-label {
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.2em; /* Taille de police légèrement plus grande */
+  color: #1a4e8d; /* Couleur assortie */
 }
 
 .pma-final-value {
-  font-size: 1.4em;
+  font-size: 1.8em; /* Taille de police plus grande */
   font-weight: bold;
+  color: #0372da; /* Couleur vive */
+  margin-top: 5px;
 }
 
 .poids-reel-result {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.3em; /* Taille de police plus grande */
+  color: #555;
 }
+
 .formations, .apropos, .entreprise, .actualites, .temoignages, .contact {
-  padding: 3rem 2rem;
+  padding: 5rem 2rem; /* Plus de padding pour chaque section */
+  max-width: 1200px; /* Largeur maximale pour les sections */
+  margin: 0 auto; /* Centrage des sections */
 }
+
 h2 {
   text-align: center;
-  margin-bottom: 2rem;
-  h2 {
-  font-size: 24px;
+  margin-bottom: 3.5rem; /* Marge inférieure accrue */
+  font-size: 2.5rem; /* Titre h2 plus grand */
+  color: #1a4e8d; /* Couleur principale */
+  position: relative;
 }
+
+h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: #0372da; /* Ligne décorative sous le titre */
+  margin: 15px auto 0 auto;
+  border-radius: 2px;
+}
+
 h3 {
-  font-size: 14px;
+  font-size: 1.6rem; /* Taille de police pour h3 */
+  margin-bottom: 1.5rem;
+  color: #2c3e50; /* Couleur sombre mais pas noire */
 }
-}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Taille minimale ajustée */
+  gap: 2rem; /* Plus grand espacement entre les éléments de la grille */
 }
+
 .card {
   background: white;
-  padding: 2rem;
+  padding: 2.5rem; /* Padding accru */
   text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: none; /* Suppression de la bordure fine */
+  border-radius: 12px; /* Coins plus arrondis */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Ombre plus prononcée et douce */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
+
+.card:hover {
+  transform: translateY(-10px); /* Soulèvement plus important */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12); /* Ombre plus forte au survol */
+}
+
+.card h4 { /* Style pour les titres des cartes (si présents) */
+    font-size: 1.3rem;
+    color: #1a4e8d;
+    margin-bottom: 1rem;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
 .card a {
   text-decoration: none;
-  color: #003366;
+  color: #0372da; /* Couleur de lien principale */
   font-weight: bold;
+  font-size: 1.05rem;
+  padding: 8px 15px; /* Padding pour les liens des cartes */
+  border: 1px solid #0372da;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.card a:hover {
+  background-color: #0372da;
+  color: white;
+}
+
 form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 600px;
+  gap: 1.5rem; /* Espacement accru entre les éléments du formulaire */
+  max-width: 700px; /* Largeur maximale augmentée pour le formulaire */
   margin: auto;
+  padding: 30px; /* Padding accru pour le formulaire */
+  background-color: #ffffff;
+  border-radius: 15px; /* Coins très arrondis */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ombre plus marquée */
 }
-input, textarea {
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+
+input,
+textarea {
+  padding: 1rem; /* Padding accru */
+  border: 1px solid #dcdcdc; /* Bordure plus douce */
+  border-radius: 8px; /* Coins arrondis */
+  font-size: 1.05rem; /* Taille de police légèrement plus grande */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+input:focus,
+textarea:focus {
+  border-color: #0372da;
+  outline: none;
+  box-shadow: 0 0 10px rgba(3, 114, 218, 0.2); /* Ombre plus visible au focus */
+}
+
 button {
-  padding: 0.75rem;
+  padding: 1rem; /* Padding accru */
   background: #003366;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px; /* Coins arrondis */
+  font-size: 1.2rem; /* Taille de police plus grande */
+  font-weight: bold;
+  letter-spacing: 0.5px; /* Léger espacement des lettres */
+  transition: background 0.3s ease, transform 0.2s ease;
 }
+
+button:hover {
+  background: #0372da; /* Bleu principal au survol */
+  transform: translateY(-3px);
+}
+
 footer {
   text-align: center;
-  padding: 1rem;
-  background: #003366;
+  padding: 2rem; /* Plus grand padding pour le pied de page */
+  background: #1a4e8d; /* Couleur de l'en-tête pour le pied de page */
   color: white;
+  font-size: 1rem; /* Taille de police standard */
+  margin-top: 50px; /* Marge supérieure pour séparer du contenu */
+}
+
+footer p {
+    margin: 0; /* Supprime la marge par défaut des paragraphes dans le pied de page */
 }
