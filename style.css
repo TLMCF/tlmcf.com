@@ -19,7 +19,7 @@ header {
 }
 
 .container {
-  width: 90%;
+  width: 150%;
   max-width: 900px; /* Réduit la largeur maximale du conteneur principal */
   margin: auto;
   display: flex;
