@@ -94,7 +94,7 @@ nav ul li a:hover {
 }
 
 .hero {
-  background: linear-gradient(135deg, #0372da, #1a4e8d);
+  background: linear-gradient(135deg, #d7dbe0, #1a4e8d);
   color: white;
   padding: 2rem 1rem;
   text-align: center;
@@ -110,7 +110,7 @@ nav ul li a:hover {
 
 .hero p {
   font-size: 1.1rem;
-  max-width: 600px; /* Réduit la largeur maximale du paragraphe du héros */
+  max-width: 1000px; /* Réduit la largeur maximale du paragraphe du héros */
   margin: 0 auto 1rem auto;
 }
 
