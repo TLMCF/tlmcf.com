@@ -17,10 +17,18 @@ header {
   padding: 0.7rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+/* Nouveau style pour centrer les images d'illustration des formations */
+.caces-illustration {
+  display: block; /* Indispensable pour que margin: auto fonctionne */
+  margin: 0 auto 1rem auto; /* Centre l'image horizontalement et conserve une marge en bas */
+  max-width: 85%; /* Garde la réactivité de l'image */
+  height: auto; /* S'assure que la hauteur est ajustée automatiquement */
+  /* Vous pouvez retirer le style inline de votre HTML une fois que c'est ici */
+}
 
 .container {
   width: 1550%;
-  max-width: 1400px; /* Réduit la largeur maximale du conteneur principal */
+  max-width: 1100px; /* Réduit la largeur maximale du conteneur principal */
   margin: auto;
   display: flex;
   justify-content: space-between;
