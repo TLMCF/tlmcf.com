@@ -17,6 +17,7 @@ header {
   padding: 0.7rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 /* Nouveau style pour centrer les images d'illustration des formations */
 .caces-illustration {
   display: block; /* Indispensable pour que margin: auto fonctionne */

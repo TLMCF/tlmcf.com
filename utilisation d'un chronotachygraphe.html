@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilisation d'un Chronotachygraphe - TLM CF</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .formation-wrapper {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px; /* Pour espacer du footer */
+    }
+
+    .formation-card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .formation-card h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .formation-card .details {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+
+    .formation-card .details li {
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .formation-card .details strong {
+      font-weight: bold;
+    }
+
+    .formation-card .call-to-action {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .formation-card .price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 0;
+    }
+
+    .formation-card .button {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .formation-card .button:hover {
+      background-color: #0056b3;
+    }
+
+    .bouton-jaune {
+      background-color: #f0e24e; /* Jaune moins vif (couleur orange cuivré) */
+      color: black; /* Couleur du texte dans le bouton */
+      padding: 10px 20px; /* Espacement intérieur un peu plus grand */
+      border-radius: 5px; /* Bords arrondis */
+      text-decoration: none; /* Supprime le soulignement par défaut des liens */
+      display: inline-block; /* Pour que la largeur et le padding fonctionnent */
+      margin: 10px; /* Espacement autour des boutons */
+    }
+
+    .bouton-jaune a {
+      color: inherit; /* Hérite de la couleur du span */
+      text-decoration: none; /* Supprime le soulignement du lien à l'intérieur */
+    }
+
+    .bouton-jaune:hover {
+      background-color: #d0ba2b; /* Couleur au survol (facultatif) */
+    }
+
+    .bloc-boutons {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center; /* Centre horizontalement les éléments inline */
+    }
+
+    .bloc-boutons ul {
+      list-style: none;
+      padding: 0;
+      display: inline-block; /* Permet de centrer la liste si nécessaire */
+      margin: 0;
+    }
+
+    .bloc-boutons li {
+      margin: 0;
+    }
+
+    .promotion-gestes-postures {
+      background-color: #f9f9f9; /* Fond légèrement gris pour faire ressortir le bloc */
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center; /* Centrer le texte globalement */
+    }
+
+    .promotion-gestes-postures h3 {
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .promotion-gestes-postures p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .strong {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .promotion-gestes-postures .highlight {
+      color: #007bff; /* Couleur bleue pour mettre en évidence le nom de la formation */
+      font-weight: bold;
+    }
+
+    .promotion-gestes-postures ul {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 15px;
+      color: #555;
+      text-align: left; /* Aligner la liste à gauche pour une meilleure lecture */
+      display: inline-block; /* Permet de centrer la liste dans le bloc */
+    }
+
+    .promotion-gestes-postures h4 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .promotion-gestes-postures .call-to-action {
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+
+    .promotion-gestes-postures .button-inscription {
+      display: inline-block;
+      background-color: #28a745; /* Couleur verte pour le bouton d'inscription */
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .promotion-gestes-postures .button-inscription:hover {
+      background-color: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="Images/index/Logo TLMCF.png" alt="TLM CF" height="100">
+      <nav>
+        <ul>
+          <li><a href="#" onclick="window.history.back(); return false;">Retour</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+   <!-- Images illustratives -->
+<img src="Images/transport/chronotachygraphe.jpg" alt="Formation chronotachygraphe"
+class="caces-illustration" style="max-width:85%; height: auto; margin-bottom: 1rem;">
+<meta charset="UTF-8">
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Formation : Utilisation d'un Chronotachygraphe</h2>
+      </div>
+  </section>
+
+  <div class="formation-wrapper">
+    <div class="formation-card">
+      <h3>Formation "Utilisation d'un chronotachygraphe"</h3>
+      <div class="promotion-gestes-postures">
+        <h3>Apprendre a utiliser un chronotachygraphe !</h3>
+        <p>Vous êtes un conducteur routier et vous passez vos journées au volant sans être certain de maîtriser toutes les subtilités de votre chronotachygraphe ?</p>
+        <p class="strong">Investissez dans votre conformité et votre sérénité grâce à notre <span class="highlight">formation "Utilisation d'un chronotachygraphe" !</span></p>
+        <p>Bien plus qu'une simple sensibilisation, cette formation pratique et interactive vous donnera les clés pour respecter la réglementation et utiliser votre appareil de manière optimale. Vous apprendrez à :</p>
+        <ul>
+          <li>Maîtriser l'utilisation de l'appareil de contrôle numérique et ses manipulations obligatoires.</li>
+          <li>Connaître toutes les fonctionnalités du chronotachygraphe numérique, y compris la saisie manuelle des activités et des codes pays.</li>
+          <li>Comprendre et appliquer la réglementation sociale européenne sur les temps de conduite et de repos.</li>
+          <li>Gérer les cartes conducteur et entreprise.</li>
+          <li>Identifier et agir en cas de dysfonctionnement de l'appareil.</li>
+          <li>Comprendre l'impact financier des infractions dues à une mauvaise utilisation du chronotachygraphe.</li>
+        </ul>
+        <h4>Les bénéfices sont concrets :</h4>
+        <ul>
+          <li>Réduction significative des risques d'infractions et des sanctions financières.</li>
+          <li>Amélioration de votre gestion du temps de conduite et de repos.</li>
+          <li>Augmentation de votre sécurité et de celle des autres usagers de la route.</li>
+          <li>Un investissement durable pour votre carrière et celle de votre entreprise.</li>
+        </ul>
+        <p class="call-to-action"><strong>N'attendez plus !</strong> Offrez-vous (ou à vos équipes) les outils nécessaires pour travailler en toute sécurité.</p>
+        <p class="call-to-action"><a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%20chronotachygraphe." class="button-inscription">Rejoignez dès aujourd'hui notre formation "Utilisation d'un chronotachygraphe" et faites le premier pas vers un quotidien professionnel plus confortable et plus sécurisé !</a></p>
+      </div>
+      <div class="call-to-action">
+        <a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20la%20formation%chronotachygraphe." class="button">En savoir plus et s'inscrire</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bloc-boutons">
+    <ul>
+      <li><span class="bouton-jaune"><a href="Documents/PF_CHRONO_TRM_08.09.pdf" download>📥 TÉLÉCHARGER LE PROGRAMME</a></span></li>
+     </div>
+</section> <section id="contact" class="contact">
+  <h2>Contactez-nous (Formulaire ci-dessous) ou par mail</h2>
+  <form action="https://formspree.io/f/mjkrovrb" method="POST">
+    <input type="text" name="nom" placeholder="Nom et prénom" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="tel" name="telephone" placeholder="Téléphone">
+    <textarea name="message" placeholder="Votre message" required></textarea>
+    <button type="submit">Envoyer</button>
+  </form>
+  <div class="carte">
+    <p>Téléphone : 06.09.62.49.43</p>
+    <a href="mailto:contact@tlmcf.com?subject=Demande%20de%20renseignements&body=Bonjour,%20je%20souhaiterais%20plus%20d'informations%20sur%20vos%20formations.">contact@tlmcf.com</a>
+  </div>
+</section>
+  <footer>
+    <p>&copy; 2025 TLM CF - Tous droits réservés</p>
+  </footer>
+</body>
+</html>
