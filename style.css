@@ -34,7 +34,27 @@ header {
   height: auto; /* S'assure que la hauteur est ajustée automatiquement */
   /* Vous pouvez retirer le style inline de votre HTML une fois que c'est ici */
 }
+/* Ajoutez ce CSS à votre fichier de style ou entre les balises <style> dans le <head> */
+.footer-button {
+  color: white; /* Texte blanc */
+  text-decoration: none; /* Supprime le soulignement */
+  padding: 5px 10px; /* Espacement intérieur du bouton */
+  margin: 0 5px; /* Marge extérieure pour séparer les boutons */
+  border-radius: 3px; /* Bords légèrement arrondis */
+  transition: background-color 0.3s ease; /* Transition douce au survol */
+}
 
+.footer-button:hover {
+  background-color: #777; /* Changement de couleur au survol */
+}
+
+footer p {
+  color: #ccc; /* Couleur du texte général du footer, pour que "Tous droits réservés" soit visible */
+  display: flex; /* Utilise Flexbox pour aligner les éléments sur une ligne */
+  align-items: center; /* Centre verticalement les éléments */
+  justify-content: center; /* Centre horizontalement tous les éléments (texte et boutons) */
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si l'espace est insuffisant */
+}
 .container {
   width: 1550%;
   max-width: 1100px; /* Réduit la largeur maximale du conteneur principal */
