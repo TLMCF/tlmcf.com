@@ -17,7 +17,15 @@ header {
   padding: 0.7rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
+.center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Optionnel : Assurez-vous que le lien occupe tout l'espace de la carte */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box; /* S'assure que le remplissage et la bordure n'augmentent pas la taille */
+}
 /* Nouveau style pour centrer les images d'illustration des formations */
 .caces-illustration {
   display: block; /* Indispensable pour que margin: auto fonctionne */
