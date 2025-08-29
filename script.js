@@ -72,8 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // === NOUVEAU BLOC POUR LE TAUX DE SATISFACTION ===
   const satisfactionSheetId = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=1472296115&single=true&output=csv";
   const satisfactionCell = "K8";
-  const satisfactionUrl = `https://docs.google.com/spreadsheets/d/${satisfactionSheetId}/gviz/tq?tqx=out:json&tq=select%20${satisfactionCell.charAt(0)}%20where%20${satisfactionCell.charAt(0)}%20is%20not%20null%20offset%20${parseInt(satisfactionCell.substring(1)) - 1}`;
-  
   fetch(satisfactionUrl)
     .then(res => res.text())
     .then(text => {
