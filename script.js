@@ -68,32 +68,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
   }
+// === NOUVEAU BLOC POUR LE TAUX DE SATISFACTION (plus fiable) ===
+const satisfactionSheetId = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=1472296115&single=true&output=csv";
+const satisfactionCell = "F15";
+const satisfactionUrl = `https://docs.google.com/spreadsheets/d/${satisfactionSheetId}/gviz/tq?tqx=out:json&tq=select%20${satisfactionCell.charAt(0)}%20where%20${satisfactionCell.charAt(0)}%20is%20not%20null%20offset%20${parseInt(satisfactionCell.substring(1)) - 1}`;
 
-  // === NOUVEAU BLOC POUR LE TAUX DE SATISFACTION ===
-  const satisfactionSheetId = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=1472296115&single=true&output=csv";
-  const satisfactionCell = "K8";
-  fetch(satisfactionUrl)
-    .then(res => res.text())
-    .then(text => {
-      const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-      const json = JSON.parse(jsonText);
-      
-      if (json.table && json.table.rows && json.table.rows[0]) {
-        const cellValue = json.table.rows[0].c[0].v;
-        const element = document.getElementById('satisfaction-pourcentage');
-        if (element) {
-          element.textContent = `${cellValue}% de satisfaction !`;
-        }
-      } else {
-        document.getElementById('satisfaction-pourcentage').textContent = 'Données non trouvées';
+fetch(satisfactionUrl)
+  .then(res => res.text())
+  .then(text => {
+    const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+    const json = JSON.parse(jsonText);
+    
+    if (json.table && json.table.rows && json.table.rows[0]) {
+      const cellValue = json.table.rows[0].c[0].v;
+      const element = document.getElementById('satisfaction-pourcentage');
+      if (element) {
+        element.textContent = `${cellValue}% de satisfaction !`;
       }
-    })
-    .catch(error => {
-      console.error("Erreur lors du chargement du taux de satisfaction :", error);
-      const el = document.getElementById('satisfaction-pourcentage');
-      if (el) {
-          el.textContent = "Erreur de chargement";
-      }
-    });
+    } else {
+      document.getElementById('satisfaction-pourcentage').textContent = 'Données non trouvées';
+    }
+  })
+  .catch(error => {
+    console.error("Erreur lors du chargement du taux de satisfaction :", error);
+    const el = document.getElementById('satisfaction-pourcentage');
+    if (el) {
+        el.textContent = "Erreur de chargement";
+    }
+  });
 
 });
