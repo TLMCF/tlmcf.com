@@ -1,16 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // URL pour le taux de réussite (ne change pas)
-  const csvUrlTauxReussite = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=520631916&single=true&output=csv";
-
-  // ⚠️ Remplacez VOTRE_URL_DU_TAUX_DE_SATISFACTION par l'URL que vous avez copiée
-  const csvUrlTauxSatisfaction = "VOTRE_URL_DU_TAUX_DE_SATISFACTION";
-
-  // ... (Le reste du code pour le taux de réussite) ...
-  // Pas besoin de le recopier ici, c'est la partie de votre script existant qui va de `const pageTitleElement = ...` jusqu'à `el.textContent = ...`
-  // Collez ce qui suit juste après ce premier fetch.
-
   const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=520631916&single=true&output=csv";
-
+  
   // 1. Tenter d'obtenir l'identifiant de la formation depuis le titre H1 ou H2 de la page
   // On va d'abord chercher dans un H1, puis si non trouvé, dans un H2.
   const pageTitleElement = document.querySelector('section.hero h1') || document.querySelector('section.hero h2');
