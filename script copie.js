@@ -100,42 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
   .catch(error => {
   console.error("Erreur lors du chargement du taux :", error);
   });
-  // === NOUVEAU BLOC POUR LE TAUX DE SATISFACTION ===
-
-  // ⚠️ Remplacez VOTRE_URL_DU_TAUX_DE_SATISFACTION par l'URL que vous avez copiée ci-dessus.
-  const csvUrlSatisfaction = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=1472296115&single=true&output=csv";
-  
-  fetch(csvUrlSatisfaction)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erreur de réseau lors du chargement de la satisfaction : ' + response.status);
-      }
-      return response.text();
-    })
-    .then(csv => {
-      // Les lignes du fichier CSV
-      const lines = csv.trim().split("\n");
-      
-      // La valeur du taux de satisfaction se trouve dans la ligne 15, colonne F (index 5)
-      // Assurez-vous que cette structure est correcte dans votre CSV.
-      if (lines.length > 14) {
-        const data = lines[14].split(",");
-        if (data.length > 5) {
-          const satisfactionValue = data[5].trim();
-          
-          // Met à jour l'élément HTML avec l'ID 'satisfaction-pourcentage'
-          const el = document.getElementById('satisfaction-pourcentage');
-          if (el) {
-            el.textContent = `${satisfactionValue} de satisfaction !`;
-          }
-        }
-      }
-    })
-    .catch(error => {
-      console.error("Erreur lors du chargement du taux de satisfaction :", error);
-      const el = document.getElementById('satisfaction-pourcentage');
-      if (el) {
-          el.textContent = "Erreur de chargement";
-      }
-    });
   });
