@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Afficher le taux de réussite
-      const reussiteEl = document.querySelector('.pourcentage');
+      const reussiteEl = document.getElementById('reussite-pourcentage'); // Corrected to use new ID
       if (reussiteEl && formationId) {
         reussiteEl.textContent = `📈 ${foundTauxReussite} de réussite à l'examen !`;
       } else if (reussiteEl) {
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(error => {
       console.error("Erreur lors du chargement des taux :", error);
-      const reussiteEl = document.querySelector('.pourcentage');
+      const reussiteEl = document.getElementById('reussite-pourcentage'); // Corrected to use new ID
       if (reussiteEl) {
         reussiteEl.textContent = "Erreur de chargement";
       }
