@@ -207,37 +207,8 @@
   <section class="taux-reussite">
     <h3>👌🏻 Taux de Satisfaction</h3>
     <p class="pourcentage">Chargement en cours...</p>
-    <p class="confiance">Nos apprenants repartent de leur formation chez TLM CF.</p>
+    <p class="confiance">Nos apprenants repartent satisfaient de leur formation chez TLM CF.</p>
   </section>
-  <script src="script.js"></script>  
-  
-  <script>
-    // Remplacez VOTRE_ID_DE_FEUILLE par l'ID que vous avez copié à l'étape 2.
-    const sheetId = '1f5d7jF1Mr6bV0D3FGO3PLSB9HsRso8Rl';
-    // Remplacez 'G9' par la cellule exacte qui contient votre taux de satisfaction (par ex. A1, B5, G9...).
-    const cellAddress = 'K8';
-    
-    const url = `hhttps://docs.google.com/spreadsheets/d/1f5d7jF1Mr6bV0D3FGO3PLSB9HsRso8Rl/edit?gid=1472296115#gid=1472296115`;
-    
-    fetch(url)
-      .then(res => res.text())
-      .then(text => {
-        // Nettoyer le texte pour qu'il soit un JSON valide
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        
-        if (json.table && json.table.rows && json.table.rows[0]) {
-          // Obtenir la valeur de la cellule
-          const cellValue = json.table.rows[0].c[0].v;
-          
-          // Afficher la valeur dans l'élément souhaité (ici, le div de chargement)
-          const element = document.getElementById('taux-satisfaction');
-          if (element) {
-            element.textContent = cellValue + '%'; // Ajoutez le symbole % si nécessaire
-          }
-        }
-      })
-      .catch(error => console.error('Erreur lors du chargement des données :', error));
-  </script>
 
   <section id="temoignages" class="temoignages">
     <h2>👇 Témoignages 👇</h2>
