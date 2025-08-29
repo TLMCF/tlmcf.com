@@ -69,37 +69,37 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
   // === NOUVEAU BLOC POUR LE TAUX DE SATISFACTION (corrigé) ===
-// L'ID de votre feuille de satisfaction, extrait de votre lien partagé
-const satisfactionSheetId = "1f5d7jF1Mr6bV0D3FGO3PLSB9HsRso8Rl";
-// L'identifiant de l'onglet (gid) pour le taux de satisfaction
-const satisfactionGid = "1472296115";
-// La cellule à récupérer
-const satisfactionCell = "K8";
+  // L'ID de votre feuille de satisfaction, extrait de votre lien
+  const satisfactionSheetId = "1f5d7jF1Mr6bV0D3FGO3PLSB9HsRso8Rl";
+  // L'identifiant de l'onglet (gid)
+  const satisfactionGid = "1472296115";
+  // La cellule à récupérer
+  const satisfactionCell = "K8";
 
-const satisfactionUrl = `https://docs.google.com/spreadsheets/d/${satisfactionSheetId}/gviz/tq?gid=${satisfactionGid}&tqx=out:json&tq=select%20${satisfactionCell.charAt(0)}%20offset%20${parseInt(satisfactionCell.substring(1)) - 1}%20limit%201`;
+  const satisfactionUrl = `https://docs.google.com/spreadsheets/d/${satisfactionSheetId}/gviz/tq?gid=${satisfactionGid}&tqx=out:json&tq=select%20${satisfactionCell.charAt(0)}%20offset%20${parseInt(satisfactionCell.substring(1)) - 1}%20limit%201`;
 
-fetch(satisfactionUrl)
-  .then(res => res.text())
-  .then(text => {
-    const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-    const json = JSON.parse(jsonText);
-    
-    if (json.table && json.table.rows && json.table.rows[0]) {
-      const cellValue = json.table.rows[0].c[0].v;
-      const element = document.getElementById('satisfaction-pourcentage');
-      if (element) {
-        element.textContent = `${cellValue}% de satisfaction !`;
+  fetch(satisfactionUrl)
+    .then(res => res.text())
+    .then(text => {
+      const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+      const json = JSON.parse(jsonText);
+      
+      if (json.table && json.table.rows && json.table.rows[0]) {
+        const cellValue = json.table.rows[0].c[0].v;
+        const element = document.getElementById('satisfaction-pourcentage');
+        if (element) {
+          element.textContent = `${cellValue}% de satisfaction !`;
+        }
+      } else {
+        document.getElementById('satisfaction-pourcentage').textContent = 'Données non trouvées';
       }
-    } else {
-      document.getElementById('satisfaction-pourcentage').textContent = 'Données non trouvées';
-    }
-  })
-  .catch(error => {
-    console.error("Erreur lors du chargement du taux de satisfaction :", error);
-    const el = document.getElementById('satisfaction-pourcentage');
-    if (el) {
-        el.textContent = "Erreur de chargement";
-    }
-  });
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement du taux de satisfaction :", error);
+      const el = document.getElementById('satisfaction-pourcentage');
+      if (el) {
+          el.textContent = "Erreur de chargement";
+      }
+    });
 
 });
