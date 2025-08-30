@@ -112,7 +112,7 @@ footer p {
   text-align: center;
   font-family: Arial, sans-serif;
   margin-top: 30px;
-  border-top: 4px solid #1abc9c;
+  border-top: 4px solid #1a35bc;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
@@ -125,7 +125,7 @@ footer p {
 
 .taux-satisfaction .pourcentage {
   font-size: 20px;
-  color: #1abc9c;
+  color: #1a35bc;
   margin: 12px 0;
   font-weight: bold;
 }
