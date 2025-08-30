@@ -1,28 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // URL pour le taux de réussite (et maintenant de satisfaction)
+  // L'URL unique qui exporte l'intégralité de votre feuille "Taux-reussite" en CSV.
+  // C'est la source de données pour le taux de satisfaction.
   const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQfmuZMJFCyNST3Pa69vyDHwt89D_KWolF-AZ62sX7N3Z094tR1fWulavwHD5fmcQ/pub?gid=520631916&single=true&output=csv";
 
-  const pageTitleElement = document.querySelector('section.hero h1') || document.querySelector('section.hero h2');
-  let formationId = null;
-
-  if (pageTitleElement) {
-    const titleText = pageTitleElement.textContent;
-    const specificMatch = titleText.match(/([AR][C]?-\d{3,})/i);
-    if (specificMatch && specificMatch[1]) {
-      formationId = specificMatch[1].trim().toUpperCase();
-    } else {
-      const genericMatch = titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
-      if (genericMatch && genericMatch[1]) {
-        formationId = genericMatch[1].trim().toUpperCase();
-      } else {
-        const simpleEndMatch = titleText.match(/([A-Z0-9-]+)\s*$/i);
-        if (simpleEndMatch && simpleEndMatch[1]) {
-          formationId = simpleEndMatch[1].trim().toUpperCase();
-        }
-      }
-    }
-  }
-
+  // Appeler l'API de Google Sheets une seule fois
   fetch(csvUrl)
     .then(response => {
       if (!response.ok) throw new Error('Erreur de réseau : ' + response.status);
@@ -38,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Colonnes 'taux-reussite' ou 'Formation' non trouvées.");
       }
 
-      let foundTauxReussite = "N/A";
       let foundTauxSatisfaction = "N/A";
 
       for (let i = 2; i < lines.length; i++) {
@@ -47,23 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
           const currentFormationInCsv = currentDataLine[formationIdColIndex].trim().toUpperCase();
           const currentTaux = currentDataLine[tauxIndex].trim();
 
-          if (formationId && currentFormationInCsv === formationId) {
-            foundTauxReussite = currentTaux;
-          }
-
+          // Taux de satisfaction (recherche de la ligne "SATISFACTION")
           if (currentFormationInCsv === "SATISFACTION") {
             foundTauxSatisfaction = currentTaux;
+            break; // Arrête la boucle une fois que la ligne est trouvée
           }
         }
       }
 
-      const reussiteEl = document.getElementById('reussite-pourcentage');
-      if (reussiteEl && formationId) {
-        reussiteEl.textContent = `📈 ${foundTauxReussite} de réussite à l'examen !`;
-      } else if (reussiteEl) {
-        reussiteEl.textContent = "Taux non disponible (ID formation manquant)";
-      }
-
+      // Afficher le taux de satisfaction
       const satisfactionEl = document.getElementById('satisfaction-pourcentage');
       if (satisfactionEl) {
         if (foundTauxSatisfaction !== "N/A") {
@@ -74,11 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
     .catch(error => {
-      console.error("Erreur lors du chargement des taux :", error);
-      const reussiteEl = document.getElementById('reussite-pourcentage');
-      if (reussiteEl) {
-        reussiteEl.textContent = "Erreur de chargement";
-      }
+      console.error("Erreur lors du chargement du taux de satisfaction :", error);
       const satisfactionEl = document.getElementById('satisfaction-pourcentage');
       if (satisfactionEl) {
         satisfactionEl.textContent = "Erreur de chargement";
