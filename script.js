@@ -8,15 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (pageTitleElement) {
     const titleText = pageTitleElement.textContent;
-    const specificMatch = titleText.match(/([AR][C]?-\\d{3,})/i);
+    // Correction de l'erreur de syntaxe dans les expressions régulières
+    const specificMatch = titleText.match(/([AR][C]?-\d{3,})/i);
     if (specificMatch && specificMatch[1]) {
       formationId = specificMatch[1].trim().toUpperCase();
     } else {
-      const genericMatch = titleText.match(/(?:Formation|Conduite)\\s*[:\\s]*([A-Z0-9-]+)/i);
+      const genericMatch = titleText.match(/(?:Formation|Conduite)\s*[:\s]*([A-Z0-9-]+)/i);
       if (genericMatch && genericMatch[1]) {
         formationId = genericMatch[1].trim().toUpperCase();
       } else {
-        const simpleEndMatch = titleText.match(/([A-Z0-9-]+)\\s*$/i);
+        const simpleEndMatch = titleText.match(/([A-Z0-9-]+)\s*$/i);
         if (simpleEndMatch && simpleEndMatch[1]) {
           formationId = simpleEndMatch[1].trim().toUpperCase();
         }
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return response.text();
     })
     .then(csv => {
-      const lines = csv.trim().split("\\n");
+      const lines = csv.trim().split("\n");
       const headers = lines[1].split(",");
       const cleanedHeaders = headers.map(h => h.trim().toLowerCase().replace(/[^a-z0-9-]/g, ''));
       const tauxIndex = cleanedHeaders.findIndex(h => h === "taux-reussite");
@@ -48,11 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentDataLine.length > formationIdColIndex && currentDataLine.length > tauxIndex) {
           const currentFormationInCsv = currentDataLine[formationIdColIndex].trim().toUpperCase();
           const currentTaux = currentDataLine[tauxIndex].trim();
-
           if (formationId && currentFormationInCsv === formationId) {
             foundTauxReussite = currentTaux;
           }
-
           if (currentFormationInCsv === "SATISFACTION") {
             foundTauxSatisfaction = currentTaux;
           }
