@@ -26,53 +26,6 @@ header {
   height: 100%;
   box-sizing: border-box; /* S'assure que le remplissage et la bordure n'augmentent pas la taille */
 }
-/* ... Vos styles existants pour les formations et les cartes ... */
-        
-.search-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* La ligne ci-dessous a été modifiée */
-  margin-top: 20px; /* Ajoute un espace de 20 pixels au-dessus du champ de recherche */
-  gap: 10px;
-}
-#search-input {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 300px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-#search-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#search-button:hover {
-  background-color: #0056b3;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ... Vos autres styles ... */
 /* Nouveau style pour centrer les images d'illustration des formations */
 .caces-illustration {
   display: block; /* Indispensable pour que margin: auto fonctionne */
