@@ -24,7 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchButton = document.getElementById('search-button');
+    const formationsSelect = document.getElementById('formations-select');
 
+    if (searchButton && formationsSelect) {
+        searchButton.addEventListener('click', function() {
+            const selectedPage = formationsSelect.value;
+            
+            if (selectedPage) {
+                window.location.href = selectedPage;
+            }
+        });
+    }
+});
   // Appeler l'API de Google Sheets une seule fois
   fetch(csvUrl)
     .then(response => {
